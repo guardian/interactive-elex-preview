@@ -1,0 +1,270 @@
+@import "fonts";
+@import "mq";
+@import "palette";
+// @import "enhancer";
+
+.interactive-atom {
+    margin: 0;
+    padding: 0;
+}
+
+// .gv-test-para {
+//     @include fs-textSans(4)
+// }
+
+.sticky-container-height {
+    position: relative;
+    display: block;
+    border-top: 1px solid #dcdcdc;
+    // padding-top: 0;
+}
+
+.sticky-container {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    background: white;
+    z-index: 100;
+    width: 100%;
+    padding: 6px 0 12px;
+    border-bottom: 1px solid transparent;
+
+    &.sticky {
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 6px 10px;
+        border-color: $gu-grey-1;
+    }
+}
+
+body.android,
+body.ios {
+    .sticky-container.sticky {
+        padding: 6px 12px;
+    }
+}
+
+
+.elex-map {
+    width: 100%;
+    max-width: 860px;
+    overflow: visible !important;
+}
+
+.elex-state {
+    fill: white;
+    stroke: #dcdcdc;
+}
+
+.sticky .sticky-inner {
+    box-sizing: border-box;
+
+    @include mq(tablet) {
+        max-width: 740px;
+        margin: auto;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    @include mq(desktop) {
+        max-width: 960px;
+        margin: auto;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    @include mq(leftCol) {
+        max-width: 1140px;
+    }
+
+    @include mq(wide) {
+        max-width: 1300px;
+    }
+}
+
+.elex-votes {
+    box-sizing: border-box;
+    position: relative;
+    margin: 1em 0 2em;
+    margin-top: 36px;
+
+    @include mq($until: tablet) {
+        margin-top: 0;
+        margin-bottom: 1.25em;
+    }
+}
+
+[class^='elex-votes__'] {
+    position: relative;
+    width: 100%;
+    margin: 0.5em 0;
+
+    @include mq(tablet) {
+        margin: 1em 0;
+    }
+}
+
+
+[class^='bar-title'] {
+    position: absolute;
+    left: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding-left: 5px;
+    z-index: 1000;
+    background: white;
+    box-sizing: border-box;
+    text-align: left;
+    margin-left: 1px;
+    @include fs-textSans(1);
+    padding-right: 0.25em;
+
+    .title-count {
+        @include fs-textSans(2);
+        font-weight: bold;
+        margin-left: 0.5em;
+
+        @include mq($until: tablet) {
+            display: none;
+        }
+    }
+
+    @include mq(tablet) {
+        margin-bottom: 0.25em;
+        @include fs-header(3);
+    }
+}
+
+[class^='bar-container'] {
+    box-sizing: border-box;
+    position: relative;
+    height: 36px;
+    font-size: 0;
+    z-index: 20;
+
+    @include mq(tablet) {
+        height: 36px;
+        background: none;
+    }
+
+    &.bar-container__biden {
+        background: #25428f;
+    }
+
+    &.bar-container__trump {
+        background: #cc0a11;
+    }
+
+    transition: width .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
+}
+
+.bar-container__biden,
+.bar-container__trump {
+    border: 2px solid #000;
+}
+
+.elex-votes-finishline {
+    position: absolute;
+    top: -0.25em;
+    bottom: -0.25em;
+    border-left: 2px solid $gu-grey-1;
+
+    @include mq(tablet) {
+        top: -0.5em;
+        bottom: -0.5em;
+    }
+
+    transition: left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
+}
+
+.elex-votes-finish-label {
+    position: absolute;
+    left: 0;
+    transform: translateX(-50%);
+    width: auto;
+    white-space: nowrap;
+    bottom: 100%;
+    font-weight: bold;
+
+    @include mq($until: tablet) {
+        top: 105%;
+        bottom: auto;
+
+
+        @include fs-textSans(1);
+        transition: left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
+
+
+
+        @include mq(tablet) {
+            @include fs-textSans(3);
+        }
+    }
+}
+
+.state-groups {
+    margin-top: 24px;
+    display: flex;
+    max-width: 1260px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.state-group {
+    flex: 400px 0 0;
+    background: #f6f6f6;
+    margin: 6px 5px;
+    align-self: stretch;
+    min-height: 350px;
+    width: 400px;
+    padding: 6px 5px;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.025);
+
+    // border-radius: 10px;
+    border: 1px solid #dcdcdc;
+
+    @include mq($until: tablet) {
+        margin: 6px 0;
+        flex-basis: 100%;
+    }
+
+    &:first-of-type {
+        .state-group__evcount::after {
+            content: 'electoral votes';
+            @include fs-textSans(2);
+            display: block;
+            margin-left: 5px;
+            margin-right: 2px;
+        }
+    }
+}
+
+.state-group__name {
+    @include fs-header(3);
+    min-height: 32px;
+    padding-right: 65px;
+    margin-bottom: 3px;
+}
+
+.state-group__evcount {
+    @include fs-titlepiece(1);
+    position: absolute;
+    text-align: right;
+    right: 5px;
+    top: 1px;
+}
+
+.state-group__context {
+    @include fs-textSans(3);
+}
+
+.state-group__states {
+    @include fs-headline(1);
+    border-bottom: 1px solid #dcdcdc;
+    padding-right: 65px;
+    padding-bottom: 3px;
+}
