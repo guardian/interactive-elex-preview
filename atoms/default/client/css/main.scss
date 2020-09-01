@@ -16,6 +16,8 @@
     position: relative;
     display: block;
     border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 30px
     // padding-top: 0;
 }
 
@@ -57,37 +59,44 @@ body.ios {
     stroke: #dcdcdc;
 }
 
-.sticky .sticky-inner {
-    box-sizing: border-box;
+// .sticky .sticky-inner {
+//     box-sizing: border-box;
+//     background: red;
 
-    @include mq(tablet) {
-        max-width: 740px;
-        margin: auto;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
+//     @include mq(tablet) {
+//         max-width: 740px;
+//         margin: auto;
+//         padding-left: 20px;
+//         padding-right: 20px;
+//     }
 
-    @include mq(desktop) {
-        max-width: 960px;
-        margin: auto;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
+//     @include mq(desktop) {
+//         max-width: 960px;
+//         margin: auto;
+//         padding-left: 20px;
+//         padding-right: 20px;
+//     }
 
-    @include mq(leftCol) {
-        max-width: 1140px;
-    }
+//     @include mq(leftCol) {
+//         max-width: 1140px;
+//     }
 
-    @include mq(wide) {
-        max-width: 1300px;
-    }
+//     @include mq(wide) {
+//         max-width: 1300px;
+//     }
+// }
+
+
+.elex-votes-wrapper {
+position: relative;
+margin: 0 158px;
 }
 
 .elex-votes {
     box-sizing: border-box;
     position: relative;
-    margin: 1em 0 2em;
-    margin-top: 36px;
+    //margin: 1em 0 2em;
+    margin-top: 100px;
     background-color: $gu-grey-4;
 
     @include mq($until: tablet) {
@@ -104,37 +113,173 @@ body.ios {
     @include mq(tablet) {
         margin: 1em 0;
     }
+
+    &.elex-votes__biden {
+
+    &:before {
+        display: block;
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: #25428f;
+        top: -90px;
+        left: 0;
+        margin-left: -150px;
+    }
+
+    &:after {
+        display: block;
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: #25428f;
+        top: -90px;
+        left: 0;
+        margin-left: -150px;
+    }
+
+    }
+
+    &.elex-votes__trump {
+
+        &:before {
+            display: block;
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #cc0a11;
+            top: -90px;
+            right: 0;
+            margin-right: -150px;
+        }
+    
+        &:after {
+            display: block;
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #cc0a11;
+            top: -90px;
+            right: 0;
+            margin-right: -150px;
+        }
+    
+        }
+
+  
 }
 
 
 [class^='bar-title'] {
     position: absolute;
-    left: 1px;
-    top: 50%;
-    transform: translateY(-50%);
-    padding-left: 5px;
+    top: -90px;
+    left: 0;
+    width: 100%;
+    transform: translateY(0) !important;
+    padding-left: 0!important;
     z-index: 1000;
-    background: white;
+    background: transparent !important;;
     box-sizing: border-box;
     text-align: left;
-    margin-left: 1px;
-    @include fs-textSans(1);
-    padding-right: 0.25em;
+    margin-left: 0 !important;
+    //@include fs-textSans(1);
+    @include fs-titlepiece(1);
+    padding-right: 0 !important;
 
-    .title-count {
-        @include fs-textSans(2);
-        font-weight: bold;
-        margin-left: 0.5em;
+    
+    &.bar-title__trump {
+        text-align: right;
+        color: #cc0a11;
 
-        @include mq($until: tablet) {
-            display: none;
+        &:before {
+            display: block;
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            background: black;
+            top: 0;
+            right: 0;
+            margin-right: -150px;
+        }
+    
+        &:after {
+            display: block;
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            background: black;
+            top: 0;
+            right: 0;
+            margin-right: -150px;
+        }
+        
+
+    }
+
+    &.bar-title__biden {
+        color: #25428f;
+
+        &:before {
+            display: block;
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            background: black;
+            top: 0;
+            left: 0;
+            margin-left: -150px;
+        }
+
+        &:after {
+            display: block;
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            background: black;
+            top: 0;
+            left: 0;
+            margin-left: -150px;
         }
     }
 
-    @include mq(tablet) {
-        margin-bottom: 0.25em;
-        @include fs-header(3);
+    .title-count {
+        // @include fs-textSans(2);
+        // font-weight: bold;
+        position: relative;
+        margin-left: 0!important;
+        @include fs-titlepiece(1);
+        // @include mq($until: tablet) {
+        //     display: none;
+        // }
+        span {
+            @include fs-textSans(2);
+            display: inline-block;
+            position: relative;
+            top: -1px;
+            margin: 0 10px;
+            width: 100px;
+            line-height: 16px;
+        }
     }
+
+    
+
+    // @include mq(tablet) {
+    //     margin-bottom: 0.25em;
+    //     @include fs-header(3);
+    // }
 }
 
 [class^='bar-container'] {
@@ -184,6 +329,7 @@ body.ios {
     white-space: nowrap;
     bottom: 100%;
     font-weight: bold;
+    @include fs-textSans(2);
 
     @include mq($until: tablet) {
         top: 105%;
