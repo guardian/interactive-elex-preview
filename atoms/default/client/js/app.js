@@ -9,6 +9,113 @@ import * as topojson from 'topojson'
 import statesTopo from 'us-atlas/counties-10m.json'
 import bubbleData from 'shared/server/data_joined.json'
 
+let moodIndex = 0, trumpTotal = 218, bidenTotal = 218;
+const pulseBtn = document.querySelector(".pulse-btn");
+const moodBtn = document.querySelector(".mood-btn");
+const incrementBtn = document.querySelector(".increment-btn");
+const winBtn = document.querySelector(".win-btn");
+const bidenIncreaseBtn = document.querySelector(".biden-increase-btn");
+const bidenWinBtn = document.querySelector(".biden-win-btn");
+const bidenLoseBtn = document.querySelector(".biden-lose-btn");
+const resetBtn = document.querySelector(".reset-btn");
+
+pulseBtn.addEventListener("click", function(){ pulse("biden"); });
+moodBtn.addEventListener("click", function(){ changePortrait("biden", null); });
+incrementBtn.addEventListener("click", function(){ animateTotal("biden", (bidenTotal + 23), bidenTotal); });
+winBtn.addEventListener("click", function(){ winFlash(); });
+bidenIncreaseBtn.addEventListener("click", function(){ animateElexBar( "biden", (bidenTotal + 27), "normal", "normal", bidenTotal); });
+bidenWinBtn.addEventListener("click", function(){ animateElexBar( "biden", 283, "happy", "unhappy", bidenTotal); });
+bidenLoseBtn.addEventListener("click", function(){ animateElexBar( "trump", 270, "unhappy", "happy", trumpTotal); });
+resetBtn.addEventListener("click", function(){ animateElexBar( "trump", 21, "normal", "normal", trumpTotal);animateElexBar( "biden", 27, "normal", "normal",bidenTotal); });
+
+
+function pulse(candidate) {
+    const pulseEl = document.querySelector(".bar-portrait__" + candidate + " .bar-portrait-roundel");
+    pulseEl.classList.remove("pulse-roundel");
+    void pulseEl.offsetWidth;
+    pulseEl.classList.add("pulse-roundel");
+}
+
+function changePortrait(candidate, mood) {
+
+    if (mood == null) {
+
+    const moods = ["unhappy", "happy", "normal"];
+    mood = moods[moodIndex];
+    moodIndex++;
+    if (moodIndex >= moods.length) {
+        moodIndex = 0;
+    }
+}
+
+    const portraits = document.querySelectorAll("." + candidate + "-portrait");
+
+    portraits.forEach(function(portrait) {
+        portrait.classList.remove("show-portrait");
+    });
+
+    const portraitEl = document.querySelector("." + candidate + "-portrait-" + mood);
+    portraitEl.classList.add("show-portrait");
+
+}
+
+function animateTotal(candidate, newTotal, currentTotal) {
+
+    const total = d3.select('.' + candidate + "-title-count");
+    let flashWin = false;
+    total.attr("data-val", currentTotal);
+
+    if (candidate == "biden") {
+        bidenTotal = newTotal;
+    } else {
+        trumpTotal = newTotal;
+    }
+
+    if (currentTotal < 270 && newTotal >= 270) {
+        flashWin = true;
+    }
+
+
+    total
+    .transition()
+    .duration(500)
+    .tween('text', function() {
+        const currentVal = d3.select(this).attr("data-val");
+        const i = d3.interpolate(currentVal, newTotal)
+        return (t) => {
+            // .text("$" + Math.round(data[slide].rev / 1000000) + "bn");
+            total.text(parseInt(i(t))).attr("data-val", newTotal);
+            if (i(t) >= 270 && flashWin) {
+                winFlash();
+                flashWin = false;
+            }
+        }
+    });
+}
+
+function winFlash() {
+    const finishLabelEl = document.querySelector(".elex-votes-finish-label-overlay");
+    finishLabelEl.classList.remove("finish-label-flash");
+    void finishLabelEl.offsetWidth;
+    finishLabelEl.classList.add("finish-label-flash");
+   
+}
+
+function animateElexBar( candidate, votes, bidenMood, trumpMood, currentTotal) {
+    pulse(candidate);
+    animateTotal(candidate, votes, currentTotal);
+    changePortrait("trump", trumpMood);
+    changePortrait("biden", bidenMood);
+
+    const candidateBar = $(".bar-container__" + candidate);
+    candidateBar.style.width = (votes/540*100) + "%";
+
+    // if (candidate == "trump") {
+    //     candidateBar.style.left = "auto"; //((540-votes)/540*100) + "%";
+    // }
+
+}
+
 async function loadGroupData() {
     // fetch data from url, get state groupings
     const sheetData = await fetch('http://interactive.guim.co.uk/docsdata-test/1xxtoiJ5Rn1cVXwynMgJyGr4Cd40znZoI9RYiMj_rMe0.json')
@@ -125,6 +232,11 @@ function createInitialGraphics(solids) {
         .attr("class", "elex-votes-finish-label")
         .text("270 to win");
 
+        finish
+        .append('div')
+        .attr("class", "elex-votes-finish-label elex-votes-finish-label-overlay")
+        .text("270 to win");
+
     const solidData = {
         trump: solids[0].ev_count,
         biden: solids[1].ev_count
@@ -140,7 +252,7 @@ function createInitialGraphics(solids) {
     // Fill solid
     const trumpBar = d3.select('.bar-container__trump')
         .style("width", x(solidData.trump) + '%')
-        .style("left", x(538) - x(solidData.trump) + '%')
+        //.style("left", x(538) - x(solidData.trump) + '%')
     const bidenBar = d3.select('.bar-container__biden')
         .style("width", x(solidData.biden) + '%')
     console.log(x(538) - x(solidData.trump) + '%')
