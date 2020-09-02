@@ -13,62 +13,117 @@ async function loadGroupData() {
     // fetch data from url, get state groupings
     const sheetData = await fetch('http://interactive.guim.co.uk/docsdata-test/1xxtoiJ5Rn1cVXwynMgJyGr4Cd40znZoI9RYiMj_rMe0.json')
         .then(res => res.json())
-    const groups = sheetData.sheets.state_groups.filter(group => group.id);
+    const groups = sheetData.sheets.state_cards.filter(group => group.type);
     return groups
 }
 
 
 
 loadGroupData().then(groups => {
-    const groupsInUse = groups.filter(group => group.states)
-    const boxes = createBoxes(groupsInUse)
-    const solids = groups.filter(group => group.solid)
+    const statesInUse = groups.filter(group => group.groups_in_use)
+    const boxes = createBoxes(statesInUse)
+    const sections = groups.filter(group => group.type == "group")
+    const initialBar = groups.filter(group => group.type == "initial_bar")
 
-    createInitialGraphics(solids)
+    createInitialGraphics(initialBar)
     // boxes.onChange(data => {
     //     bars.update(data);
     // })
-
-    console.log(groupsInUse)
 
 })
 
 const bidenCol = '#25428f'
 const trumpCol = '#cc0a11'
 
-function createBoxes(groups) {
-    const groupsDiv = d3.select('.state-groups')
+function createBoxes(statesInUse) {
+    const statesDiv = d3.select('.state-cards')
 
-    const groupDivs = groupsDiv
-        .selectAll('.state-group')
-        .data(groups)
+    const stateDivs = statesDiv
+        .selectAll('.state-card')
+        .data(statesInUse)
         .enter()
         .append('div')
-        .classed('state-group', true)
+        .classed('state-card', true)
 
-    groupDivs
+    stateDivs
         .append('h2')
-        .html(d => d.name)
-        .classed('state-group__name', true)
+        .html(d => d.state)
+        .classed('state-card__name', true)
 
-    groupDivs
-        .append('h3')
-        .html(d => d.states)
-        .classed("state-group__states", true)
+    stateDivs
+        .append('h2')
+        .html(d => d.ecvs + " electoral votes")
+        .classed("state-card__ecvs", true)
 
-    groupDivs
+    const indicatorDiv = stateDivs
         .append('div')
-        .html(d => d.ev_count)
-        .classed("state-group__evcount", true)
+        .classed("state-card__indicator", true)
 
-    groupDivs
+
+    const indicatorLabels = indicatorDiv
+        .append('div')
+        .classed('state-card__indicator-labels', true)
+
+    indicatorLabels
+        .append('div')
+        .classed('state-card__indicator-labels-2000', true)
+        .text('2000')
+
+    indicatorLabels
+        .append('div')
+        .classed('state-card__indicator-labels-2016', true)
+        .text('2016 margin')
+
+    indicatorLabels
+        .append('div')
+        .classed('state-card__indicator-labels-2020', true)
+        .text('2020 polling');
+
+    for (var i = 0; i < 4; i++) {
+        indicatorDiv
+            .append('div')
+            .style('background-color', function (d) {
+                if (d.voting_history[i] == "R") {
+                    return trumpCol
+                } else {
+                    return bidenCol
+                }
+            })
+            .classed('state-card__voting-history', true)
+    }
+
+    indicatorDiv
+        .append('div')
+        .html(d => d.absmargin2016)
+        .style('background-color', function (d) {
+            if (d.margin2016 > 0) {
+                return bidenCol
+            } else {
+                return trumpCol
+            }
+        })
+        .classed('state-card__2016-margin', true)
+
+    indicatorDiv
+        .append('div')
+        .html(d => d.abspolling2020)
+        .style('background-color', function (d) {
+            if (d.polling2020 > 0) {
+                return '#d3d9e9'
+            } else {
+                return '#ea8386'
+            }
+        })
+        .classed('state-card__2020-polling', true)
+
+    stateDivs
         .append('p')
-        .html(d => d.storyText)
-        .classed("state-group__context", true)
+        .html(d => d.stateText)
+        .classed("state-card__text", true)
 
-    const setToggle = (groupDiv, d) => {
-        const options = groupDiv.selectAll('.state-group-toggle__option')
-        const inner = groupDiv.select('.state-group-toggle__inner')
+    const setToggle = (stateDiv, d) => {
+        const options = stateDiv.selectAll('.state-card-toggle__option')
+        const inner = stateDiv.select('.state-card-toggle__inner')
 
         const perc = d === 'biden' ? 0 : (d === 'unselected' ? 33.3333 : 66.6667)
         const backCol = d === 'biden' ? bidenCol : (d === 'unselected' ? "#dcdcdc" : trumpCol)
@@ -76,36 +131,36 @@ function createBoxes(groups) {
         inner.style('left', perc + '%')
         inner.style('background-color', backCol)
 
-        options.classed('state-group-toggle__option--selected', d2 => {
+        options.classed('state-card-toggle__option--selected', d2 => {
             return d2 === d
         })
     }
 
-    const toggleDiv = groupDivs
+    const toggleDiv = stateDivs
         .append('div')
-        .classed("state-group__toggle", true)
+        .classed("state-card__toggle", true)
 
     const inner = toggleDiv
         .append('div')
-        .classed('state-group-toggle__inner', true)
+        .classed('state-card-toggle__inner', true)
 
     const options = toggleDiv
         .selectAll('blah')
         .data(['biden', 'unselected', 'trump'])
         .enter()
         .append('div')
-        .attr('class', d => `state-group-toggle__option state-group-toggle__option--${d.toLowerCase()}`)
+        .attr('class', d => `state-card-toggle__option state-card-toggle__option--${d.toLowerCase()}`)
         .text(d => d.slice(0, 1).toUpperCase() + d.slice(1))
 
-    groupDivs.each(function (d, i) {
-        const groupDiv = d3.select(this)
-        setToggle(groupDiv, d.candidate_select)
+    stateDivs.each(function (d, i) {
+        const stateDiv = d3.select(this)
+        setToggle(stateDiv, d.candidate_select)
     })
 
 }
 
 
-function createInitialGraphics(solids) {
+function createInitialGraphics(initialBar) {
 
     // Bar setup
     const x = d3.scaleLinear().domain([0, 538]).range([0, 100])
@@ -126,16 +181,14 @@ function createInitialGraphics(solids) {
         .text("270 to win");
 
     const solidData = {
-        trump: solids[0].ev_count,
-        biden: solids[1].ev_count
+        trump: initialBar[0].group_ecvs,
+        biden: initialBar[1].group_ecvs
     }
 
-    const trumpSolidStates = solids[0].solid_states.split(", ")
+    const trumpSolidStates = initialBar[0].group_states.split(", ")
 
-    const bidenSolidStates = solids[1].solid_states.split(", ")
+    const bidenSolidStates = initialBar[1].group_states.split(", ")
 
-    console.log(trumpSolidStates)
-    console.log(bidenSolidStates)
 
     // Fill solid
     const trumpBar = d3.select('.bar-container__trump')
@@ -143,14 +196,12 @@ function createInitialGraphics(solids) {
         .style("left", x(538) - x(solidData.trump) + '%')
     const bidenBar = d3.select('.bar-container__biden')
         .style("width", x(solidData.biden) + '%')
-    console.log(x(538) - x(solidData.trump) + '%')
 
 
     // Map setup
     const statesFc = topojson.feature(statesTopo, statesTopo.objects.states)
 
     // 'fc' is short for 'FeatureCollection', you can log it to look at the structure
-    console.log(statesFc)
 
     const draw = () => {
 
