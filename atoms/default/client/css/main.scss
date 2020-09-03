@@ -216,7 +216,7 @@ body.ios {
     align-self: stretch;
     min-height: 350px;
     width: 400px;
-    padding: 6px 5px;
+    padding: 6px 10px;
     padding-bottom: 40px;
     box-sizing: border-box;
     position: relative;
@@ -244,14 +244,13 @@ body.ios {
 .state-card__name {
     @include fs-header(3);
     min-height: 32px;
-    padding-right: 65px;
     margin-bottom: 3px;
 }
 
 .state-card__text {
     @include fs-textSans(3);
-    display: block;
-    margin-top: 50px;
+    display: inline-block;
+    margin-top: 10px;
 }
 
 .state-card__ecvs {
@@ -267,37 +266,51 @@ body.ios {
 
 }
 
-.state-card__indicator-labels {
-    @include fs-textSans(3);
-    display: flex;
-    margin-top: 15px;
-    width: 40px;
-    line-height: 14px;
-    text-align: center;
-}
-
-
-.state-card__voting-history,
-.state-card__2016-margin {
+.state-card__history-block,
+.state-card__2016-margin-block,
+.state-card__2020-polling-block {
     @include fs-textSans(3);
     text-align: center;
     color: #ffffff;
     line-height: 15px;
     float: left;
     height: 15px;
-    width: 45px;
+    width: 48px;
     margin: 3px 1px;
-    // background-color: #cc0a11;
+
+    &.state-card__2020-polling-block {
+        width: 75px;
+        margin: 3px 8px;
+    }
 }
 
+.state-card__2016-margin,
 .state-card__2020-polling {
     float: left;
-    height: 15px;
-    width: 75px;
-    margin: 3px 8px;
-    background-color: #EA8386;
 }
 
+.state-card__label {
+    @include fs-textSans(3);
+    width: 40px;
+    line-height: 14px;
+    text-align: center;
+    padding-bottom: 2px;
+
+    &.label-2016 {
+        margin: auto;
+    }
+
+    &.label-2020 {
+        margin: auto;
+    }
+
+
+}
+
+.state-card__voting-history {
+    position: relative;
+    top: 29px;
+}
 
 .state-card__toggle {
 

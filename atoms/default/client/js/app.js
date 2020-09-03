@@ -60,41 +60,41 @@ function createBoxes(statesInUse) {
         .classed("state-card__indicator", true)
 
 
-    const indicatorLabels = indicatorDiv
+    const votingHistory = indicatorDiv
         .append('div')
-        .classed('state-card__indicator-labels', true)
+        .classed('state-card__voting-history', true)
 
-    indicatorLabels
+    votingHistory
         .append('div')
-        .classed('state-card__indicator-labels-2000', true)
+        .classed('state-card__label label-2000', true)
         .text('2000')
 
-    indicatorLabels
-        .append('div')
-        .classed('state-card__indicator-labels-2016', true)
-        .text('2016 margin')
-
-    indicatorLabels
-        .append('div')
-        .classed('state-card__indicator-labels-2020', true)
-        .text('2020 polling');
-
     for (var i = 0; i < 4; i++) {
-        indicatorDiv
+        votingHistory
             .append('div')
             .style('background-color', function (d) {
                 if (d.voting_history[i] == "R") {
-                    return trumpCol
+                    return trumpCol;
                 } else {
-                    return bidenCol
+                    return bidenCol;
                 }
             })
-            .classed('state-card__voting-history', true)
+            .classed('state-card__history-block', true)
     }
 
-    indicatorDiv
+    const margin2016 = indicatorDiv
         .append('div')
-        .html(d => d.absmargin2016)
+        .classed('state-card__2016-margin', true)
+
+
+    margin2016
+        .append('div')
+        .classed('state-card__label label-2016', true)
+        .text('2016 margin')
+
+    margin2016
+        .append('div')
+        .html(d => Math.abs(d.margin2016))
         .style('background-color', function (d) {
             if (d.margin2016 > 0) {
                 return bidenCol
@@ -102,19 +102,28 @@ function createBoxes(statesInUse) {
                 return trumpCol
             }
         })
-        .classed('state-card__2016-margin', true)
+        .classed('state-card__2016-margin-block', true)
 
-    indicatorDiv
+    const polling2020 = indicatorDiv
         .append('div')
-        .html(d => d.abspolling2020)
+        .classed('state-card__2020-polling', true)
+
+    polling2020
+        .append('div')
+        .classed('state-card__label label-2020', true)
+        .text('2020 polling')
+
+    polling2020
+        .append('div')
+        .html(d => Math.abs(d.polling2020))
         .style('background-color', function (d) {
             if (d.polling2020 > 0) {
-                return '#d3d9e9'
+                return '#93a9e1'
             } else {
                 return '#ea8386'
             }
         })
-        .classed('state-card__2020-polling', true)
+        .classed('state-card__2020-polling-block', true)
 
     stateDivs
         .append('p')
