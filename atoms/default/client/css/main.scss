@@ -3,6 +3,8 @@
 @import "palette";
 // @import "enhancer";
 
+$bar-height: 36px;
+
 .interactive-atom {
     margin: 0;
     padding: 0;
@@ -11,14 +13,26 @@
 // .gv-test-para {
 //     @include fs-textSans(4)
 // }
+#gv-mobile-dummy {
+    display: block;
+    position: absolute;
+
+    @include mq(tablet) {
+        display: none;
+    }
+
+}
 
 .sticky-container-height {
     position: relative;
     display: block;
     border-top: 1px solid #dcdcdc;
     border-bottom: 1px solid #dcdcdc;
-    padding-bottom: 49px
+    padding-bottom: 61px;
     // padding-top: 0;
+    @include mq($until: tablet) {
+        padding-bottom: 0 !important;;
+    }
 }
 
 .sticky-container {
@@ -28,14 +42,15 @@
     background: white;
     z-index: 100;
     width: 100%;
-    padding: 6px 0 12px;
+    //padding: 6px 0 12px;
+    padding: 0;
     border-bottom: 1px solid transparent;
 
     &.sticky {
         position: fixed;
         top: 0;
         left: 0;
-        padding: 6px 10px;
+        //padding: 6px 10px;
         border-color: $gu-grey-1;
     }
 }
@@ -93,6 +108,11 @@ body.ios {
 .elex-votes-wrapper {
 position: relative;
 margin: 0 158px;
+
+@include mq($until: tablet) {
+    margin: 0;
+}
+
 }
 
 .elex-votes {
@@ -100,12 +120,12 @@ margin: 0 158px;
     position: relative;
     //margin: 1em 0 2em;
     margin-top: 100px;
-    background-color: $gu-grey-4;
-    height: 36px;
+    //background-color: yellow;
+    height: $bar-height;
 
     @include mq($until: tablet) {
-        margin-top: 0;
-        margin-bottom: 1.25em;
+        margin-bottom: 5px;
+        height: 175px;
     }
 }
 
@@ -117,17 +137,34 @@ margin: 0 158px;
     @include mq(tablet) {
         margin: 1em 0;
     }
+
+    &.elex-votes__biden {
+
+    }
+
+    &.elex-votes__trump {
+
+        @include mq($until: tablet) {
+            top: 130px;
+        }
+       
+    }
   
 }
 
 [class^='bar-portrait'] {
 
     display: block;
-    content: "";
     position: absolute;
     width: 130px;
     height: 130px;
     top: -90px;
+
+    @include mq($until: tablet) {
+       width: 0;
+       height: 0;
+       top: 0;
+    }
 
     .bar-portrait-roundel {
         position: absolute;
@@ -136,6 +173,11 @@ margin: 0 158px;
         border-radius: 50%;
         width: 100%;
         height: 100%;
+
+        @include mq($until: tablet) {
+            display: none;
+        }
+
         .bar-portrait-roundel-inner {
             position: absolute;
             top: 0;
@@ -164,6 +206,11 @@ margin: 0 158px;
         width: 226px;
         height: auto;
         z-index: 99;
+
+        @include mq($until: tablet) {
+            width: 110px;
+            top: -92px;
+         }
         //height: 188px;
 
         .bar-portrait-image {
@@ -180,6 +227,11 @@ margin: 0 158px;
                 opacity: 1;
             }
         }
+    }
+
+    @include mq($until: tablet) {
+        margin-left: 0 !important;
+        right: auto !important;
     }
 
     &.bar-portrait__biden {
@@ -230,14 +282,38 @@ margin: 0 158px;
     @include fs-titlepiece(1);
     padding-right: 0 !important;
 
+    @include mq($until: tablet) {
+        left: 115px;
+        top: -80px;
+        font-size: 32px;
+        line-height: 32px;
+    }
+    
+
     
     &.bar-title__trump {
         text-align: right;
         color: #cc0a11;
+        @include mq($until: tablet) {
+            text-align: left;
+        }
     }
 
     &.bar-title__biden {
         color: #25428f;
+    }
+
+    .bar-candidate-name {
+        @include mq($until: tablet) {
+            display: none;
+        }
+    }
+
+    .bar-candidate-name-short {
+        display: none;
+        @include mq($until: tablet) {
+            display: inline;
+        }
     }
 
     .title-count {
@@ -247,8 +323,13 @@ margin: 0 158px;
         margin-left: 0!important;
         @include fs-titlepiece(1);
         // @include mq($until: tablet) {
-        //     display: none;
+        display: block !important;
         // }
+
+        @include mq($until: tablet) {
+           font-size: 32px;
+           line-height: 32px;
+        }
         .title-count-label {
             @include fs-textSans(2);
             display: inline-block;
@@ -257,6 +338,9 @@ margin: 0 158px;
             margin: 0 10px;
             width: 100px;
             line-height: 16px;
+             @include mq($until: tablet) {
+                display: none;
+            }
         }
     }
 
@@ -270,28 +354,45 @@ margin: 0 158px;
 
 [class^='bar-container'] {
     box-sizing: border-box;
-    position: relative;
-    height: 36px;
+    position: absolute;;
+    height: $bar-height;
     font-size: 0;
     z-index: 20;
-    position: absolute;
+    width: 100%;
+    background-color: $gu-grey-4;
+
+
+    
 
     @include mq(tablet) {
-        height: 36px;
-        background: none;
+
+      &.bar-container__trump {
+        background-color: transparent;
+      }
     }
 
-    &.bar-container__biden {
+    
+
+    [class^='bar-votes'] {
+    position: absolute;
+    height: 100%;
+    transition: width .8s cubic-bezier(0.5, 0.1, 0.15, 0.98), left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
+
+    &.bar-votes__biden {
         background: #25428f;
         left: 0;
     }
 
-    &.bar-container__trump {
+    &.bar-votes__trump {
         background: #cc0a11;
         right: 0;
+        @include mq($until: tablet) {
+            right: auto;
+            left: 0;
+        }
     }
 
-    transition: width .8s cubic-bezier(0.5, 0.1, 0.15, 0.98), left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
+    }
 }
 
 
@@ -301,6 +402,12 @@ margin: 0 158px;
     bottom: -0.25em;
     border-left: 2px solid $gu-grey-1;
     z-index: 99;
+    left: 50%;
+
+    @include mq($until: tablet) {
+        left: 90%;
+        top: -15px;
+    }
 
     @include mq(tablet) {
         top: -0.5em;
@@ -321,8 +428,8 @@ margin: 0 158px;
     @include fs-textSans(2);
 
     @include mq($until: tablet) {
-        top: 105%;
-        bottom: auto;
+        //top: 105%;
+        //bottom: auto;
 
 
         @include fs-textSans(1);
