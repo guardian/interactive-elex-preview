@@ -13,7 +13,8 @@ import bubbleData from 'shared/server/data_joined.json'
 
 let moodIndex = 0;
 
-let trumpTotal = 218, bidenTotal = 218; // These are global references to the current vote totals currently used in the bar animation
+let trumpTotal = 218,
+    bidenTotal = 218; // These are global references to the current vote totals currently used in the bar animation
 
 const pulseBtn = document.querySelector(".pulse-btn");
 const moodBtn = document.querySelector(".mood-btn");
@@ -24,15 +25,32 @@ const bidenWinBtn = document.querySelector(".biden-win-btn");
 const bidenLoseBtn = document.querySelector(".biden-lose-btn");
 const resetBtn = document.querySelector(".reset-btn");
 
-pulseBtn.addEventListener("click", function(){ pulse("biden"); });
-moodBtn.addEventListener("click", function(){ changePortrait("biden", null); });
-incrementBtn.addEventListener("click", function(){ animateTotal("biden", (bidenTotal + 23), bidenTotal); });
-winBtn.addEventListener("click", function(){ winFlash(); });
-bidenIncreaseBtn.addEventListener("click", function(){ updateElexBarGraphic( (bidenTotal + 27), trumpTotal, bidenTotal, trumpTotal); });
-bidenWinBtn.addEventListener("click", function(){ updateElexBarGraphic( 283, 200, bidenTotal, trumpTotal); });
-bidenLoseBtn.addEventListener("click", function(){ updateElexBarGraphic( 210, 270, bidenTotal, trumpTotal); });
-resetBtn.addEventListener("click", function(){ updateElexBarGraphic( 27, 21, bidenTotal, trumpTotal);  changePortrait("biden", "normal");
-changePortrait("trump", "normal"); });
+pulseBtn.addEventListener("click", function () {
+    pulse("biden");
+});
+moodBtn.addEventListener("click", function () {
+    changePortrait("biden", null);
+});
+incrementBtn.addEventListener("click", function () {
+    animateTotal("biden", (bidenTotal + 23), bidenTotal);
+});
+winBtn.addEventListener("click", function () {
+    winFlash();
+});
+bidenIncreaseBtn.addEventListener("click", function () {
+    updateElexBarGraphic((bidenTotal + 27), trumpTotal, bidenTotal, trumpTotal);
+});
+bidenWinBtn.addEventListener("click", function () {
+    updateElexBarGraphic(283, 200, bidenTotal, trumpTotal);
+});
+bidenLoseBtn.addEventListener("click", function () {
+    updateElexBarGraphic(210, 270, bidenTotal, trumpTotal);
+});
+resetBtn.addEventListener("click", function () {
+    updateElexBarGraphic(27, 21, bidenTotal, trumpTotal);
+    changePortrait("biden", "normal");
+    changePortrait("trump", "normal");
+});
 
 
 async function loadGroupData() {
@@ -44,14 +62,24 @@ async function loadGroupData() {
 }
 
 
-
 loadGroupData().then(groups => {
+
     const statesInUse = groups.filter(group => group.groups_in_use)
-    const boxes = createBoxes(statesInUse)
-    const sections = groups.filter(group => group.type == "group")
+    const stateGroups = groups.filter(group => group.type == "group")
     const initialBar = groups.filter(group => group.type == "initial_bar")
 
+    const groupIds = stateGroups.map(function (el) {
+        return el.group_id
+    })
+    console.log(groupIds)
+
+    groupIds.forEach(function (e) {
+        createGroupsAndCards(statesInUse, stateGroups, e)
+        console.log("Finished group: " + e)
+    })
+
     createInitialGraphics(initialBar)
+    // createGroupsAndCards(statesInUse, stateGroups, "close_lean_dem")
     // boxes.onChange(data => {
     //     bars.update(data);
     // })
@@ -61,12 +89,37 @@ loadGroupData().then(groups => {
 const bidenCol = '#25428f'
 const trumpCol = '#cc0a11'
 
-function createBoxes(statesInUse) {
-    const statesDiv = d3.select('.state-cards')
+
+function createGroupsAndCards(statesInUse, stateGroups, groupName) {
+    const stateGroup = stateGroups.filter(d => d.group_id == groupName)
+    const statesInGroup = statesInUse.filter(d => d.groups_in_use == groupName)
+
+    const groupsDiv = d3.select(`.state-groups--${groupName}`)
+
+    const groupDivs = groupsDiv
+        .selectAll('.state-group')
+        .data(stateGroup)
+        .enter()
+        .append('div')
+        .classed('state-group', true)
+
+    groupDivs
+        .append('h2')
+        .html(d => d.group_name)
+        .classed('state-group__name', true)
+
+    groupDivs
+        .append('p')
+        .html(d => d.groupText)
+        .classed('state-group__text', true)
+
+    const statesDiv = groupDivs
+        .append('div')
+        .classed('state-cards', true)
 
     const stateDivs = statesDiv
         .selectAll('.state-card')
-        .data(statesInUse)
+        .data(statesInGroup)
         .enter()
         .append('div')
         .classed('state-card', true)
@@ -194,6 +247,144 @@ function createBoxes(statesInUse) {
 
 }
 
+// function createStateCards(statesInUse, groupName) {
+//     const statesInGroup = statesInUse.filter(d => d.groups_in_use == groupName)
+
+//     console.log(statesInGroup)
+//     const statesDiv = groupDivs
+//         .append('div')
+//         .classed('state-cards', true)
+
+//     const stateDivs = statesDiv
+//         .selectAll('.state-card')
+//         .data(statesInGroup)
+//         .enter()
+//         .append('div')
+//         .classed('state-card', true)
+
+//     stateDivs
+//         .append('h2')
+//         .html(d => d.state)
+//         .classed('state-card__name', true)
+
+//     stateDivs
+//         .append('h2')
+//         .html(d => d.ecvs + " electoral votes")
+//         .classed("state-card__ecvs", true)
+
+//     const indicatorDiv = stateDivs
+//         .append('div')
+//         .classed("state-card__indicator", true)
+
+
+//     const votingHistory = indicatorDiv
+//         .append('div')
+//         .classed('state-card__voting-history', true)
+
+//     votingHistory
+//         .append('div')
+//         .classed('state-card__label label-2000', true)
+//         .text('2000')
+
+//     for (var i = 0; i < 4; i++) {
+//         votingHistory
+//             .append('div')
+//             .style('background-color', function (d) {
+//                 if (d.voting_history[i] == "R") {
+//                     return trumpCol;
+//                 } else {
+//                     return bidenCol;
+//                 }
+//             })
+//             .classed('state-card__history-block', true)
+//     }
+
+//     const margin2016 = indicatorDiv
+//         .append('div')
+//         .classed('state-card__2016-margin', true)
+
+
+//     margin2016
+//         .append('div')
+//         .classed('state-card__label label-2016', true)
+//         .text('2016 margin')
+
+//     margin2016
+//         .append('div')
+//         .html(d => Math.abs(d.margin2016))
+//         .style('background-color', function (d) {
+//             if (d.margin2016 > 0) {
+//                 return bidenCol
+//             } else {
+//                 return trumpCol
+//             }
+//         })
+//         .classed('state-card__2016-margin-block', true)
+
+//     const polling2020 = indicatorDiv
+//         .append('div')
+//         .classed('state-card__2020-polling', true)
+
+//     polling2020
+//         .append('div')
+//         .classed('state-card__label label-2020', true)
+//         .text('2020 polling')
+
+//     polling2020
+//         .append('div')
+//         .html(d => Math.abs(d.polling2020))
+//         .style('background-color', function (d) {
+//             if (d.polling2020 > 0) {
+//                 return '#93a9e1'
+//             } else {
+//                 return '#ea8386'
+//             }
+//         })
+//         .classed('state-card__2020-polling-block', true)
+
+//     stateDivs
+//         .append('p')
+//         .html(d => d.stateText)
+//         .classed("state-card__text", true)
+
+//     const setToggle = (stateDiv, d) => {
+//         const options = stateDiv.selectAll('.state-card-toggle__option')
+//         const inner = stateDiv.select('.state-card-toggle__inner')
+
+//         const perc = d === 'biden' ? 0 : (d === 'unselected' ? 33.3333 : 66.6667)
+//         const backCol = d === 'biden' ? bidenCol : (d === 'unselected' ? "#dcdcdc" : trumpCol)
+
+//         inner.style('left', perc + '%')
+//         inner.style('background-color', backCol)
+
+//         options.classed('state-card-toggle__option--selected', d2 => {
+//             return d2 === d
+//         })
+//     }
+
+//     const toggleDiv = stateDivs
+//         .append('div')
+//         .classed("state-card__toggle", true)
+
+//     const inner = toggleDiv
+//         .append('div')
+//         .classed('state-card-toggle__inner', true)
+
+//     const options = toggleDiv
+//         .selectAll('blah')
+//         .data(['biden', 'unselected', 'trump'])
+//         .enter()
+//         .append('div')
+//         .attr('class', d => `state-card-toggle__option state-card-toggle__option--${d.toLowerCase()}`)
+//         .text(d => d.slice(0, 1).toUpperCase() + d.slice(1))
+
+//     stateDivs.each(function (d, i) {
+//         const stateDiv = d3.select(this)
+//         setToggle(stateDiv, d.candidate_select)
+//     })
+
+// }
+
 
 function createInitialGraphics(initialBar) {
 
@@ -215,7 +406,7 @@ function createInitialGraphics(initialBar) {
         .attr("class", "elex-votes-finish-label")
         .text("270 to win");
 
-        finish
+    finish
         .append('div')
         .attr("class", "elex-votes-finish-label elex-votes-finish-label-overlay")
         .text("270 to win");
@@ -233,7 +424,7 @@ function createInitialGraphics(initialBar) {
     // Fill solid
     const trumpBar = d3.select('.bar-container__trump')
         .style("width", x(solidData.trump) + '%')
-        //.style("left", x(538) - x(solidData.trump) + '%')
+    //.style("left", x(538) - x(solidData.trump) + '%')
     const bidenBar = d3.select('.bar-container__biden')
         .style("width", x(solidData.biden) + '%')
 
@@ -318,17 +509,17 @@ function pulse(candidate) {
 
 function changePortrait(candidate, mood) {
     if (mood == null) {
-    const moods = ["unhappy", "happy", "normal"];
-    mood = moods[moodIndex];
-    moodIndex++;
-    if (moodIndex >= moods.length) {
-        moodIndex = 0;
-    }
+        const moods = ["unhappy", "happy", "normal"];
+        mood = moods[moodIndex];
+        moodIndex++;
+        if (moodIndex >= moods.length) {
+            moodIndex = 0;
+        }
     }
 
     const portraits = document.querySelectorAll("." + candidate + "-portrait");
 
-    portraits.forEach(function(portrait) {
+    portraits.forEach(function (portrait) {
         portrait.classList.remove("show-portrait");
     });
 
@@ -356,20 +547,20 @@ function animateTotal(candidate, newTotal, currentTotal) {
     }
 
     total
-    .transition()
-    .duration(500)
-    .tween('text', function() {
-        const currentVal = d3.select(this).attr("data-val");
-        const i = d3.interpolate(currentVal, newTotal)
-        return (t) => {
-            // .text("$" + Math.round(data[slide].rev / 1000000) + "bn");
-            total.text(parseInt(i(t))).attr("data-val", newTotal);
-            if (i(t) >= 270 && flashWin) {
-                winFlash();
-                flashWin = false;
+        .transition()
+        .duration(500)
+        .tween('text', function () {
+            const currentVal = d3.select(this).attr("data-val");
+            const i = d3.interpolate(currentVal, newTotal)
+            return (t) => {
+                // .text("$" + Math.round(data[slide].rev / 1000000) + "bn");
+                total.text(parseInt(i(t))).attr("data-val", newTotal);
+                if (i(t) >= 270 && flashWin) {
+                    winFlash();
+                    flashWin = false;
+                }
             }
-        }
-    });
+        });
 }
 
 // FLASH FINISH LINE TEXT
@@ -378,13 +569,13 @@ function winFlash() {
     const finishLabelEl = document.querySelector(".elex-votes-finish-label-overlay");
     finishLabelEl.classList.remove("finish-label-flash");
     void finishLabelEl.offsetWidth;
-    finishLabelEl.classList.add("finish-label-flash"); 
+    finishLabelEl.classList.add("finish-label-flash");
 }
 
 // MAIN FUNCTION TO UPDATE BAR GRAPHIC AND TRIGGER ANIMATIONS
 
-function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotesTrump) {
- 
+function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesTrump) {
+
 
     if (votesBiden > prevVotesBiden) {
         pulse("biden");
@@ -403,24 +594,18 @@ function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotes
         // BIDEN WIN
         changePortrait("trump", "unhappy");
         changePortrait("biden", "happy");
-    }
-
-    else if (votesTrump >=270 && prevVotesTrump < 270) {
+    } else if (votesTrump >= 270 && prevVotesTrump < 270) {
         // TRUMP WIN
         changePortrait("trump", "happy");
         changePortrait("biden", "unhappy");
-    }
-    
-    else if (votesBiden < prevVotesBiden && prevVotesBiden >= 270 && votesTrump < 270) {
+    } else if (votesBiden < prevVotesBiden && prevVotesBiden >= 270 && votesTrump < 270) {
         // NO VICTOR
         changePortrait("biden", "normal");
         changePortrait("trump", "normal");
-    }
-
-    else if (votesTrump < prevVotesTrump && prevVotesTrump >= 270 && votesBiden < 270) {
+    } else if (votesTrump < prevVotesTrump && prevVotesTrump >= 270 && votesBiden < 270) {
         // NO VICTOR
-            changePortrait("biden", "normal");
-            changePortrait("trump", "normal");
+        changePortrait("biden", "normal");
+        changePortrait("trump", "normal");
     }
 
     trumpTotal = votesTrump; // Update global votes totals
@@ -430,6 +615,6 @@ function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotes
 
     const bidenBar = $(".bar-container__biden");
     const trumpBar = $(".bar-container__trump");
-    bidenBar.style.width = (votesBiden/540*100) + "%";
-    trumpBar.style.width = (votesTrump/540*100) + "%";
+    bidenBar.style.width = (votesBiden / 540 * 100) + "%";
+    trumpBar.style.width = (votesTrump / 540 * 100) + "%";
 }
