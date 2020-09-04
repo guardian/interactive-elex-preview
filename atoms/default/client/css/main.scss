@@ -488,64 +488,38 @@ body.ios {
     top: 29px;
 }
 
-.state-card__toggle {
-
-    position: absolute;
-    bottom: 6px;
-
+.state-card-buttons__option {
     @include fs-textSans(3);
+    font-weight: bold;
     box-sizing: border-box;
-    width: calc(100% - 10px);
+    width: calc(40%);
     min-height: 32px;
     border: 1px solid #dcdcdc;
     border-radius: 16px;
     background-color: #ffff;
-
-}
-
-.state-card-toggle__option {
     display: inline-block;
     line-height: 32px;
-    position: absolute;
     padding: 0 6px;
-    box-sizing: border-box;
+    margin: 0 6px;
 
-    width: 33.333333%;
+    // width: 33.333333%;
     text-align: center;
-
-    &.state-card-toggle__option--selected {
-        //color: white;
-        font-weight: bold;
-    }
-
-    &.state-card-toggle__option--biden {
-        left: 0;
-    }
-
-    &.state-card-toggle__option--unselected {
-        left: 33.3333%;
-        // display: none;
-    }
-
-    &.state-card-toggle__option--trump {
-        left: 66.6667%;
-    }
 
     cursor: pointer;
 }
 
-.state-card-toggle__inner {
-    position: absolute;
+// .state-card-toggle__inner {
+//     position: absolute;
 
-    left: 0;
+//     left: 0;
 
-    transform: translate(1px, -1px);
+//     transform: translate(1px, -1px);
 
-    width: 33%;
-    background: #dcdcdc;
-    min-height: 32px;
-    border-radius: 16px;
+//     width: 33%;
+//     background: #dcdcdc;
+//     min-height: 32px;
+//     border-radius: 16px;
 
-    transition: left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98), background-color .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
-    ;
-}
+//     transition: left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98), background-color .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
+//     ;
+// }
