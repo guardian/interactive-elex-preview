@@ -29,9 +29,11 @@ $bar-height: 36px;
     border-top: 1px solid #dcdcdc;
     border-bottom: 1px solid #dcdcdc;
     padding-bottom: 61px;
+
     // padding-top: 0;
     @include mq($until: tablet) {
-        padding-bottom: 0 !important;;
+        padding-bottom: 0 !important;
+        ;
     }
 }
 
@@ -106,12 +108,13 @@ body.ios {
 }
 
 .elex-votes-wrapper {
-position: relative;
-margin: 0 158px;
+    position: relative;
+    margin: 0 158px;
 
-@include mq($until: tablet) {
-    margin: 0;
+    @include mq($until: tablet) {
+        margin: 0;
 
+    }
 }
 
 .elex-votes {
@@ -128,6 +131,7 @@ margin: 0 158px;
     }
 }
 
+
 [class^='elex-votes__'] {
     position: relative;
     width: 100%;
@@ -137,16 +141,14 @@ margin: 0 158px;
         margin: 1em 0;
     }
 
-    &.elex-votes__biden {
-
-    }
+    &.elex-votes__biden {}
 
     &.elex-votes__trump {
 
         @include mq($until: tablet) {
             top: 130px;
         }
-       
+
     }
 
 }
@@ -160,9 +162,9 @@ margin: 0 158px;
     top: -90px;
 
     @include mq($until: tablet) {
-       width: 0;
-       height: 0;
-       top: 0;
+        width: 0;
+        height: 0;
+        top: 0;
     }
 
     .bar-portrait-roundel {
@@ -209,7 +211,8 @@ margin: 0 158px;
         @include mq($until: tablet) {
             width: 110px;
             top: -92px;
-         }
+        }
+
         //height: 188px;
 
         .bar-portrait-image {
@@ -290,11 +293,13 @@ margin: 0 158px;
         font-size: 32px;
         line-height: 32px;
     }
-    
+
+
 
     &.bar-title__trump {
         text-align: right;
         color: #cc0a11;
+
         @include mq($until: tablet) {
             text-align: left;
         }
@@ -312,6 +317,7 @@ margin: 0 158px;
 
     .bar-candidate-name-short {
         display: none;
+
         @include mq($until: tablet) {
             display: inline;
         }
@@ -323,15 +329,15 @@ margin: 0 158px;
         position: relative;
         margin-left: 0 !important;
         @include fs-titlepiece(1);
-
         // @include mq($until: tablet) {
         display: block !important;
         // }
 
         @include mq($until: tablet) {
-           font-size: 32px;
-           line-height: 32px;
+            font-size: 32px;
+            line-height: 32px;
         }
+
         .title-count-label {
             @include fs-textSans(2);
             display: inline-block;
@@ -340,11 +346,13 @@ margin: 0 158px;
             margin: 0 10px;
             width: 100px;
             line-height: 16px;
-             @include mq($until: tablet) {
+
+            @include mq($until: tablet) {
                 display: none;
             }
         }
     }
+
 
 
     // @include mq(tablet) {
@@ -355,7 +363,8 @@ margin: 0 158px;
 
 [class^='bar-container'] {
     box-sizing: border-box;
-    position: absolute;;
+    position: absolute;
+    ;
     height: $bar-height;
     font-size: 0;
     z-index: 20;
@@ -363,35 +372,39 @@ margin: 0 158px;
     background-color: $gu-grey-4;
 
 
-    
+
 
     @include mq(tablet) {
 
-      &.bar-container__trump {
-        background-color: transparent;
-      }
-    }
-
-    
-
-    [class^='bar-votes'] {
-    position: absolute;
-    height: 100%;
-    transition: width .8s cubic-bezier(0.5, 0.1, 0.15, 0.98), left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
-
-    &.bar-votes__biden {
-        background: #25428f;
-        left: 0;
-    }
-
-    &.bar-votes__trump {
-        background: #cc0a11;
-        right: 0;
-        @include mq($until: tablet) {
-            right: auto;
-            left: 0;
+        &.bar-container__trump {
+            background-color: transparent;
         }
     }
+
+
+
+    [class^='bar-votes'] {
+        position: absolute;
+        height: 100%;
+        transition: width .8s cubic-bezier(0.5, 0.1, 0.15, 0.98), left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
+
+        &.bar-votes__biden {
+            background: #25428f;
+            left: 0;
+        }
+
+        &.bar-votes__trump {
+            background: #cc0a11;
+            right: 0;
+
+            @include mq($until: tablet) {
+                right: auto;
+                left: 0;
+            }
+        }
+
+    }
+}
 
 
 
