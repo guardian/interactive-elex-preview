@@ -1,92 +1,92 @@
-<div class="interactive-wrapper">
-    <div id="gv-mobile-dummy"></div>
-    <h2 class="elex-intro-block"><b>Choose which way the remaining states will vote and trace Biden or Trump's path to
-            victory.</b></h2>
-    <div class="sticky-container-height">
-        <div class="sticky-container">
-            <div class="sticky-inner">
+    <div class="interactive-wrapper">
+        <div id="gv-mobile-dummy"></div>
+        <!-- <h2 class="elex-intro-block"><b>Choose which way the remaining states will vote and trace Biden or Trump's path to
+            victory.</b></h2> -->
+        <div class="sticky-container-height">
+            <div class="sticky-container">
+                <div class="sticky-inner">
+                    <div class="elex-votes-wrapper">
+                        <div class="elex-votes">
+                            <div class="elex-votes__biden">
+                                <div class="bar-portrait__biden">
+                                    <div class="bar-portrait-roundel">
+                                        <div class="bar-portrait-roundel-inner"></div>
+                                    </div>
+                                    <div class="bar-portrait-image-wrapper">
+                                        <img class="bar-portrait-image biden-portrait biden-portrait-normal show-portrait"
+                                            src="<%= path %>/images/portraits/biden_normal.png" />
+                                        <img class="bar-portrait-image biden-portrait biden-portrait-unhappy"
+                                            src="<%= path %>/images/portraits/biden_unhappy.png" />
+                                        <img class="bar-portrait-image biden-portrait biden-portrait-happy"
+                                            src="<%= path %>/images/portraits/biden_happy.png" />
+                                    </div>
+                                </div>
+                                <div class="bar-title__biden"><span class="bar-candidate-name">JOE BIDEN</span><span
+                                        class="bar-candidate-name-short">BIDEN</span>
+                                    <div class="title-count"><span class="biden-title-count">218</span><span
+                                            class="title-count-label">electoral college votes</span></div>
+                                </div>
+                                <div class="bar-container__biden">
+                                    <div class="bar-votes__biden"></div>
+                                </div>
+                            </div>
 
-                <div class="elex-votes-wrapper">
-                    <div class="elex-votes">
-                        <div class="elex-votes__biden">
-                            <div class="bar-portrait__biden">
-                                <div class="bar-portrait-roundel">
-                                    <div class="bar-portrait-roundel-inner"></div>
+                            <div class="elex-votes__trump">
+                                <div class="bar-portrait__trump">
+                                    <div class="bar-portrait-roundel">
+                                        <div class="bar-portrait-roundel-inner"></div>
+                                    </div>
+                                    <div class="bar-portrait-image-wrapper">
+                                        <img class="bar-portrait-image trump-portrait trump-portrait-normal show-portrait"
+                                            src="<%= path %>/images/portraits/trump_normal.png" />
+                                        <img class="bar-portrait-image trump-portrait trump-portrait-unhappy"
+                                            src="<%= path %>/images/portraits/trump_unhappy.png" />
+                                        <img class="bar-portrait-image trump-portrait trump-portrait-happy"
+                                            src="<%= path %>/images/portraits/trump_happy.png" />
+                                    </div>
                                 </div>
-                                <div class="bar-portrait-image-wrapper">
-                                    <img class="bar-portrait-image biden-portrait biden-portrait-normal show-portrait"
-                                        src="<%= path %>/images/portraits/biden_normal.png" />
-                                    <img class="bar-portrait-image biden-portrait biden-portrait-unhappy"
-                                        src="<%= path %>/images/portraits/biden_unhappy.png" />
-                                    <img class="bar-portrait-image biden-portrait biden-portrait-happy"
-                                        src="<%= path %>/images/portraits/biden_happy.png" />
+                                <div class="bar-title__trump"><span class="bar-candidate-name">DONALD TRUMP</span><span
+                                        class="bar-candidate-name-short">TRUMP</span>
+                                    <div class="title-count"><span class="title-count-label">electoral college
+                                            votes</span><span class="trump-title-count">218</span></div>
+                                </div>
+                                <div class="bar-container__trump">
+                                    <div class="bar-votes__trump"></div>
                                 </div>
                             </div>
-                            <div class="bar-title__biden">JOE BIDEN<div class="title-count"><span
-                                        class="biden-title-count">218</span><span class="title-count-label">electoral
-                                        college votes</span></div>
-                            </div>
-                            <div class="bar-container__biden"></div>
                         </div>
-                        <div class="bar-title__biden"><span class="bar-candidate-name">JOE BIDEN</span><span class="bar-candidate-name-short">BIDEN</span><div class="title-count"><span class="biden-title-count">218</span><span class="title-count-label">electoral college votes</span></div></div>
-                        <div class="bar-container__biden"><div class="bar-votes__biden"></div></div>
+
                     </div>
-
-
-                        <div class="elex-votes__trump">
-                            <div class="bar-portrait__trump">
-                                <div class="bar-portrait-roundel">
-                                    <div class="bar-portrait-roundel-inner"></div>
-                                </div>
-                                <div class="bar-portrait-image-wrapper">
-                                    <img class="bar-portrait-image trump-portrait trump-portrait-normal show-portrait"
-                                        src="<%= path %>/images/portraits/trump_normal.png" />
-                                    <img class="bar-portrait-image trump-portrait trump-portrait-unhappy"
-                                        src="<%= path %>/images/portraits/trump_unhappy.png" />
-                                    <img class="bar-portrait-image trump-portrait trump-portrait-happy"
-                                        src="<%= path %>/images/portraits/trump_happy.png" />
-                                </div>
-                            </div>
-                            <div class="bar-title__trump">DONALD TRUMP<div class="title-count"><span
-                                        class="title-count-label">electoral college votes</span><span
-                                        class="trump-title-count">218</span></div>
-                            </div>
-                            <div class="bar-container__trump"></div>
-                        </div>
-                        <div class="bar-title__trump"><span class="bar-candidate-name">DONALD TRUMP</span><span class="bar-candidate-name-short">TRUMP</span><div class="title-count"><span class="title-count-label">electoral college votes</span><span class="trump-title-count">218</span></div></div>
-                        <div class="bar-container__trump"><div class="bar-votes__trump"></div></div>
-                    </div>
-
                 </div>
             </div>
         </div>
-    </div>
-    <button class="reset-btn">Reset</button>
-    <button class="biden-increase-btn">Biden increase</button>
-    <button class="biden-win-btn">Biden win</button>
-    <button class="biden-lose-btn">Biden lose</button>
-    <button class="pulse-btn">Pulse roundel</button>
-    <button class="increment-btn">Increment</button>
-    <button class="mood-btn">Change mood</button>
-    <button class="win-btn">Win</button>
+        <button class="reset-btn">Reset</button>
+        <button class="biden-increase-btn">Biden increase</button>
+        <button class="biden-win-btn">Biden win</button>
+        <button class="biden-lose-btn">Biden lose</button>
+        <button class="pulse-btn">Pulse roundel</button>
+        <button class="increment-btn">Increment</button>
+        <button class="mood-btn">Change mood</button>
+        <button class="win-btn">Win</button>
 
-    <div class="state-groups--close_lean_dem">
-    </div>
-    <div class="state-groups--former_strong_GOP">
-    </div>
-    <div class="state-groups--swing">
-    </div>
-    <div class="state-groups--broken_blue_wall">
-    </div>
-    <div class="state-groups--close_cds">
-    </div>
-    <div class="finish-card">
-        <div class="finish-headline">
-            Under your scenario, <span class="finish-headline__status"></span> ...would win the election.
-        </div>
-        <div class="gv-map">
-            <svg class='elex-map'></svg>
-        </div>
-    </div>
 
-</div>
+        <div class="state-groups--close_lean_dem">
+        </div>
+        <div class="state-groups--former_strong_GOP">
+        </div>
+        <div class="state-groups--swing">
+        </div>
+        <div class="state-groups--broken_blue_wall">
+        </div>
+        <div class="state-groups--close_cds">
+        </div>
+        <div class="finish-card">
+            <div class="finish-headline">
+                Under your scenario, <span class="finish-headline__status"></span> ...would win the election.
+            </div>
+            <div class="gv-map">
+                <svg class='elex-map'></svg>
+            </div>
+        </div>
+
+    </div>

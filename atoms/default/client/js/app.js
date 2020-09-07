@@ -318,7 +318,7 @@ class initialGraphics {
         }
 
         Object.keys(this.bars).forEach(pos => {
-            this.bars[pos] = d3.select(`.bar-container__${pos}`)
+            this.bars[pos] = d3.select(`.bar-votes__${pos}`)
         })
 
         const barTotals = data.filter(data => data.type == "bar_total")
@@ -335,25 +335,25 @@ class initialGraphics {
         const bidenSolidStates = barTotals[1].group_states.split(", ")
 
         // Make bar sticky
-        this.stickyContainer = $('.sticky-container-height')
-        this.stickyElement = d3.select('.sticky-container').node()
-        this.isApp = d3.select('body').classed('ios')
+        // this.stickyContainer = $('.sticky-container-height')
+        // this.stickyElement = d3.select('.sticky-container').node()
+        // this.isApp = d3.select('body').classed('ios')
 
-        // select sticky div and style height
-        d3.select('.sticky-container-height')
-            .style('height', (this.stickyElement.getBoundingClientRect().height) + 'px')
+        // // select sticky div and style height
+        // d3.select('.sticky-container-height')
+        //     .style('height', (this.stickyElement.getBoundingClientRect().height) + 'px')
 
 
-        // get scroll point (+ app scroll point extra?)
-        const getScrollPoint = () => this.stickyContainer.getBoundingClientRect().top + window.scrollY + (this.isApp ? 45 : 0);
-        // listen for scrolling and call scrollpoint function?
-        this.stickyListener = this.makeStickyListenerAt(getScrollPoint)
-        this.sticky = window.scrollY >= getScrollPoint();
+        // // get scroll point (+ app scroll point extra?)
+        // const getScrollPoint = () => this.stickyContainer.getBoundingClientRect().top + window.scrollY + (this.isApp ? 45 : 0);
+        // // listen for scrolling and call scrollpoint function?
+        // this.stickyListener = this.makeStickyListenerAt(getScrollPoint)
+        // this.sticky = window.scrollY >= getScrollPoint();
 
-        // event listener on scroll
-        d3.select(this.stickyElement).classed('sticky', this.sticky);
-        window.addEventListener('scroll', this.stickyListener, false);
-        // }
+        // // event listener on scroll
+        // d3.select(this.stickyElement).classed('sticky', this.sticky);
+        // window.addEventListener('scroll', this.stickyListener, false);
+        // // }
 
 
         // // Map setup
@@ -425,9 +425,9 @@ class initialGraphics {
         const trumpTotal = barTotalData.trump
         const bidenTotal = barTotalData.biden
 
-        const trumpBar = d3.select('.bar-container__trump')
+        const trumpBar = d3.select('.bar-votes__trump')
             .style("width", x(trumpTotal) + '%')
-        const bidenBar = d3.select('.bar-container__biden')
+        const bidenBar = d3.select('.bar-votes__biden')
             .style("width", x(bidenTotal) + '%')
     }
 
@@ -587,7 +587,7 @@ function winFlash() {
 
 // MAIN FUNCTION TO UPDATE BAR GRAPHIC AND TRIGGER ANIMATIONS
 
-function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotesTrump) {
+function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesTrump) {
 
 
     if (votesBiden > prevVotesBiden) {
@@ -625,7 +625,7 @@ function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotes
     bidenTotal = votesBiden;
 
     // BELOW RESIZES THE BAR MAY NOT BE CORRECTLY SIZED?? MIGHT WANT TO PLUG INTO A CUSTOM D3 RESIZE FUNCTION
-    
+
     // DESKTOP SIZES TO VOTES AS A PROPORTION OF TOTAL VOTES POSSIBLE (540) AS A PERCENTAGE WIDTH
 
     // MOBILE DESIGN HAS 270 FINISH LINE TO RIGHT, POSITIONED AT 90% INITIALLY
@@ -636,7 +636,7 @@ function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotes
     const bidenBar = $(".bar-votes__biden");
     const trumpBar = $(".bar-votes__trump");
 
-    
+
 
     if (isMobile()) {
         // mobile
@@ -654,13 +654,13 @@ function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotes
         }
 
 
-        bidenBar.style.width = (votesBiden/(270 / finishXPos)) * 100 + "%";
-        trumpBar.style.width = (votesTrump/(270 / finishXPos)) * 100 + "%";
+        bidenBar.style.width = (votesBiden / (270 / finishXPos)) * 100 + "%";
+        trumpBar.style.width = (votesTrump / (270 / finishXPos)) * 100 + "%";
 
     } else {
         // desktop
-        bidenBar.style.width = (votesBiden/540*100) + "%";
-        trumpBar.style.width = (votesTrump/540*100) + "%";
+        bidenBar.style.width = (votesBiden / 540 * 100) + "%";
+        trumpBar.style.width = (votesTrump / 540 * 100) + "%";
     }
 }
 
