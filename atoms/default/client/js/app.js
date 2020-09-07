@@ -312,7 +312,6 @@ class stateCards {
 class initialGraphics {
     constructor(data) {
 
-
         this.bars = {
             biden: true,
             trump: true
@@ -347,7 +346,6 @@ class initialGraphics {
 
         // get scroll point (+ app scroll point extra?)
         const getScrollPoint = () => this.stickyContainer.getBoundingClientRect().top + window.scrollY + (this.isApp ? 45 : 0);
-
         // listen for scrolling and call scrollpoint function?
         this.stickyListener = this.makeStickyListenerAt(getScrollPoint)
         this.sticky = window.scrollY >= getScrollPoint();
@@ -589,7 +587,7 @@ function winFlash() {
 
 // MAIN FUNCTION TO UPDATE BAR GRAPHIC AND TRIGGER ANIMATIONS
 
-function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesTrump) {
+function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotesTrump) {
 
 
     if (votesBiden > prevVotesBiden) {
@@ -626,10 +624,60 @@ function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesT
     trumpTotal = votesTrump; // Update global votes totals
     bidenTotal = votesBiden;
 
-    // BELOW RESIZES THE BAR MAY NOT BE CORRECTLY SIZED?? MIGHT WANT TO PLUG INTO A CUSTOM D3 RESIZE FUNCTION 
+    // BELOW RESIZES THE BAR MAY NOT BE CORRECTLY SIZED?? MIGHT WANT TO PLUG INTO A CUSTOM D3 RESIZE FUNCTION
+    
+    // DESKTOP SIZES TO VOTES AS A PROPORTION OF TOTAL VOTES POSSIBLE (540) AS A PERCENTAGE WIDTH
 
-    const bidenBar = $(".bar-container__biden");
-    const trumpBar = $(".bar-container__trump");
-    bidenBar.style.width = (votesBiden / 540 * 100) + "%";
-    trumpBar.style.width = (votesTrump / 540 * 100) + "%";
+    // MOBILE DESIGN HAS 270 FINISH LINE TO RIGHT, POSITIONED AT 90% INITIALLY
+    // SO BAR WIDTH SHOULD BE (VOTES/(270 / 0.9)) * 100%
+
+    // TO DO: IF VOTES INCREASE ABOVE THEN THAT 0.9 figure will have to dynamically change to 0.8 or less with finish line at 80% or less;
+
+    const bidenBar = $(".bar-votes__biden");
+    const trumpBar = $(".bar-votes__trump");
+
+    
+
+    if (isMobile()) {
+        // mobile
+
+        let finishXPos = 0.9; // 90%;
+
+        if (votesBiden > 300 || votesTrump > 300) {
+
+            let maxXVotes = Math.max(votesBiden, votesTrump); // + 30 to give space to grow into???
+            // if (maxXVotes > 540) {
+            //     maxXVotes == 540;
+            // }
+            finishXPos = 270 / maxXVotes;
+            document.querySelector(".elex-votes-finishline").style.left = (finishXPos * 100) + "%";
+        }
+
+
+        bidenBar.style.width = (votesBiden/(270 / finishXPos)) * 100 + "%";
+        trumpBar.style.width = (votesTrump/(270 / finishXPos)) * 100 + "%";
+
+    } else {
+        // desktop
+        bidenBar.style.width = (votesBiden/540*100) + "%";
+        trumpBar.style.width = (votesTrump/540*100) + "%";
+    }
+}
+
+
+// MOBILE DETECT
+
+function isMobile() {
+    var dummy = document.querySelector("#gv-mobile-dummy");
+    if (getStyle(dummy) == 'block') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+function getStyle(element) {
+    return element.currentStyle ? element.currentStyle.display :
+        getComputedStyle(element, null).display;
 }
