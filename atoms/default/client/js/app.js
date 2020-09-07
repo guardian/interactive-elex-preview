@@ -68,12 +68,13 @@ loadData().then(groups => {
 
     const cards = new stateCards(groups)
     const barAndMap = new initialGraphics(groups);
-    // console.log(cards)
-    // console.log(barAndMap)
+    console.log(cards)
+    console.log(barAndMap)
 
     cards.onChange(data => {
         barAndMap.update(data)
     })
+
 })
 
 const bidenCol = '#25428f'
@@ -273,9 +274,6 @@ class stateCards {
             })
         })
 
-        // const options = d3.selectAll('.state-card-buttons__option')
-        // this.options = options
-
         const stateDivs = d3.selectAll('.state-card')
         this.stateDivs = stateDivs
     }
@@ -335,79 +333,79 @@ class initialGraphics {
         const bidenSolidStates = barTotals[1].group_states.split(", ")
 
         // Make bar sticky
-        // this.stickyContainer = $('.sticky-container-height')
-        // this.stickyElement = d3.select('.sticky-container').node()
-        // this.isApp = d3.select('body').classed('ios')
+        this.stickyContainer = $('.sticky-container-height')
+        this.stickyElement = d3.select('.sticky-container').node()
+        this.isApp = d3.select('body').classed('ios')
 
-        // // select sticky div and style height
-        // d3.select('.sticky-container-height')
-        //     .style('height', (this.stickyElement.getBoundingClientRect().height) + 'px')
-
-
-        // // get scroll point (+ app scroll point extra?)
-        // const getScrollPoint = () => this.stickyContainer.getBoundingClientRect().top + window.scrollY + (this.isApp ? 45 : 0);
-        // // listen for scrolling and call scrollpoint function?
-        // this.stickyListener = this.makeStickyListenerAt(getScrollPoint)
-        // this.sticky = window.scrollY >= getScrollPoint();
-
-        // // event listener on scroll
-        // d3.select(this.stickyElement).classed('sticky', this.sticky);
-        // window.addEventListener('scroll', this.stickyListener, false);
-        // // }
+        // select sticky div and style height
+        d3.select('.sticky-container-height')
+            .style('height', (this.stickyElement.getBoundingClientRect().height) + 'px')
 
 
-        // // Map setup
-        // const statesFc = topojson.feature(statesTopo, statesTopo.objects.states)
+        // get scroll point (+ app scroll point extra?)
+        const getScrollPoint = () => this.stickyContainer.getBoundingClientRect().top + window.scrollY + (this.isApp ? 45 : 0);
+        // listen for scrolling and call scrollpoint function?
+        this.stickyListener = this.makeStickyListenerAt(getScrollPoint)
+        this.sticky = window.scrollY >= getScrollPoint();
 
-        // // 'fc' is short for 'FeatureCollection', you can log it to look at the structure
-
-        // const draw = () => {
-
-        //     // $ is shorthand for document.querySelector
-        //     // selects the SVG element
-        //     const svgEl = $('.elex-map')
-
-        //     // get the SVG's width as set in CSS
-        //     const width = svgEl.getBoundingClientRect().width
-        //     const height = width * 0.66
-
-        //     const svg = d3.select(svgEl)
-        //         .attr('width', width)
-        //         .attr('height', height)
-
-        //     // set up a map projection that fits our GeoJSON into the SVG
-
-        //     const proj = d3.geoAlbersUsa()
-        //         .fitExtent([
-        //             [-69, 0],
-        //             [width, height]
-        //         ], statesFc)
-
-        //     const path = d3.geoPath().projection(proj)
-
-        //     // Draw states
-
-        //     const stateShapes = svg
-        //         .selectAll('blah')
-        //         // do something for each feature ( = area ) in the GeoJSON
-        //         .data(statesFc.features)
-        //         .enter()
-        //         .append('path')
-        //         .style("fill", function (d) {
-        //             if (trumpSolidStates.includes(d.properties.name) == true) {
-        //                 return trumpCol
-        //             } else if (bidenSolidStates.includes(d.properties.name) == true) {
-        //                 return bidenCol
-        //             } else {
-        //                 return "#f6f6f6"
-        //             }
-        //         })
-        //         .attr('d', path)
-        //         .attr('class', 'elex-state')
-
+        // event listener on scroll
+        d3.select(this.stickyElement).classed('sticky', this.sticky);
+        window.addEventListener('scroll', this.stickyListener, false);
         // }
-        // // call the draw function
-        // draw()
+
+
+        // Map setup
+        const statesFc = topojson.feature(statesTopo, statesTopo.objects.states)
+
+        // 'fc' is short for 'FeatureCollection', you can log it to look at the structure
+
+        const draw = () => {
+
+            // $ is shorthand for document.querySelector
+            // selects the SVG element
+            const svgEl = $('.elex-map')
+
+            // get the SVG's width as set in CSS
+            const width = svgEl.getBoundingClientRect().width
+            const height = width * 0.66
+
+            const svg = d3.select(svgEl)
+                .attr('width', width)
+                .attr('height', height)
+
+            // set up a map projection that fits our GeoJSON into the SVG
+
+            const proj = d3.geoAlbersUsa()
+                .fitExtent([
+                    [-69, 0],
+                    [width, height]
+                ], statesFc)
+
+            const path = d3.geoPath().projection(proj)
+
+            // Draw states
+
+            const stateShapes = svg
+                .selectAll('blah')
+                // do something for each feature ( = area ) in the GeoJSON
+                .data(statesFc.features)
+                .enter()
+                .append('path')
+                .style("fill", function (d) {
+                    if (trumpSolidStates.includes(d.properties.name) == true) {
+                        return trumpCol
+                    } else if (bidenSolidStates.includes(d.properties.name) == true) {
+                        return bidenCol
+                    } else {
+                        return "#f6f6f6"
+                    }
+                })
+                .attr('d', path)
+                .attr('class', 'elex-state')
+
+        }
+        // call the draw function
+        draw()
 
         if (data) {
             this.update(data)
@@ -415,20 +413,10 @@ class initialGraphics {
     }
 
     update(data) {
-        console.log(data)
-        const barTotals = data.filter(data => data.type == "bar_total")
+        const newTrumpTotal = this.barTotalData.trump
+        const newBidenTotal = this.barTotalData.biden
 
-        const barTotalData = {
-            trump: barTotals[0].group_ecvs,
-            biden: barTotals[1].group_ecvs
-        }
-        const trumpTotal = barTotalData.trump
-        const bidenTotal = barTotalData.biden
-
-        const trumpBar = d3.select('.bar-votes__trump')
-            .style("width", x(trumpTotal) + '%')
-        const bidenBar = d3.select('.bar-votes__biden')
-            .style("width", x(bidenTotal) + '%')
+        updateElexBarGraphic(newBidenTotal, newTrumpTotal, 0, 0)
     }
 
     makeStickyListenerAt(getYPos) {
@@ -495,7 +483,7 @@ class initialGraphics {
     }
 }
 
-
+// FINISH CARD
 
 // Filled status headline
 // d3.select('.elex-votes-filled')
@@ -504,6 +492,7 @@ class initialGraphics {
 //     .style('color', votesFor > votesAgainst ? statusHex.succeed : statusHex.fail)
 //     .transition()
 //     .text(votesFor > votesAgainst ? 'pass' : 'reject')
+
 
 // ANIMATION FUNCTIONS
 

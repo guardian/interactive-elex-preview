@@ -27,7 +27,7 @@ $bar-height: 36px;
     position: relative;
     display: block;
     border-top: 1px solid #dcdcdc;
-    border-bottom: 1px solid #dcdcdc;
+    // border-bottom: 1px solid #dcdcdc;
     padding-bottom: 61px;
 
     // padding-top: 0;
@@ -406,6 +406,10 @@ body.ios {
     }
 }
 
+button {
+    display: none;
+}
+
 
 
 .elex-votes-finishline {
@@ -478,6 +482,11 @@ body.ios {
     }
 }
 
+.state-groups {
+    padding: 10px 0;
+    margin: 40px 0
+}
+
 // .state-groups--close_lean_dem,
 // .state-groups--former_strong_GOP,
 // .state-groups--swing,
@@ -485,6 +494,7 @@ body.ios {
 // .state-groups--close_cds {
 //     background-color: #f6f6f6;
 // }
+
 
 .state-group__name {
     @include fs-header(4);
@@ -632,5 +642,20 @@ body.ios {
 }
 
 .finish-card {
-    display: none;
+    // display: none;
+    margin: 40px 0;
+    padding: 10px;
+    border: solid 1px #121212
+}
+
+.finish-headline p {
+    @include fs-textSans(4);
+}
+
+.finish-headline h2 {
+    @include fs-titlepiece(2);
+}
+
+.finish-agree-percentage {
+    @include fs-header(4);
 }
