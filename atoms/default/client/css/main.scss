@@ -46,8 +46,6 @@ body.ios {
     }
 }
 
-.sticky-inner {}
-
 
 .elex-map {
     width: 100%;
@@ -86,6 +84,10 @@ body.ios {
     }
 }
 
+.elex-intro-block {
+    @include fs-header(4);
+    padding-bottom: 6px;
+}
 
 .elex-votes-wrapper {
     position: relative;
@@ -391,7 +393,7 @@ body.ios {
     margin: 8px 5px;
     align-self: stretch;
     min-height: 350px;
-    width: 400px;
+    max-width: 400px;
     padding: 6px 10px;
     padding-bottom: 40px;
     box-sizing: border-box;
@@ -488,6 +490,12 @@ body.ios {
     top: 29px;
 }
 
+.state-card-buttons {
+    width: 400px;
+    position: absolute;
+    bottom: 10px;
+}
+
 .state-card-buttons__option {
     @include fs-textSans(3);
     font-weight: bold;
@@ -508,18 +516,6 @@ body.ios {
     cursor: pointer;
 }
 
-// .state-card-toggle__inner {
-//     position: absolute;
-
-//     left: 0;
-
-//     transform: translate(1px, -1px);
-
-//     width: 33%;
-//     background: #dcdcdc;
-//     min-height: 32px;
-//     border-radius: 16px;
-
-//     transition: left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98), background-color .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
-//     ;
-// }
+.finish-card {
+    display: none;
+}
