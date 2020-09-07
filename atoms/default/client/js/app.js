@@ -13,7 +13,8 @@ import bubbleData from 'shared/server/data_joined.json'
 
 let moodIndex = 0;
 
-let trumpTotal = 218, bidenTotal = 218; // These are global references to the current vote totals currently used in the bar animation
+let trumpTotal = 218,
+    bidenTotal = 218; // These are global references to the current vote totals currently used in the bar animation
 
 const pulseBtn = document.querySelector(".pulse-btn");
 const moodBtn = document.querySelector(".mood-btn");
@@ -24,213 +25,476 @@ const bidenWinBtn = document.querySelector(".biden-win-btn");
 const bidenLoseBtn = document.querySelector(".biden-lose-btn");
 const resetBtn = document.querySelector(".reset-btn");
 
-pulseBtn.addEventListener("click", function(){ pulse("biden"); });
-moodBtn.addEventListener("click", function(){ changePortrait("biden", null); });
-incrementBtn.addEventListener("click", function(){ animateTotal("biden", (bidenTotal + 23), bidenTotal); });
-winBtn.addEventListener("click", function(){ winFlash(); });
-bidenIncreaseBtn.addEventListener("click", function(){ updateElexBarGraphic( (bidenTotal + 27), trumpTotal, bidenTotal, trumpTotal); });
-bidenWinBtn.addEventListener("click", function(){ updateElexBarGraphic( 283, 200, bidenTotal, trumpTotal); });
-bidenLoseBtn.addEventListener("click", function(){ updateElexBarGraphic( 210, 270, bidenTotal, trumpTotal); });
-resetBtn.addEventListener("click", function(){ updateElexBarGraphic( 27, 21, bidenTotal, trumpTotal);  changePortrait("biden", "normal");
-changePortrait("trump", "normal"); });
+pulseBtn.addEventListener("click", function () {
+    pulse("biden");
+});
+moodBtn.addEventListener("click", function () {
+    changePortrait("biden", null);
+});
+incrementBtn.addEventListener("click", function () {
+    animateTotal("biden", (bidenTotal + 23), bidenTotal);
+});
+winBtn.addEventListener("click", function () {
+    winFlash();
+});
+bidenIncreaseBtn.addEventListener("click", function () {
+    updateElexBarGraphic((bidenTotal + 27), trumpTotal, bidenTotal, trumpTotal);
+});
+bidenWinBtn.addEventListener("click", function () {
+    updateElexBarGraphic(283, 200, bidenTotal, trumpTotal);
+});
+bidenLoseBtn.addEventListener("click", function () {
+    updateElexBarGraphic(210, 270, bidenTotal, trumpTotal);
+});
+resetBtn.addEventListener("click", function () {
+    updateElexBarGraphic(27, 21, bidenTotal, trumpTotal);
+    changePortrait("biden", "normal");
+    changePortrait("trump", "normal");
+});
 
 
-async function loadGroupData() {
+// Load data, return individual states, groups & initial bar counts
+async function loadData() {
     // fetch data from url, get state groupings
     const sheetData = await fetch('http://interactive.guim.co.uk/docsdata-test/1xxtoiJ5Rn1cVXwynMgJyGr4Cd40znZoI9RYiMj_rMe0.json')
         .then(res => res.json())
-    const groups = sheetData.sheets.state_groups.filter(group => group.id);
+    const groups = sheetData.sheets.state_cards.filter(group => group.type);
     return groups
 }
 
 
+// Plot intial bar & map, create state groups & cards, on button clicks update bar & map
+loadData().then(groups => {
 
-loadGroupData().then(groups => {
-    const groupsInUse = groups.filter(group => group.states)
-    const boxes = createBoxes(groupsInUse)
-    const solids = groups.filter(group => group.solid)
+    const cards = new stateCards(groups)
+    const barAndMap = new initialGraphics(groups);
+    // console.log(cards)
+    // console.log(barAndMap)
 
-    createInitialGraphics(solids)
-    // boxes.onChange(data => {
-    //     bars.update(data);
-    // })
-
-    console.log(groupsInUse)
-
+    cards.onChange(data => {
+        barAndMap.update(data)
+    })
 })
 
 const bidenCol = '#25428f'
 const trumpCol = '#cc0a11'
 
-function createBoxes(groups) {
-    const groupsDiv = d3.select('.state-groups')
+// Bar setup
+const x = d3.scaleLinear().domain([0, 538]).range([0, 100])
 
-    const groupDivs = groupsDiv
-        .selectAll('.state-group')
-        .data(groups)
-        .enter()
-        .append('div')
-        .classed('state-group', true)
+const y = d3.scaleLinear()
+    .domain([0, 1])
+    .range([0, 100])
 
-    groupDivs
-        .append('h2')
-        .html(d => d.name)
-        .classed('state-group__name', true)
+// 270 majority finish line
+const finish = d3.select('.elex-votes')
+    .append('div')
+    .attr("class", 'elex-votes-finishline')
+    .style('left', x(270) + '%');
 
-    groupDivs
-        .append('h3')
-        .html(d => d.states)
-        .classed("state-group__states", true)
+finish
+    .append('div')
+    .attr("class", "elex-votes-finish-label")
+    .text("270 to win");
 
-    groupDivs
-        .append('div')
-        .html(d => d.ev_count)
-        .classed("state-group__evcount", true)
+finish
+    .append('div')
+    .attr("class", "elex-votes-finish-label elex-votes-finish-label-overlay")
+    .text("270 to win");
 
-    groupDivs
-        .append('p')
-        .html(d => d.storyText)
-        .classed("state-group__context", true)
 
-    const setToggle = (groupDiv, d) => {
-        const options = groupDiv.selectAll('.state-group-toggle__option')
-        const inner = groupDiv.select('.state-group-toggle__inner')
+// Change style of buttons when clicked
+const setButtons = (stateDiv, d) => {
+    const options = stateDiv.selectAll('.state-card-buttons__option')
+        .style('background-color', null)
+        .style('color', null);
 
-        const perc = d === 'biden' ? 0 : (d === 'unselected' ? 33.3333 : 66.6667)
-        const backCol = d === 'biden' ? bidenCol : (d === 'unselected' ? "#dcdcdc" : trumpCol)
+    const backCol = d === 'biden' ? bidenCol : (d === 'trump' ? trumpCol : "#dcdcdc")
 
-        inner.style('left', perc + '%')
-        inner.style('background-color', backCol)
+    options.classed('state-card-buttons__option--selected', d2 => {
+        return d2 === d
+    })
+    const selected = stateDiv.selectAll('.state-card-buttons__option--selected')
+        .style('background-color', backCol)
+        .style('color', '#ffffff')
+}
 
-        options.classed('state-group-toggle__option--selected', d2 => {
-            return d2 === d
+
+// Create state groups & cards
+class stateCards {
+
+    constructor(groups) {
+
+        const statesInUse = groups.filter(group => group.groups_in_use)
+        const stateGroups = groups.filter(group => group.type == "group")
+
+        this.statesInUse = statesInUse;
+
+        const groupIds = stateGroups.map(function (el) {
+            return el.group_id;
+        })
+
+        groupIds.forEach(function (groupName) {
+
+
+            const stateGroup = stateGroups.filter(d => d.group_id == groupName)
+            const statesInGroup = statesInUse.filter(d => d.groups_in_use == groupName)
+
+            const groupsDiv = d3.select(`.state-groups--${groupName}`)
+
+            const groupDivs = groupsDiv
+                .selectAll('.state-group')
+                .data(stateGroup)
+                .enter()
+                .append('div')
+                .classed('state-group', true)
+
+            groupDivs
+                .append('h2')
+                .html(d => d.group_name)
+                .classed('state-group__name', true)
+
+            groupDivs
+                .append('p')
+                .html(d => d.groupText)
+                .classed('state-group__text', true)
+
+            const statesDiv = groupDivs
+                .append('div')
+                .classed('state-cards', true)
+
+            const stateDivs = statesDiv
+                .selectAll('.state-card')
+                .data(statesInGroup)
+                .enter()
+                .append('div')
+                .classed('state-card', true)
+
+            stateDivs
+                .append('h2')
+                .html(d => d.state)
+                .classed('state-card__name', true)
+
+            stateDivs
+                .append('h2')
+                .html(d => d.ecvs + " electoral vote" + (d.ecvs == 1 ? "" : "s"))
+                .classed("state-card__ecvs", true)
+
+            const indicatorDiv = stateDivs
+                .append('div')
+                .classed("state-card__indicator", true)
+
+
+            const votingHistory = indicatorDiv
+                .append('div')
+                .classed('state-card__voting-history', true)
+
+            votingHistory
+                .append('div')
+                .classed('state-card__label label-2000', true)
+                .text('2000')
+
+            for (var i = 0; i < 4; i++) {
+                votingHistory
+                    .append('div')
+                    .style('background-color', function (d) {
+                        if (d.voting_history[i] == "R") {
+                            return trumpCol;
+                        } else {
+                            return bidenCol;
+                        }
+                    })
+                    .classed('state-card__history-block', true)
+            }
+
+            const margin2016 = indicatorDiv
+                .append('div')
+                .classed('state-card__2016-margin', true)
+
+
+            margin2016
+                .append('div')
+                .classed('state-card__label label-2016', true)
+                .text('2016 margin')
+
+            margin2016
+                .append('div')
+                .html(d => "+ " + parseFloat(Math.abs(d.margin2016)).toFixed(1))
+                .style('background-color', function (d) {
+                    if (d.margin2016 > 0) {
+                        return bidenCol
+                    } else {
+                        return trumpCol
+                    }
+                })
+                .classed('state-card__2016-margin-block', true)
+
+            const polling2020 = indicatorDiv
+                .append('div')
+                .classed('state-card__2020-polling', true)
+
+            polling2020
+                .append('div')
+                .classed('state-card__label label-2020', true)
+                .text('2020 polling')
+
+            polling2020
+                .append('div')
+                .html(d => "+ " + parseFloat(Math.abs(d.polling2020)).toFixed(1))
+                .style('background-color', function (d) {
+                    if (d.polling2020 > 0) {
+                        return '#93a9e1'
+                    } else {
+                        return '#ea8386'
+                    }
+                })
+                .classed('state-card__2020-polling-block', true)
+
+            stateDivs
+                .append('p')
+                .html(d => d.stateText)
+                .classed("state-card__text", true)
+
+            const buttonsDiv = stateDivs
+                .append('div')
+                .classed("state-card-buttons", true)
+
+            const options = buttonsDiv
+                .selectAll('choices')
+                .data(['biden', 'trump'])
+                .enter()
+                .append('div')
+                .attr('class', d => `state-card-buttons__option state-card-buttons__option--${d.toLowerCase()}`)
+                .text(d => d.slice(0, 1).toUpperCase() + d.slice(1))
+
+            stateDivs.each(function (d, i) {
+                const stateDiv = d3.select(this)
+                setButtons(stateDiv, d.candidate_select)
+            })
+        })
+
+        // const options = d3.selectAll('.state-card-buttons__option')
+        // this.options = options
+
+        const stateDivs = d3.selectAll('.state-card')
+        this.stateDivs = stateDivs
+    }
+
+
+    onChange(callback) {
+        const that = this
+
+        this.stateDivs.each(function (td) {
+            const stateDiv = d3.select(this)
+            const options = stateDiv.selectAll('.state-card-buttons__option')
+
+            options.on('click', function (d, i) {
+                const candidate_select = d.toLowerCase();
+
+                that.statesInUse = that.statesInUse.map(t => {
+                    return t.id === td.id ? Object.assign({}, t, {
+                            candidate_select
+                        }) :
+                        t
+                })
+
+                setButtons(stateDiv, d)
+                callback(that.stateInUse)
+            })
+
         })
     }
-
-    const toggleDiv = groupDivs
-        .append('div')
-        .classed("state-group__toggle", true)
-
-    const inner = toggleDiv
-        .append('div')
-        .classed('state-group-toggle__inner', true)
-
-    const options = toggleDiv
-        .selectAll('blah')
-        .data(['biden', 'unselected', 'trump'])
-        .enter()
-        .append('div')
-        .attr('class', d => `state-group-toggle__option state-group-toggle__option--${d.toLowerCase()}`)
-        .text(d => d.slice(0, 1).toUpperCase() + d.slice(1))
-
-    groupDivs.each(function (d, i) {
-        const groupDiv = d3.select(this)
-        setToggle(groupDiv, d.candidate_select)
-    })
-
 }
 
 
-function createInitialGraphics(solids) {
 
-    // Bar setup
-    const x = d3.scaleLinear().domain([0, 538]).range([0, 100])
+// Build initial bar & map (showing solid + likely states from Trump & Biden)
+class initialGraphics {
+    constructor(data) {
 
-    const y = d3.scaleLinear()
-        .domain([0, 1])
-        .range([0, 100])
+        this.bars = {
+            biden: true,
+            trump: true
+        }
 
-    // 270 majority finish line
-    const finish = d3.select('.elex-votes')
-        .append('div')
-        .attr("class", 'elex-votes-finishline')
-        //.style('left', x(270) + '%');
+        Object.keys(this.bars).forEach(pos => {
+            this.bars[pos] = d3.select(`.bar-container__${pos}`)
+        })
 
-    finish
-        .append('div')
-        .attr("class", "elex-votes-finish-label")
-        .text("270 to win");
+        const barTotals = data.filter(data => data.type == "bar_total")
 
-        finish
-        .append('div')
-        .attr("class", "elex-votes-finish-label elex-votes-finish-label-overlay")
-        .text("270 to win");
+        const barTotalData = {
+            trump: barTotals[0].group_ecvs,
+            biden: barTotals[1].group_ecvs
+        }
 
-    const solidData = {
-        trump: solids[0].ev_count,
-        biden: solids[1].ev_count
+        this.barTotalData = barTotalData
+
+        const trumpSolidStates = barTotals[0].group_states.split(", ")
+
+        const bidenSolidStates = barTotals[1].group_states.split(", ")
+
+        // Make bar sticky
+        this.stickyContainer = $('.sticky-container-height')
+        this.stickyElement = d3.select('.sticky-container').node()
+        this.isApp = d3.select('body').classed('ios')
+
+        // select sticky div and style height
+        d3.select('.sticky-container-height')
+            .style('height', (this.stickyElement.getBoundingClientRect().height) + 'px')
+
+
+        // get scroll point (+ app scroll point extra?)
+        const getScrollPoint = () => this.stickyContainer.getBoundingClientRect().top + window.scrollY + (this.isApp ? 45 : 0);
+        // listen for scrolling and call scrollpoint function?
+        this.stickyListener = this.makeStickyListenerAt(getScrollPoint)
+        this.sticky = window.scrollY >= getScrollPoint();
+
+        // event listener on scroll
+        d3.select(this.stickyElement).classed('sticky', this.sticky);
+        window.addEventListener('scroll', this.stickyListener, false);
+        // }
+
+
+        // // Map setup
+        // const statesFc = topojson.feature(statesTopo, statesTopo.objects.states)
+
+        // // 'fc' is short for 'FeatureCollection', you can log it to look at the structure
+
+        // const draw = () => {
+
+        //     // $ is shorthand for document.querySelector
+        //     // selects the SVG element
+        //     const svgEl = $('.elex-map')
+
+        //     // get the SVG's width as set in CSS
+        //     const width = svgEl.getBoundingClientRect().width
+        //     const height = width * 0.66
+
+        //     const svg = d3.select(svgEl)
+        //         .attr('width', width)
+        //         .attr('height', height)
+
+        //     // set up a map projection that fits our GeoJSON into the SVG
+
+        //     const proj = d3.geoAlbersUsa()
+        //         .fitExtent([
+        //             [-69, 0],
+        //             [width, height]
+        //         ], statesFc)
+
+        //     const path = d3.geoPath().projection(proj)
+
+        //     // Draw states
+
+        //     const stateShapes = svg
+        //         .selectAll('blah')
+        //         // do something for each feature ( = area ) in the GeoJSON
+        //         .data(statesFc.features)
+        //         .enter()
+        //         .append('path')
+        //         .style("fill", function (d) {
+        //             if (trumpSolidStates.includes(d.properties.name) == true) {
+        //                 return trumpCol
+        //             } else if (bidenSolidStates.includes(d.properties.name) == true) {
+        //                 return bidenCol
+        //             } else {
+        //                 return "#f6f6f6"
+        //             }
+        //         })
+        //         .attr('d', path)
+        //         .attr('class', 'elex-state')
+
+        // }
+        // // call the draw function
+        // draw()
+
+        if (data) {
+            this.update(data)
+        }
     }
 
-    const trumpSolidStates = solids[0].solid_states.split(", ")
+    update(data) {
+        console.log(data)
+        const barTotals = data.filter(data => data.type == "bar_total")
 
-    const bidenSolidStates = solids[1].solid_states.split(", ")
+        const barTotalData = {
+            trump: barTotals[0].group_ecvs,
+            biden: barTotals[1].group_ecvs
+        }
+        const trumpTotal = barTotalData.trump
+        const bidenTotal = barTotalData.biden
 
-    console.log(trumpSolidStates)
-    console.log(bidenSolidStates)
+        const trumpBar = d3.select('.bar-container__trump')
+            .style("width", x(trumpTotal) + '%')
+        const bidenBar = d3.select('.bar-container__biden')
+            .style("width", x(bidenTotal) + '%')
+    }
 
-    // Fill solid
-    const trumpBar = d3.select('.bar-votes__trump')
-        .style("width", x(solidData.trump) + '%')
-        //.style("left", x(538) - x(solidData.trump) + '%')
-    const bidenBar = d3.select('.bar-votes__biden')
-        .style("width", x(solidData.biden) + '%')
-    console.log(x(538) - x(solidData.trump) + '%')
+    makeStickyListenerAt(getYPos) {
 
+        var yPos = getYPos();
+        setInterval(() =>
+            requestAnimationFrame(() =>
+                yPos = getYPos()
+            ), 1000)
 
-    // Map setup
-    const statesFc = topojson.feature(statesTopo, statesTopo.objects.states)
+        const toggleSticky = (e) => {
+            if (this.sticky && window.scrollY < yPos) {
+                // console.log('Unstick header')
+                this.sticky = false;
+            } else if (!this.sticky && window.scrollY >= yPos) {
+                // console.log('Stick header')
+                this.sticky = true;
 
-    // 'fc' is short for 'FeatureCollection', you can log it to look at the structure
-    console.log(statesFc)
-
-    const draw = () => {
-
-        // $ is shorthand for document.querySelector
-        // selects the SVG element
-        const svgEl = $('.elex-map')
-
-        // get the SVG's width as set in CSS
-        const width = svgEl.getBoundingClientRect().width
-        const height = width * 0.66
-
-        const svg = d3.select(svgEl)
-            .attr('width', width)
-            .attr('height', height)
-
-        // set up a map projection that fits our GeoJSON into the SVG
-
-        const proj = d3.geoAlbersUsa()
-            .fitExtent([
-                [-69, 0],
-                [width, height]
-            ], statesFc)
-
-        const path = d3.geoPath().projection(proj)
-
-        // Draw states
-
-        const stateShapes = svg
-            .selectAll('blah')
-            // do something for each feature ( = area ) in the GeoJSON
-            .data(statesFc.features)
-            .enter()
-            .append('path')
-            .style("fill", function (d) {
-                if (trumpSolidStates.includes(d.properties.name) == true) {
-                    return trumpCol
-                } else if (bidenSolidStates.includes(d.properties.name) == true) {
-                    return bidenCol
-                } else {
-                    return "#f6f6f6"
+                if (this.isApp) {
+                    appBar = false;
+                    this.stickyElement.style.transform = 'translateY(-45px)'
                 }
-            })
-            .attr('d', path)
-            .attr('class', 'elex-state')
+            }
+            d3.select(this.stickyElement).classed('sticky', this.sticky)
+        }
 
+        var lastY = 0,
+            appBar = true;
+        const adjustBarTop = (e) => {
+            if (window.scrollY > 0) {
+                if (this.sticky && appBar && window.scrollY > lastY) {
+                    if (window.scrollY - lastY >= 45) {
+                        this.stickyElement.style.transform = 'translateY(-45px)'
+                        lastY = window.scrollY;
+                        appBar = false;
+                    } else {
+                        this.stickyElement.style.transform = `translateY(${lastY - window.scrollY}px)`
+                    }
+                } else if (this.sticky && !appBar && window.scrollY < lastY) {
+                    // console.log(`Showing the app bar... ${window.scrollY - lastY}`);
+                    if (lastY - window.scrollY >= 45) {
+                        this.stickyElement.style.transform = 'translateY(0)'
+                        lastY = window.scrollY;
+                        appBar = true;
+                    } else {
+                        this.stickyElement.style.transform = `translateY(-${45 - (lastY - window.scrollY)}px)`
+                    }
+                } else {
+                    lastY = window.scrollY;
+                }
+            } else {
+                this.stickyElement.style.transform = 'translateY(0)'
+            }
+        }
+
+        if (this.isApp) {
+            return (e) => {
+                toggleSticky(e);
+                adjustBarTop(e);
+            }
+        } else {
+            return toggleSticky;
+        }
     }
-    // call the draw function
-    draw()
 }
+
 
 
 // Filled status headline
@@ -258,17 +522,17 @@ function pulse(candidate) {
 
 function changePortrait(candidate, mood) {
     if (mood == null) {
-    const moods = ["unhappy", "happy", "normal"];
-    mood = moods[moodIndex];
-    moodIndex++;
-    if (moodIndex >= moods.length) {
-        moodIndex = 0;
-    }
+        const moods = ["unhappy", "happy", "normal"];
+        mood = moods[moodIndex];
+        moodIndex++;
+        if (moodIndex >= moods.length) {
+            moodIndex = 0;
+        }
     }
 
     const portraits = document.querySelectorAll("." + candidate + "-portrait");
 
-    portraits.forEach(function(portrait) {
+    portraits.forEach(function (portrait) {
         portrait.classList.remove("show-portrait");
     });
 
@@ -296,20 +560,20 @@ function animateTotal(candidate, newTotal, currentTotal) {
     }
 
     total
-    .transition()
-    .duration(500)
-    .tween('text', function() {
-        const currentVal = d3.select(this).attr("data-val");
-        const i = d3.interpolate(currentVal, newTotal)
-        return (t) => {
-            // .text("$" + Math.round(data[slide].rev / 1000000) + "bn");
-            total.text(parseInt(i(t))).attr("data-val", newTotal);
-            if (i(t) >= 270 && flashWin) {
-                winFlash();
-                flashWin = false;
+        .transition()
+        .duration(500)
+        .tween('text', function () {
+            const currentVal = d3.select(this).attr("data-val");
+            const i = d3.interpolate(currentVal, newTotal)
+            return (t) => {
+                // .text("$" + Math.round(data[slide].rev / 1000000) + "bn");
+                total.text(parseInt(i(t))).attr("data-val", newTotal);
+                if (i(t) >= 270 && flashWin) {
+                    winFlash();
+                    flashWin = false;
+                }
             }
-        }
-    });
+        });
 }
 
 // FLASH FINISH LINE TEXT
@@ -318,7 +582,7 @@ function winFlash() {
     const finishLabelEl = document.querySelector(".elex-votes-finish-label-overlay");
     finishLabelEl.classList.remove("finish-label-flash");
     void finishLabelEl.offsetWidth;
-    finishLabelEl.classList.add("finish-label-flash"); 
+    finishLabelEl.classList.add("finish-label-flash");
 }
 
 // MAIN FUNCTION TO UPDATE BAR GRAPHIC AND TRIGGER ANIMATIONS
@@ -343,24 +607,18 @@ function updateElexBarGraphic( votesBiden, votesTrump, prevVotesBiden, prevVotes
         // BIDEN WIN
         changePortrait("trump", "unhappy");
         changePortrait("biden", "happy");
-    }
-
-    else if (votesTrump >=270 && prevVotesTrump < 270) {
+    } else if (votesTrump >= 270 && prevVotesTrump < 270) {
         // TRUMP WIN
         changePortrait("trump", "happy");
         changePortrait("biden", "unhappy");
-    }
-    
-    else if (votesBiden < prevVotesBiden && prevVotesBiden >= 270 && votesTrump < 270) {
+    } else if (votesBiden < prevVotesBiden && prevVotesBiden >= 270 && votesTrump < 270) {
         // NO VICTOR
         changePortrait("biden", "normal");
         changePortrait("trump", "normal");
-    }
-
-    else if (votesTrump < prevVotesTrump && prevVotesTrump >= 270 && votesBiden < 270) {
+    } else if (votesTrump < prevVotesTrump && prevVotesTrump >= 270 && votesBiden < 270) {
         // NO VICTOR
-            changePortrait("biden", "normal");
-            changePortrait("trump", "normal");
+        changePortrait("biden", "normal");
+        changePortrait("trump", "normal");
     }
 
     trumpTotal = votesTrump; // Update global votes totals
@@ -417,6 +675,7 @@ function isMobile() {
         return false;
     }
 }
+
 
 function getStyle(element) {
     return element.currentStyle ? element.currentStyle.display :

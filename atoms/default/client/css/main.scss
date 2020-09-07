@@ -62,10 +62,6 @@ body.ios {
     }
 }
 
-.sticky-inner {
-    
-}
-
 
 .elex-map {
     width: 100%;
@@ -104,6 +100,10 @@ body.ios {
     }
 }
 
+.elex-intro-block {
+    @include fs-header(4);
+    padding-bottom: 6px;
+}
 
 .elex-votes-wrapper {
 position: relative;
@@ -111,7 +111,6 @@ margin: 0 158px;
 
 @include mq($until: tablet) {
     margin: 0;
-}
 
 }
 
@@ -149,7 +148,7 @@ margin: 0 158px;
         }
        
     }
-  
+
 }
 
 [class^='bar-portrait'] {
@@ -237,9 +236,10 @@ margin: 0 158px;
     &.bar-portrait__biden {
         margin-left: -150px;
         left: 0;
-      
 
-        .bar-portrait-roundel, .bar-portrait-roundel-inner {
+
+        .bar-portrait-roundel,
+        .bar-portrait-roundel-inner {
             background: #25428f;
         }
 
@@ -251,8 +251,9 @@ margin: 0 158px;
     &.bar-portrait__trump {
         margin-right: -150px;
         right: 0;
-       
-        .bar-portrait-roundel, .bar-portrait-roundel-inner {
+
+        .bar-portrait-roundel,
+        .bar-portrait-roundel-inner {
             background: #cc0a11;
         }
 
@@ -261,7 +262,7 @@ margin: 0 158px;
         }
     }
 
-   
+
 
 }
 
@@ -272,9 +273,10 @@ margin: 0 158px;
     left: 0;
     width: 100%;
     transform: translateY(0) !important;
-    padding-left: 0!important;
+    padding-left: 0 !important;
     z-index: 1000;
-    background: transparent !important;;
+    background: transparent !important;
+    ;
     box-sizing: border-box;
     text-align: left;
     margin-left: 0 !important;
@@ -290,7 +292,6 @@ margin: 0 158px;
     }
     
 
-    
     &.bar-title__trump {
         text-align: right;
         color: #cc0a11;
@@ -320,8 +321,9 @@ margin: 0 158px;
         // @include fs-textSans(2);
         // font-weight: bold;
         position: relative;
-        margin-left: 0!important;
+        margin-left: 0 !important;
         @include fs-titlepiece(1);
+
         // @include mq($until: tablet) {
         display: block !important;
         // }
@@ -344,7 +346,6 @@ margin: 0 158px;
         }
     }
 
-    
 
     // @include mq(tablet) {
     //     margin-bottom: 0.25em;
@@ -392,8 +393,6 @@ margin: 0 158px;
         }
     }
 
-    }
-}
 
 
 .elex-votes-finishline {
@@ -455,26 +454,49 @@ margin: 0 158px;
 }
 
 @keyframes labelFlash {
-    from {opacity: 1; transform: translateX(-50%) translateY(0) scale(1);}
-    to {opacity: 0; transform: translateX(-50%) translateY(-2px) scale(2);}
-  }
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
 
-.state-groups {
-    margin-top: 24px;
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-2px) scale(2);
+    }
+}
+
+// .state-groups--close_lean_dem,
+// .state-groups--former_strong_GOP,
+// .state-groups--swing,
+// .state-groups--broken_blue_wall,
+// .state-groups--close_cds {
+//     background-color: #f6f6f6;
+// }
+
+.state-group__name {
+    @include fs-header(4);
+    margin: 50px 5px 0px;
+}
+
+.state-group__text {
+    @include fs-bodyCopy(2);
+    margin: 0 5px;
+}
+
+.state-cards {
     display: flex;
     max-width: 1260px;
     flex-wrap: wrap;
-    justify-content: space-evenly;
 }
 
-.state-group {
+.state-card {
     flex: 400px 0 0;
     background: #f6f6f6;
-    margin: 6px 5px;
+    margin: 8px 5px;
     align-self: stretch;
     min-height: 350px;
-    width: 400px;
-    padding: 6px 5px;
+    max-width: 400px;
+    padding: 6px 10px;
     padding-bottom: 40px;
     box-sizing: border-box;
     position: relative;
@@ -489,7 +511,7 @@ margin: 0 158px;
     }
 
     &:first-of-type {
-        .state-group__evcount::after {
+        .state-card__evcount::after {
             content: 'electoral votes';
             @include fs-textSans(2);
             display: block;
@@ -499,90 +521,103 @@ margin: 0 158px;
     }
 }
 
-.state-group__name {
+.state-card__name {
     @include fs-header(3);
     min-height: 32px;
-    padding-right: 65px;
     margin-bottom: 3px;
 }
 
-.state-group__evcount {
-    @include fs-titlepiece(1);
-    position: absolute;
-    text-align: right;
-    right: 5px;
-    top: 1px;
+.state-card__text {
+    @include fs-bodyCopy(1);
+    display: inline-block;
+    margin-top: 10px;
 }
 
-.state-group__context {
-    @include fs-textSans(3);
-}
-
-.state-group__states {
-    @include fs-headline(1);
+.state-card__ecvs {
+    @include fs-header(3);
     border-bottom: 1px solid #dcdcdc;
     padding-right: 65px;
     padding-bottom: 3px;
 }
 
-.state-group-toggle {
+.state-card__indicator {
+    height: 20px;
+    width: 400px;
 
-    position: absolute;
-    bottom: 6px;
+}
 
+.state-card__history-block,
+.state-card__2016-margin-block,
+.state-card__2020-polling-block {
     @include fs-textSans(3);
+    text-align: center;
+    color: #ffffff;
+    line-height: 15px;
+    float: left;
+    height: 15px;
+    width: 48px;
+    margin: 3px 1px;
+
+    &.state-card__2020-polling-block {
+        width: 75px;
+        margin: 3px 20px;
+    }
+}
+
+.state-card__2016-margin,
+.state-card__2020-polling {
+    float: left;
+}
+
+.state-card__label {
+    @include fs-textSans(3);
+    width: 40px;
+    line-height: 14px;
+    text-align: center;
+    padding-bottom: 2px;
+
+    &.label-2016 {
+        margin: auto;
+    }
+
+    &.label-2020 {
+        margin: auto;
+    }
+
+
+}
+
+.state-card__voting-history {
+    position: relative;
+    top: 29px;
+}
+
+.state-card-buttons {
+    width: 400px;
+    position: absolute;
+    bottom: 10px;
+}
+
+.state-card-buttons__option {
+    @include fs-textSans(3);
+    font-weight: bold;
     box-sizing: border-box;
-    width: calc(100% - 10px);
+    width: calc(40%);
     min-height: 32px;
     border: 1px solid #dcdcdc;
     border-radius: 16px;
     background-color: #ffff;
-
-}
-
-.state-group-toggle__option {
     display: inline-block;
     line-height: 32px;
-    position: absolute;
     padding: 0 6px;
-    box-sizing: border-box;
+    margin: 0 6px;
 
-    width: 33.333333%;
+    // width: 33.333333%;
     text-align: center;
-
-    &.state-group-toggle__option--selected {
-        //color: white;
-        font-weight: bold;
-    }
-
-    &.state-group-toggle__option--biden {
-        left: 0;
-    }
-
-    &.state-group-toggle__option--unselected {
-        left: 33.3333%;
-        // display: none;
-    }
-
-    &.state-group-toggle__option--trump {
-        left: 66.6667%;
-    }
 
     cursor: pointer;
 }
 
-.state-group-toggle__inner {
-    position: absolute;
-
-    left: 0;
-
-    transform: translate(1px, -1px);
-
-    width: 33%;
-    background: #dcdcdc;
-    min-height: 32px;
-    border-radius: 16px;
-
-    transition: left .8s cubic-bezier(0.5, 0.1, 0.15, 0.98), background-color .8s cubic-bezier(0.5, 0.1, 0.15, 0.98);
-    ;
+.finish-card {
+    display: none;
 }
