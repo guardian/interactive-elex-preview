@@ -13,7 +13,7 @@ import bubbleData from 'shared/server/data_joined.json'
 
 let moodIndex = 0;
 
-let trumpTotal = 218,
+let trumpTotal = 125,
     bidenTotal = 218; // These are global references to the current vote totals currently used in the bar animation
 
 const pulseBtn = document.querySelector(".pulse-btn");
@@ -387,7 +387,6 @@ class initialGraphics {
 
             const stateShapes = svg
                 .selectAll('blah')
-                // do something for each feature ( = area ) in the GeoJSON
                 .data(statesFc.features)
                 .enter()
                 .append('path')
@@ -402,6 +401,28 @@ class initialGraphics {
                 })
                 .attr('d', path)
                 .attr('class', 'elex-state')
+
+            // Circles for Maine & Nebraska congressional disctrict votes
+            // Change fill: if statewide and district vote differently...show circle and fill X?
+            const maineCoords = proj([-69.009649, 45.403030])
+
+            const maineCD = svg
+                .append("circle")
+                .attr("cx", maineCoords[0])
+                .attr("cy", maineCoords[1])
+                .attr("r", 10)
+                .style("fill", '#dcdcdc')
+                .style("display", "none")
+
+            const nebrasCoords = proj([-97.203378, 40.713956])
+
+            const nebrasCD = svg
+                .append("circle")
+                .attr("cx", nebrasCoords[0])
+                .attr("cy", nebrasCoords[1])
+                .attr("r", 10)
+                .style("fill", "#dcdcdc")
+                .style("display", "none")
 
         }
         // call the draw function
@@ -484,14 +505,40 @@ class initialGraphics {
 }
 
 // FINISH CARD
+d3.select('.finish-card')
+    .style('display', bidenTotal >= 270 ? "block" : (trumpTotal >= 270 ? "block" : ((trumpTotal == 269 && trumpTotal == bidenTotal) ? "block" : "none")))
 
-// Filled status headline
-// d3.select('.elex-votes-filled')
-//     .style('opacity', 1)
-//     .select('.elex-votes-filled__status')
-//     .style('color', votesFor > votesAgainst ? statusHex.succeed : statusHex.fail)
-//     .transition()
-//     .text(votesFor > votesAgainst ? 'pass' : 'reject')
+// Winner headline
+d3.select('.finish-headline-win')
+    .style('display', bidenTotal == trumpTotal ? "none" : "block")
+    .style('opacity', 1)
+    .select('.finish-headline__status')
+    .style('color', bidenTotal > trumpTotal ? bidenCol : trumpCol)
+    .transition()
+    .text(bidenTotal > trumpTotal ? 'Joe Biden' : 'Donald Trump')
+
+// % Guardian readers who agree
+
+// Custom copy
+d3.select('.finish-winner-name')
+    .text(bidenTotal > trumpTotal ? 'Biden' : 'Trump')
+
+// Tie scenario
+d3.select('.finish-win-text')
+    .style("display", bidenTotal == trumpTotal ? "none" : "block")
+
+d3.select('.finish-headline-tie')
+    .style("display", bidenTotal == trumpTotal ? "block" : "none")
+
+d3.select('.finish-tie-text')
+    .style("display", bidenTotal == trumpTotal ? "block" : "none")
+
+
+// Key win custom text: 
+// if all blue wall goes to Biden, "the "blue wall" of Michigan, Pennsylvania and Wisconsin"
+// other scenarios? 
+// d3.select('.finish-key-win')
+//     .text(bidenTotal > trumpTotal ? 'Biden' : 'Trump')
 
 
 // ANIMATION FUNCTIONS

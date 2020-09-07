@@ -67,7 +67,8 @@ body.ios {
 
 .elex-map {
     width: 100%;
-    max-width: 860px;
+    max-width: 680px;
+    margin: 10px;
     overflow: visible !important;
 }
 
@@ -648,14 +649,28 @@ button {
     border: solid 1px #121212
 }
 
-.finish-headline p {
+.finish-headline-win p,
+.finish-headline-tie p {
     @include fs-textSans(4);
 }
 
-.finish-headline h2 {
+.finish-headline-win h2,
+.finish-headline-tie h2 {
     @include fs-titlepiece(2);
 }
 
 .finish-agree-percentage {
     @include fs-header(4);
+    font-weight: bold;
+}
+
+.finish-win-text,
+.finish-tie-text {
+    @include fs-headline(2);
+    width: 60%;
+    line-height: 24px;
+}
+
+.finish-tie-text {
+    display: none;
 }
