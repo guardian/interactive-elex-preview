@@ -30,7 +30,6 @@ $bar-height: 36px;
     // border-bottom: 1px solid #dcdcdc;
     padding-bottom: 61px;
 
-    // padding-top: 0;
     @include mq($until: tablet) {
         padding-bottom: 0 !important;
         ;
@@ -44,7 +43,7 @@ $bar-height: 36px;
     background: white;
     z-index: 100;
     width: 100%;
-    //padding: 6px 0 12px;
+    padding: 6px 0 12px;
     padding: 0;
     border-bottom: 1px solid transparent;
 
@@ -407,9 +406,6 @@ body.ios {
     }
 }
 
-button {
-    display: none;
-}
 
 
 
@@ -492,29 +488,29 @@ button {
     width: 600px;
 }
 
-.group-buttons {
-    width: 400px;
-}
+// .group-buttons {
+//     width: 400px;
+// }
 
-.group-buttons__option {
-    @include fs-textSans(3);
-    font-weight: bold;
-    box-sizing: border-box;
-    width: calc(40%);
-    min-height: 32px;
-    border: 1px solid #dcdcdc;
-    border-radius: 16px;
-    background-color: #ffff;
-    display: inline-block;
-    line-height: 32px;
-    padding: 0 6px;
-    margin: 0 6px;
+// .group-buttons__option {
+//     @include fs-textSans(3);
+//     font-weight: bold;
+//     box-sizing: border-box;
+//     width: calc(40%);
+//     min-height: 32px;
+//     border: 1px solid #dcdcdc;
+//     border-radius: 16px;
+//     background-color: #ffff;
+//     display: inline-block;
+//     line-height: 32px;
+//     padding: 0 6px;
+//     margin: 0 6px;
 
-    // width: 33.333333%;
-    text-align: center;
+//     // width: 33.333333%;
+//     text-align: center;
 
-    cursor: pointer;
-}
+//     cursor: pointer;
+// }
 
 
 .state-group__name {
@@ -637,13 +633,8 @@ button {
     top: 29px;
 }
 
-.state-card-buttons {
-    width: 400px;
-    position: absolute;
-    bottom: 10px;
-}
+.candidate-button {
 
-.state-card-buttons__option {
     @include fs-textSans(3);
     font-weight: bold;
     box-sizing: border-box;
@@ -659,8 +650,21 @@ button {
 
     // width: 33.333333%;
     text-align: center;
+    outline: none;
 
-    cursor: pointer;
+    &.candidate-button--selected {
+
+        color: white;
+        font-weight: bold;
+
+        &.candidate-button--biden {
+            background: #25428f;
+        }
+
+        &.candidate-button--trump {
+            background: #cc0a11;
+        }
+    }
 }
 
 .finish-card {
