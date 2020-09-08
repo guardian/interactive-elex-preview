@@ -9,9 +9,10 @@ import * as topojson from 'topojson'
 import statesTopo from 'us-atlas/counties-10m.json'
 import bubbleData from 'shared/server/data_joined.json'
 
-// FOR TESTING PURPOSES
 
 let moodIndex = 0;
+var bidenTotal = 218;
+var trumpTotal = 125;
 
 
 // Load data, return individual states, groups & initial bar counts
@@ -52,12 +53,34 @@ finish
     .attr("class", "elex-votes-finish-label elex-votes-finish-label-overlay")
     .text("270 to win");
 
+
+
 // Create state groups & cards
 function createCards(data) {
 
     const statesInUse = data.filter(d => d.groups_in_use)
     const stateGroups = data.filter(d => d.type == "group")
     var allStates = data.filter(d => d.type == "individual")
+
+    const trumpTotal = allStates.filter(d => d.candidate_select === 'trump')
+        .map(d => Number(d.ecvs)).reduce(sum, 0)
+
+    const bidenTotal = allStates.filter(d => d.candidate_select === 'biden')
+        .map(d => Number(d.ecvs)).reduce(sum, 0)
+
+    // update the elements on the page
+    const bidenEcvElement = $(".biden-title-count")
+    const trumpEcvElement = $(".trump-title-count")
+
+    bidenEcvElement.innerHTML = bidenTotal;
+    trumpEcvElement.innerHTML = trumpTotal;
+
+    // update graphic
+    const bidenBar = $(".bar-votes__biden");
+    const trumpBar = $(".bar-votes__trump");
+
+    trumpBar.style.width = (trumpTotal / 538 * 100) + "%";
+    bidenBar.style.width = (bidenTotal / 538 * 100) + "%";
 
     const groupIds = stateGroups.map(function (el) {
         return el.group_id;
@@ -67,30 +90,28 @@ function createCards(data) {
         return a + b
     }
 
-    function updateTotals() {
-
-        const trumpTotal = allStates.filter(d => d.candidate_select === 'trump')
+    // Get previous totals
+    function getPreviousTotals() {
+        const prevTrumpTotal = allStates.filter(d => d.candidate_select === 'trump')
             .map(d => Number(d.ecvs)).reduce(sum, 0)
 
-        const bidenTotal = allStates.filter(d => d.candidate_select === 'biden')
+        const prevBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
             .map(d => Number(d.ecvs)).reduce(sum, 0)
 
-        // update the elements on the page
-        const bidenEcvElement = $(".biden-title-count")
-        const trumpEcvElement = $(".trump-title-count")
+        return [prevTrumpTotal, prevBidenTotal]
+    }
 
-        bidenEcvElement.innerHTML = bidenTotal;
-        trumpEcvElement.innerHTML = trumpTotal;
 
-        // update graphic
-        const bidenBar = $(".bar-votes__biden");
-        const trumpBar = $(".bar-votes__trump");
+    function updateTotals(prevTotals) {
 
-        trumpBar.style.width = (trumpTotal / 538 * 100) + "%";
-        bidenBar.style.width = (bidenTotal / 538 * 100) + "%";
+        const newTrumpTotal = allStates.filter(d => d.candidate_select === 'trump')
+            .map(d => Number(d.ecvs)).reduce(sum, 0)
 
-        console.log(trumpTotal)
-        console.log(bidenTotal)
+        const newBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
+            .map(d => Number(d.ecvs)).reduce(sum, 0)
+
+
+        updateElexBarGraphic(newBidenTotal, newTrumpTotal, prevTotals[1], prevTotals[0])
     }
 
     groupIds.forEach(function (groupName) {
@@ -225,6 +246,8 @@ function createCards(data) {
             buttons
                 .on('click', canName => {
 
+                    var prevTotals = getPreviousTotals()
+
                     allStates = allStates.map(s => {
 
                         if (s.state === d.state) {
@@ -236,8 +259,7 @@ function createCards(data) {
                         }
                     })
 
-                    updateTotals()
-
+                    updateTotals(prevTotals)
                     buttons
                         .classed('candidate-button--selected', n => n === canName)
 
@@ -245,7 +267,6 @@ function createCards(data) {
         })
 
     })
-    updateTotals()
 }
 
 // Make bar sticky
@@ -450,7 +471,8 @@ function winFlash() {
 
 function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesTrump) {
 
-
+    console.log(votesBiden, prevVotesBiden)
+    console.log(votesTrump, prevVotesTrump)
     if (votesBiden > prevVotesBiden) {
         pulse("biden");
     } else if (votesTrump > prevVotesTrump) {
