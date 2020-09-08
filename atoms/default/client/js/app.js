@@ -70,9 +70,9 @@ loadData().then(groups => {
     const barAndMap = new initialGraphics(groups);
     console.log(cards)
 
-    cards.onChange(data => {
-        barAndMap.update(data)
-        console.log(data)
+
+    cards.onChange((data, oldData) => {
+        barAndMap.update(data, oldData)
     })
 
 })
@@ -292,6 +292,7 @@ class stateCards {
 
 
     onChange(callback) {
+
         const that = this
 
         this.stateDivs.each(function (td) {
@@ -301,15 +302,18 @@ class stateCards {
             options.on('click', function (d, i) {
                 const candidate_select = d.toLowerCase();
 
+            
+            const oldStatesInUse = that.statesInUse
+
                 that.statesInUse = that.statesInUse.map(t => {
-                    return t.id === td.id ? Object.assign({}, t, {
+                    return t.state === td.state ? Object.assign({}, t, {
                             candidate_select
                         }) :
                         t
                 })
 
                 setButtons(stateDiv, d)
-                callback(that.statesInUse)
+                callback(that.statesInUse, oldStatesInUse)
             })
 
         })
@@ -446,9 +450,20 @@ class initialGraphics {
         }
     }
 
-    update(data) {
-        const newTrumpTotal = this.barTotalData.trump
-        const newBidenTotal = this.barTotalData.biden
+    update(data, oldData) {
+
+        const sum = (a, b) => a + b
+
+        console.log(data, oldData)
+
+        const newTrumpTotal = data.filter( d => d.candidate_select === "trump")
+            .map( d => Number(d.ecvs) ).reduce(sum, 0)
+
+        const newBidenTotal = data.filter( d => d.candidate_select === "biden")
+            .map( d => Number(d.ecvs) ).reduce(sum, 0)
+    
+        // const newTrumpTotal = Number(this.barTotalData.trump)
+        // const newBidenTotal = Number(this.barTotalData.biden)
 
         // console.log(this)
 
@@ -595,6 +610,8 @@ function changePortrait(candidate, mood) {
 // ANIMATE VOTES TOTAL
 
 function animateTotal(candidate, newTotal, currentTotal) {
+
+    console.log(candidate, newTotal, currentTotal)
 
     const total = d3.select('.' + candidate + "-title-count");
     let flashWin = false;
