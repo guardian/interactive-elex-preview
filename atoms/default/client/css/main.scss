@@ -529,8 +529,12 @@ button {
 
 .state-cards {
     display: flex;
-    max-width: 1260px;
     flex-wrap: wrap;
+
+    @include mq($until: tablet) {
+        margin: 6px 0;
+        flex-basis: 100%;
+    }
 }
 
 .state-card {
@@ -549,10 +553,7 @@ button {
     // border-radius: 10px;
     border: 1px solid #dcdcdc;
 
-    @include mq($until: tablet) {
-        margin: 6px 0;
-        flex-basis: 100%;
-    }
+
 
     &:first-of-type {
         .state-card__evcount::after {
@@ -663,7 +664,7 @@ button {
 }
 
 .finish-card {
-    // display: none;
+    display: none;
     margin: 40px 0;
     padding: 10px;
     border: solid 1px #121212
