@@ -69,10 +69,10 @@ loadData().then(groups => {
     const cards = new stateCards(groups)
     const barAndMap = new initialGraphics(groups);
     console.log(cards)
-    console.log(barAndMap)
 
     cards.onChange(data => {
         barAndMap.update(data)
+        console.log(data)
     })
 
 })
@@ -159,6 +159,18 @@ class stateCards {
                 .append('p')
                 .html(d => d.groupText)
                 .classed('state-group__text', true)
+
+            const groupButtonsDiv = groupDivs
+                .append('div')
+                .classed("group-buttons", true)
+
+            const groupOptions = groupButtonsDiv
+                .selectAll('choices')
+                .data(['AllBiden', 'AllTrump'])
+                .enter()
+                .append('div')
+                .attr('class', d => `group-buttons__option group-buttons__option--${d.toLowerCase()}`)
+                .text(d => d.slice(0, 3) + " to " + d.slice(3))
 
             const statesDiv = groupDivs
                 .append('div')
@@ -297,7 +309,7 @@ class stateCards {
                 })
 
                 setButtons(stateDiv, d)
-                callback(that.stateInUse)
+                callback(that.statesInUse)
             })
 
         })
@@ -352,6 +364,7 @@ class initialGraphics {
         d3.select(this.stickyElement).classed('sticky', this.sticky);
         window.addEventListener('scroll', this.stickyListener, false);
         // }
+
 
 
         // Map setup
@@ -436,6 +449,8 @@ class initialGraphics {
     update(data) {
         const newTrumpTotal = this.barTotalData.trump
         const newBidenTotal = this.barTotalData.biden
+
+        // console.log(this)
 
         updateElexBarGraphic(newBidenTotal, newTrumpTotal, 0, 0)
     }
