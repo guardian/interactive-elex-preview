@@ -485,16 +485,36 @@ button {
 
 .state-groups {
     padding: 10px 0;
-    margin: 40px 0
+    margin: 40px 0;
 }
 
-// .state-groups--close_lean_dem,
-// .state-groups--former_strong_GOP,
-// .state-groups--swing,
-// .state-groups--broken_blue_wall,
-// .state-groups--close_cds {
-//     background-color: #f6f6f6;
-// }
+.state-group__text {
+    width: 600px;
+}
+
+.group-buttons {
+    width: 400px;
+}
+
+.group-buttons__option {
+    @include fs-textSans(3);
+    font-weight: bold;
+    box-sizing: border-box;
+    width: calc(40%);
+    min-height: 32px;
+    border: 1px solid #dcdcdc;
+    border-radius: 16px;
+    background-color: #ffff;
+    display: inline-block;
+    line-height: 32px;
+    padding: 0 6px;
+    margin: 0 6px;
+
+    // width: 33.333333%;
+    text-align: center;
+
+    cursor: pointer;
+}
 
 
 .state-group__name {

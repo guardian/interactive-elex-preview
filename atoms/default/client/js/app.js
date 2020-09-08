@@ -69,7 +69,7 @@ loadData().then(groups => {
     const cards = new stateCards(groups)
     const barAndMap = new initialGraphics(groups);
     console.log(cards)
-    console.log(barAndMap)
+
 
     cards.onChange((data, oldData) => {
         barAndMap.update(data, oldData)
@@ -159,6 +159,18 @@ class stateCards {
                 .append('p')
                 .html(d => d.groupText)
                 .classed('state-group__text', true)
+
+            const groupButtonsDiv = groupDivs
+                .append('div')
+                .classed("group-buttons", true)
+
+            const groupOptions = groupButtonsDiv
+                .selectAll('choices')
+                .data(['AllBiden', 'AllTrump'])
+                .enter()
+                .append('div')
+                .attr('class', d => `group-buttons__option group-buttons__option--${d.toLowerCase()}`)
+                .text(d => d.slice(0, 3) + " to " + d.slice(3))
 
             const statesDiv = groupDivs
                 .append('div')
@@ -358,6 +370,7 @@ class initialGraphics {
         // }
 
 
+
         // Map setup
         const statesFc = topojson.feature(statesTopo, statesTopo.objects.states)
 
@@ -451,6 +464,8 @@ class initialGraphics {
     
         // const newTrumpTotal = Number(this.barTotalData.trump)
         // const newBidenTotal = Number(this.barTotalData.biden)
+
+        // console.log(this)
 
         updateElexBarGraphic(newBidenTotal, newTrumpTotal, 0, 0)
     }
