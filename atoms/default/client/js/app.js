@@ -70,7 +70,6 @@ loadData().then(groups => {
     const barAndMap = new initialGraphics(groups);
     console.log(cards)
 
-
     cards.onChange((data, oldData) => {
         barAndMap.update(data, oldData)
     })
@@ -81,17 +80,12 @@ const bidenCol = '#25428f'
 const trumpCol = '#cc0a11'
 
 // Bar setup
-const x = d3.scaleLinear().domain([0, 538]).range([0, 100])
-
-const y = d3.scaleLinear()
-    .domain([0, 1])
-    .range([0, 100])
 
 // 270 majority finish line
 const finish = d3.select('.elex-votes')
     .append('div')
     .attr("class", 'elex-votes-finishline')
-    .style('left', x(270) + '%');
+    .attr('width', (270 / 540 * 100) + "%");
 
 finish
     .append('div')
@@ -128,8 +122,9 @@ class stateCards {
 
         const statesInUse = groups.filter(group => group.groups_in_use)
         const stateGroups = groups.filter(group => group.type == "group")
+        const allStates = groups.filter(group => group.type == "individual")
 
-        this.statesInUse = statesInUse;
+        this.allStates = allStates;
 
         const groupIds = stateGroups.map(function (el) {
             return el.group_id;
@@ -302,10 +297,10 @@ class stateCards {
             options.on('click', function (d, i) {
                 const candidate_select = d.toLowerCase();
 
-            
-            const oldStatesInUse = that.statesInUse
 
-                that.statesInUse = that.statesInUse.map(t => {
+                const oldStates = that.allStates
+
+                that.allStates = that.allStates.map(t => {
                     return t.state === td.state ? Object.assign({}, t, {
                             candidate_select
                         }) :
@@ -313,7 +308,7 @@ class stateCards {
                 })
 
                 setButtons(stateDiv, d)
-                callback(that.statesInUse, oldStatesInUse)
+                callback(that.allStates, oldStates)
             })
 
         })
@@ -343,6 +338,16 @@ class initialGraphics {
         }
 
         this.barTotalData = barTotalData
+
+        const sum = (a, b) => a + b
+
+        const TrumpTotal = data.filter(d => d.candidate_select === "trump")
+            .map(d => Number(d.ecvs)).reduce(sum, 0)
+
+        const BidenTotal = data.filter(d => d.candidate_select === "biden")
+            .map(d => Number(d.ecvs)).reduce(sum, 0)
+
+        updateElexBarGraphic(BidenTotal, TrumpTotal, 0, 0)
 
         const trumpSolidStates = barTotals[0].group_states.split(", ")
 
@@ -445,9 +450,9 @@ class initialGraphics {
         // call the draw function
         draw()
 
-        if (data) {
-            this.update(data)
-        }
+        // if (data) {
+        //     this.update(data)
+        // }
     }
 
     update(data, oldData) {
@@ -456,18 +461,20 @@ class initialGraphics {
 
         console.log(data, oldData)
 
-        const newTrumpTotal = data.filter( d => d.candidate_select === "trump")
-            .map( d => Number(d.ecvs) ).reduce(sum, 0)
+        const oldTrumpTotal = oldData.filter(d => d.candidate_select === "trump")
+            .map(d => Number(d.ecvs)).reduce(sum, 0)
 
-        const newBidenTotal = data.filter( d => d.candidate_select === "biden")
-            .map( d => Number(d.ecvs) ).reduce(sum, 0)
-    
-        // const newTrumpTotal = Number(this.barTotalData.trump)
-        // const newBidenTotal = Number(this.barTotalData.biden)
+        const oldBidenTotal = oldData.filter(d => d.candidate_select === "biden")
+            .map(d => Number(d.ecvs)).reduce(sum, 0)
 
-        // console.log(this)
+        const newTrumpTotal = data.filter(d => d.candidate_select === "trump")
+            .map(d => Number(d.ecvs)).reduce(sum, 0)
 
-        updateElexBarGraphic(newBidenTotal, newTrumpTotal, 0, 0)
+        const newBidenTotal = data.filter(d => d.candidate_select === "biden")
+            .map(d => Number(d.ecvs)).reduce(sum, 0)
+
+
+        updateElexBarGraphic(newBidenTotal, newTrumpTotal, oldBidenTotal, oldTrumpTotal)
     }
 
     makeStickyListenerAt(getYPos) {
@@ -537,7 +544,6 @@ class initialGraphics {
 // FINISH CARD
 d3.select('.finish-card')
     .style('display', bidenTotal >= 270 ? "block" : (trumpTotal >= 270 ? "block" : ((trumpTotal == 269 && trumpTotal == bidenTotal) ? "block" : "none")))
-
 // Winner headline
 d3.select('.finish-headline-win')
     .style('display', bidenTotal == trumpTotal ? "none" : "block")
@@ -727,8 +733,8 @@ function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesT
 
     } else {
         // desktop
-        bidenBar.style.width = (votesBiden / 540 * 100) + "%";
-        trumpBar.style.width = (votesTrump / 540 * 100) + "%";
+        bidenBar.style.width = (votesBiden / 538 * 100) + "%";
+        trumpBar.style.width = (votesTrump / 538 * 100) + "%";
     }
 }
 
