@@ -18,7 +18,7 @@ var trumpTotal = 125;
 // Load data, return individual states, groups & initial bar counts
 async function loadData() {
     // fetch data from url, get state groupings
-    const sheetData = await fetch('http://interactive.guim.co.uk/docsdata-test/1xxtoiJ5Rn1cVXwynMgJyGr4Cd40znZoI9RYiMj_rMe0.json')
+    const sheetData = await fetch('https://interactive.guim.co.uk/docsdata-test/1xxtoiJ5Rn1cVXwynMgJyGr4Cd40znZoI9RYiMj_rMe0.json')
         .then(res => res.json())
     const data = sheetData.sheets.state_cards.filter(data => data.type);
     return data
