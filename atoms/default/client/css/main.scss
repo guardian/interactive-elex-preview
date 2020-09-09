@@ -68,12 +68,12 @@ body.ios {
     width: 100%;
     max-width: 680px;
     margin: 10px;
-    overflow: visible !important;
+    // overflow: visible !important;
 }
 
 .elex-state {
-    // fill: white;
     stroke: #dcdcdc;
+    stroke-width: 0.5px;
 }
 
 .sticky .sticky-inner {
@@ -492,25 +492,42 @@ body.ios {
 //     width: 400px;
 // }
 
-// .group-buttons__option {
-//     @include fs-textSans(3);
-//     font-weight: bold;
-//     box-sizing: border-box;
-//     width: calc(40%);
-//     min-height: 32px;
-//     border: 1px solid #dcdcdc;
-//     border-radius: 16px;
-//     background-color: #ffff;
-//     display: inline-block;
-//     line-height: 32px;
-//     padding: 0 6px;
-//     margin: 0 6px;
+.group-candidate-button {
+    @include fs-textSans(3);
+    font-weight: bold;
+    box-sizing: border-box;
+    width: 200px;
+    min-height: 32px;
+    border: 1px solid #dcdcdc;
+    border-radius: 16px;
+    background-color: #ffff;
+    display: inline-block;
+    line-height: 32px;
+    padding: 0 6px;
+    margin: 0 6px;
 
-//     // width: 33.333333%;
-//     text-align: center;
+    // width: 33.333333%;
+    text-align: center;
 
-//     cursor: pointer;
-// }
+    cursor: pointer;
+
+    outline: none;
+
+
+    &.group-candidate-button--selected {
+
+        color: white;
+        font-weight: bold;
+
+        &.group-candidate-button--biden {
+            background: #25428f;
+        }
+
+        &.group-candidate-button--trump {
+            background: #cc0a11;
+        }
+    }
+}
 
 
 .state-group__name {

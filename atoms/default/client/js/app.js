@@ -110,22 +110,169 @@ function createCards(data) {
         const newBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
             .map(d => Number(d.ecvs)).reduce(sum, 0)
 
+        const finishCard = d3.select('.finish-card')
 
         updateElexBarGraphic(newBidenTotal, newTrumpTotal, prevTotals[1], prevTotals[0])
+
+        if ((newBidenTotal >= 270) || (newTrumpTotal >= 270) || (newBidenTotal == newTrumpTotal && newBidenTotal == 269)) {
+            showFinishCard(newBidenTotal, newTrumpTotal, allStates)
+        } else {
+            finishCard.style("display", "none")
+        }
+    }
+
+
+    function showFinishCard(votesBiden, votesTrump, allStates) {
+
+        // Get arrays of state selections
+        const trumpStates = allStates.filter(d => d.candidate_select === 'trump').map(function (el) {
+            return el.state;
+        })
+
+        const bidenStates = allStates.filter(d => d.candidate_select === 'biden').map(function (el) {
+            return el.state;
+        })
+
+        const keyStates = ['Florida', 'Ohio', 'Iowa', 'North Carolina', 'Michigan', 'Pennsylvania', 'Wisconsin', 'Arizona', 'Georgia', 'Texas']
+
+        const keyStatesSelections = allStates.filter(d => keyStates.includes(d.state)).map(function (el) {
+            return [el.groups_in_use, el.state, el.candidate_select];
+        });
+
+        // const sorted = keyStatesSelections.reduce((acc, element) => {
+        //         const [key, groups_in_use] = Object.entried(element[0];
+        //             (acc[key] || (acc[key] = [])).push(groups_in_use[0]);
+        //             return acc;
+        //         }, {})
+
+        // Win scenarios
+        d3.select('.finish-card')
+            .style('display', "block")
+
+        d3.select('.finish-headline-win')
+            .style('display', votesBiden == votesTrump ? "none" : "block")
+            .style('opacity', 1)
+            .select('.finish-headline__status')
+            .style('color', votesBiden > votesTrump ? bidenCol : trumpCol)
+            .transition()
+            .text(votesBiden > votesTrump ? 'Joe Biden' : 'Donald Trump')
+
+        // Tie scenario
+        d3.select('.finish-win-text')
+            .style("display", votesBiden == votesTrump ? "none" : "block")
+
+        d3.select('.finish-headline-tie')
+            .style("display", votesBiden == votesTrump ? "block" : "none")
+
+        d3.select('.finish-tie-text')
+            .style("display", votesBiden == votesTrump ? "block" : "none")
+
+        // % Guardian readers who agree
+
+        // Custom copy
+        d3.select('.finish-winner-name')
+            .text(votesBiden > votesTrump ? 'Biden' : 'Trump')
+
+        // d3.select('.finish-key-win')
+        //     .text(votesBiden > votesTrump ? ())
+
+        // Filled map
+
+        const ME2 = allStates.filter(d => d.state === 'Maine 2nd congressional district').map(function (el) {
+            return el.candidate_select;
+        })
+
+        const NE2 = allStates.filter(d => d.state === 'Nebraska 2nd congressional district').map(function (el) {
+            return el.candidate_select;
+        })
+
+        // Map setup
+        const statesFc = topojson.feature(statesTopo, statesTopo.objects.states)
+
+        // 'fc' is short for 'FeatureCollection', you can log it to look at the structure
+        const draw = () => {
+
+            // $ is shorthand for document.querySelector
+            // selects the SVG element
+            const svgEl = $('.elex-map')
+
+            svgEl.innerHTML = "";
+
+            // get the SVG's width as set in CSS
+            const width = svgEl.getBoundingClientRect().width
+            const height = width * 0.66
+
+            const svg = d3.select(svgEl)
+                .attr('width', width)
+                .attr('height', height)
+
+            // set up a map projection that fits our GeoJSON into the SVG
+
+            const proj = d3.geoAlbersUsa()
+                .fitExtent([
+                    [-55, 0],
+                    [width, height]
+                ], statesFc)
+
+            const path = d3.geoPath().projection(proj)
+
+            // Draw states
+
+            const stateShapes = svg
+                .selectAll('blah')
+                .data(statesFc.features)
+                .enter()
+                .append('path')
+                .style("fill", function (d) {
+                    if (trumpStates.includes(d.properties.name) == true) {
+                        return trumpCol
+                    } else if (bidenStates.includes(d.properties.name) == true) {
+                        return bidenCol
+                    } else {
+                        return "#f6f6f6"
+                    }
+                })
+                .attr('d', path)
+                .attr('class', 'elex-state')
+
+            // Circles for Maine & Nebraska congressional disctrict votes
+            const maineCoords = proj([-69.009649, 45.403030])
+
+            svg
+                .append("circle")
+                .attr("cx", maineCoords[0])
+                .attr("cy", maineCoords[1])
+                .attr("r", 8)
+                .style("fill", ME2 == "biden" ? bidenCol : (ME2 == 'trump' ? trumpCol : '#dcdcdc'))
+
+            const nebrasCoords = proj([-97.203378, 40.713956])
+
+            svg
+                .append("circle")
+                .attr("cx", nebrasCoords[0])
+                .attr("cy", nebrasCoords[1])
+                .attr("r", 8)
+                .style("fill", NE2 == "biden" ? bidenCol : (NE2 == 'trump' ? trumpCol : '#dcdcdc'))
+
+
+        }
+        // call the draw function
+        draw()
+
     }
 
     groupIds.forEach(function (groupName) {
         const stateGroup = stateGroups.filter(d => d.group_id == groupName)
         const statesInGroup = statesInUse.filter(d => d.groups_in_use == groupName)
 
-        const groupsDiv = d3.select(`.state-groups--${groupName}`)
+        const allGroups = d3.select(`.state-groups`)
 
-        const groupDivs = groupsDiv
-            .selectAll('.state-group')
+        const groupDivs = allGroups
+            .selectAll(`.state-group ${groupName}`)
             .data(stateGroup)
             .enter()
             .append('div')
-            .classed('state-group', true)
+            .classed(`state-group ${groupName}`, true)
 
         groupDivs
             .append('h2')
@@ -136,6 +283,46 @@ function createCards(data) {
             .append('p')
             .html(d => d.groupText)
             .classed('state-group__text', true)
+
+        groupDivs.each(function (d, i) {
+            const groupDiv = d3.select(this)
+            const groupButtons = groupDiv
+                .selectAll('button')
+                .data(['Biden', 'Trump'])
+                .enter()
+                .append('button')
+                .text(name => "All to " + name)
+                .attr('class', d => 'group-candidate-button group-candidate-button--' + d.toLowerCase())
+
+            groupButtons
+                .on('click', canName => {
+
+                    const stateButtons = stateDivs.selectAll('button')
+
+                    var prevTotals = getPreviousTotals()
+
+                    const statesToChange = d.group_states.split(', ')
+                    statesToChange.forEach(function () {
+                        allStates = allStates.map(s => {
+                            if (statesToChange.includes(s.state)) {
+                                return Object.assign({}, s, {
+                                    candidate_select: canName.toLowerCase()
+                                })
+                            } else {
+                                return s
+                            }
+                        })
+                    })
+
+                    updateTotals(prevTotals)
+                    groupButtons
+                        .classed('group-candidate-button--selected', n => n === canName)
+
+                    stateButtons
+                        .classed('candidate-button--selected', n => n === canName)
+
+                })
+        })
 
         const statesDiv = groupDivs
             .append('div')
@@ -267,6 +454,8 @@ function createCards(data) {
         })
 
     })
+
+
 }
 
 // Make bar sticky
@@ -350,41 +539,6 @@ function makeStickyListenerAt(getYPos) {
         return toggleSticky;
     }
 }
-
-// // FINISH CARD
-// d3.select('.finish-card')
-//     .style('display', bidenTotal >= 270 ? "block" : (trumpTotal >= 270 ? "block" : ((trumpTotal == 269 && trumpTotal == bidenTotal) ? "block" : "none")))
-// // Winner headline
-// d3.select('.finish-headline-win')
-//     .style('display', bidenTotal == trumpTotal ? "none" : "block")
-//     .style('opacity', 1)
-//     .select('.finish-headline__status')
-//     .style('color', bidenTotal > trumpTotal ? bidenCol : trumpCol)
-//     .transition()
-//     .text(bidenTotal > trumpTotal ? 'Joe Biden' : 'Donald Trump')
-
-// // % Guardian readers who agree
-
-// // Custom copy
-// d3.select('.finish-winner-name')
-//     .text(bidenTotal > trumpTotal ? 'Biden' : 'Trump')
-
-// // Tie scenario
-// d3.select('.finish-win-text')
-//     .style("display", bidenTotal == trumpTotal ? "none" : "block")
-
-// d3.select('.finish-headline-tie')
-//     .style("display", bidenTotal == trumpTotal ? "block" : "none")
-
-// d3.select('.finish-tie-text')
-//     .style("display", bidenTotal == trumpTotal ? "block" : "none")
-
-
-// Key win custom text: 
-// if all blue wall goes to Biden, "the "blue wall" of Michigan, Pennsylvania and Wisconsin"
-// other scenarios? 
-// d3.select('.finish-key-win')
-//     .text(bidenTotal > trumpTotal ? 'Biden' : 'Trump')
 
 
 // ANIMATION FUNCTIONS
@@ -471,8 +625,6 @@ function winFlash() {
 
 function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesTrump) {
 
-    console.log(votesBiden, prevVotesBiden)
-    console.log(votesTrump, prevVotesTrump)
     if (votesBiden > prevVotesBiden) {
         pulse("biden");
     } else if (votesTrump > prevVotesTrump) {
@@ -545,7 +697,10 @@ function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesT
         bidenBar.style.width = (votesBiden / 538 * 100) + "%";
         trumpBar.style.width = (votesTrump / 538 * 100) + "%";
     }
+
+
 }
+
 
 
 // MOBILE DETECT
