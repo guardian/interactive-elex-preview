@@ -2,7 +2,8 @@
 // just do e.g. import Scatter from "shared/js/scatter.js"
 import * as d3 from 'd3'
 import {
-    $
+    $,
+    $$
 } from 'shared/js/util'
 
 import * as topojson from 'topojson'
@@ -58,7 +59,7 @@ finish
 // Create state groups & cards
 function createCards(data) {
 
-    const statesInUse = data.filter(d => d.groups_in_use)
+    var statesInUse = data.filter(d => d.groups_in_use)
     const stateGroups = data.filter(d => d.type == "group")
     var allStates = data.filter(d => d.type == "individual")
 
@@ -110,6 +111,7 @@ function createCards(data) {
         const newBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
             .map(d => Number(d.ecvs)).reduce(sum, 0)
 
+
         const finishCard = d3.select('.finish-card')
 
         updateElexBarGraphic(newBidenTotal, newTrumpTotal, prevTotals[1], prevTotals[0])
@@ -123,7 +125,11 @@ function createCards(data) {
 
 
     function showFinishCard(votesBiden, votesTrump, allStates) {
-
+        // remove old reset button
+        const oldResetButton = $('.reset-button-div')
+        if (oldResetButton != null) {
+            oldResetButton.innerHTML = ""
+        }
         // Get arrays of state selections
         const trumpStates = allStates.filter(d => d.candidate_select === 'trump').map(function (el) {
             return el.state;
@@ -169,8 +175,9 @@ function createCards(data) {
         // const formerGOP = ['Arizona', 'Georgia', 'Texas']
 
         // Win scenarios
-        d3.select('.finish-card')
+        const finishCard = d3.select('.finish-card')
             .style('display', "block")
+
 
         d3.select('.finish-headline-win')
             .style('display', votesBiden == votesTrump ? "none" : "block")
@@ -188,11 +195,83 @@ function createCards(data) {
             .style("display", votesBiden == votesTrump ? "block" : "none")
 
         d3.select('.finish-tie-text')
-            .style("display", votesBiden == votesTrump ? "block" : "none")
+            .style("display", votesBiden == votesTrump ? "inline" : "none")
 
         // Portraits
-        // d3.select('.finish-portrait-image')
-        //     .style("display", votesBiden > votesTrump ? 'block' : 'none')
+        d3.select('.biden-win-portrait')
+            .style("display", votesBiden > votesTrump ? 'block' : 'none')
+        d3.select('.trump-win-portrait')
+            .style("display", votesTrump > votesBiden ? 'block' : 'none')
+        // const finishPortraits = document.querySelectorAll(".finish-portrait-image");
+
+        // finishPortraits.forEach(function (portrait) {
+        //     portrait.classList.remove("show-portrait");
+        // });
+
+        // const winner = votesBiden > votesTrump ? "biden" : (votesTrump > votesBiden ? "trump" : '')
+        // const portraitEl = document.querySelector("." + candidate + "-portrait-" + mood);
+        // portraitEl.classList.add("show-portrait");
+
+        // Reset button
+        const resetButton = d3.select('.reset-button-div')
+            .append('button')
+            .text('Try again')
+            .attr('id', 'reset-button')
+
+        resetButton
+            .on('click', canName => {
+
+                // get previous totals
+                const prevTotals = getPreviousTotals()
+
+                // select group & state buttons
+                const groupButtons = $$('.group-candidate-button')
+                const stateButtons = $$('.candidate-button')
+
+                // remove 'selected' classes from buttons
+                groupButtons.forEach(function (d) {
+                    d.classList.remove("group-candidate-button--selected")
+                })
+
+                stateButtons.forEach(function (d) {
+                    d.classList.remove("candidate-button--selected")
+                })
+
+                // reset 'candidate_select' for statesInUse
+                statesInUse.forEach(function (d) {
+                    allStates = allStates.map(s => {
+                        if (d.state === s.state) {
+                            return Object.assign({}, s, {
+                                candidate_select: ""
+                            })
+                        } else {
+                            return s
+                        }
+                    })
+                })
+
+                // run update elex bar graphic
+                updateElexBarGraphic(bidenTotal, trumpTotal, prevTotals[1], prevTotals[0])
+
+                // scroll to top? what about mobile? app?
+                function topFunction() {
+                    document.body.scrollTop = 450;
+                    document.documentElement.scrollTop = 450;
+                }
+
+                topFunction()
+
+                var trackingobject = {
+                    component: "elex-preview-08-2020",
+                    value: "reset-button-clicked"
+                }
+
+                if (window.guardian.ophan && window.guardian.ophan != undefined) {
+                    window.guardian.ophan.record(trackingobject);
+                } else {
+                    console.log("can't find ophan")
+                }
+            })
 
         // % Guardian readers who agree
 
@@ -283,6 +362,17 @@ function createCards(data) {
         // call the draw function
         draw()
 
+        var trackingobject = {
+            component: "elex-preview-08-2020",
+            value: "finish-card-shown"
+        }
+
+        if (window.guardian.ophan && window.guardian.ophan != undefined) {
+            window.guardian.ophan.record(trackingobject);
+        } else {
+            console.log("can't find ophan")
+        }
+
     }
 
     groupIds.forEach(function (groupName) {
@@ -344,6 +434,17 @@ function createCards(data) {
 
                     stateButtons
                         .classed('candidate-button--selected', n => n === canName)
+
+                    var trackingobject = {
+                        component: "elex-preview-08-2020",
+                        value: "group-button-clicked"
+                    }
+
+                    if (window.guardian.ophan && window.guardian.ophan != undefined) {
+                        window.guardian.ophan.record(trackingobject);
+                    } else {
+                        console.log("can't find ophan")
+                    }
 
                 })
         })
@@ -473,6 +574,17 @@ function createCards(data) {
                     updateTotals(prevTotals)
                     buttons
                         .classed('candidate-button--selected', n => n === canName)
+
+                    var trackingobject = {
+                        component: "elex-preview-08-2020",
+                        value: "state-button-clicked"
+                    }
+
+                    if (window.guardian.ophan && window.guardian.ophan != undefined) {
+                        window.guardian.ophan.record(trackingobject);
+                    } else {
+                        console.log("can't find ophan")
+                    }
 
                 })
         })

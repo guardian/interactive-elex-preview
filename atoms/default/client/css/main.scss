@@ -3,6 +3,7 @@
 @import "palette";
 @import "enhancer";
 
+
 $bar-height: 36px;
 
 .interactive-atom {
@@ -63,19 +64,6 @@ body.ios {
     }
 }
 
-
-.elex-map {
-    width: 100%;
-    max-width: 680px;
-    margin: 10px;
-    float: left;
-    // overflow: visible !important;
-}
-
-.elex-state {
-    stroke: #dcdcdc;
-    stroke-width: 0.5px;
-}
 
 .sticky .sticky-inner {
     box-sizing: border-box;
@@ -507,6 +495,7 @@ body.ios {
     padding: 0 6px;
     margin: 0 6px;
 
+
     // width: 33.333333%;
     text-align: center;
 
@@ -590,6 +579,7 @@ body.ios {
     @include fs-bodyCopy(1);
     display: inline-block;
     margin-top: 10px;
+    height: 130px;
 }
 
 .state-card__ecvs {
@@ -661,13 +651,9 @@ body.ios {
     border: 1px solid #dcdcdc;
     border-radius: 16px;
     background-color: #ffff;
-    display: inline-block;
     line-height: 32px;
     padding: 0 6px;
     margin: 0 6px;
-
-    // width: 33.333333%;
-    text-align: center;
     outline: none;
 
     &.candidate-button--selected {
@@ -712,7 +698,6 @@ body.ios {
     @include fs-headline(2);
     width: 60%;
     line-height: 24px;
-    float: left;
 }
 
 .finish-tie-text {
@@ -720,5 +705,46 @@ body.ios {
 }
 
 .finish-portrait-image {
+    display: none;
     width: 300px;
+}
+
+#reset-button {
+
+    @include fs-textSans(4);
+    font-size: 18px;
+    font-weight: bold;
+    box-sizing: border-box;
+    width: calc(20%);
+    min-height: 40px;
+    border: 1px solid #dcdcdc;
+    border-radius: 24px;
+    background-color: #ffff;
+    line-height: 32px;
+    padding: 0 6px;
+    margin: 0 6px;
+    outline: none;
+}
+
+.elex-map {
+    width: 100%;
+    max-width: calc(100%);
+    margin: 10px;
+    flex-shrink: 0;
+
+    // float: left;
+    // overflow: visible !important;
+}
+
+
+.elex-state {
+    stroke: #dcdcdc;
+    stroke-width: 0.5px;
+}
+
+.finish-wrapper {
+    // display: flex;
+    display: flex;
+    align-items: flex-start;
+
 }
