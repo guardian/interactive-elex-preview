@@ -186,21 +186,18 @@ function createCards(data) {
 
         d3.select('.finish-biden-win')
             .style('display', votesBiden > votesTrump ? 'block' : 'none')
+            .html(bidenBlueWall.length == 3 && bidenSwings.length < 2 && bidenGOP.length == 0 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, taking him over the majority to victory." : (
+                bidenBlueWall.length == 3 && bidenSwings.length >= 2 && bidenGOP.length == 0 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, as well as the key swing states of <b>" + (bidenSwings.slice(0, -1).join(', ') + '</b> and <b>' + bidenSwings.slice(-1)) + "</b> to take him over the majority to victory." : (
+                    bidenBlueWall.length == 3 && bidenGOP.length == 1 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican stronghold of <b>" + bidenGOP + "</b> to win the presidency." : (
+                        bidenBlueWall.length == 3 && bidenGOP.length > 1 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican strongholds of <b>" + (bidenGOP.slice(0, -1).join(', ') + '</b> and <b>' + bidenGOP.slice(-1)) + "</b> to win the presidency." : "")
+                )))
 
         d3.select('.finish-trump-win')
             .style('display', votesBiden < votesTrump ? 'block' : 'none')
+            .html(trumpBlueWall.length == 3 && trumpSwings.length < 2 ? 'You said Trump would retain the now truly broken "blue wall" of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, taking him over the majority to victory.' : (
+                trumpBlueWall.length == 3 && trumpSwings.length >= 2 ? 'You said Trump would retain the now truly broken "blue wall" of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, as well as the key swing states of <b>' + (trumpSwings.slice(0, -1).join(', ') + '</b> and <b>' + trumpSwings.slice(-1)) + "</b> to win the presidency." : (
+                    trumpBlueWall.length < 3 && trumpBlueWall.length > 1 ? 'You said Trump would retain <b>' + (trumpBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + trumpBlueWall.slice(-1)) + "</b> and win the swing states of <b> " + (trumpSwings.slice(0, -1).join(', ') + '</b> and <b>' + trumpSwings.slice(-1)) + "</b> to take him over the majority to victory." : "")))
 
-        d3.select('.finish-biden-custom')
-            .html(bidenBlueWall.length == 3 && bidenSwings.length < 2 && bidenGOP.length == 0 ? " win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, taking him over the majority to victory." : (
-                bidenBlueWall.length == 3 && bidenSwings.length >= 2 && bidenGOP.length == 0 ? " win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, as well as the key swing states of <b>" + (bidenSwings.slice(0, -1).join(', ') + '</b> and <b>' + bidenSwings.slice(-1)) + "</b> to take him over the majority to victory." : (
-                    bidenBlueWall.length == 3 && bidenGOP.length == 1 ? " win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican stronghold of <b>" + bidenGOP + "</b> to win the presidency." : (
-                        bidenBlueWall.length == 3 && bidenGOP.length > 1 ? " win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican strongholds of <b>" + (bidenGOP.slice(0, -1).join(', ') + '</b> and <b>' + bidenGOP.slice(-1)) + "</b> to win the presidency." : "")
-                )))
-
-        d3.select('.finish-trump-custom')
-            .html(trumpBlueWall.length == 3 && trumpSwings.length < 2 ? ' retain the now truly broken "blue wall" of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, taking him over the majority to victory.' : (
-                trumpBlueWall.length == 3 && trumpSwings.length >= 2 ? ' retain the now truly broken "blue wall" of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, as well as the key swing states of <b>' + (trumpSwings.slice(0, -1).join(', ') + '</b> and <b>' + trumpSwings.slice(-1)) + "</b> to win the presidency." : (
-                    trumpBlueWall.length < 3 && trumpBlueWall.length > 1 ? ' retain <b>' + (trumpBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + trumpBlueWall.slice(-1)) + "</b> and win the swing states of <b> " + (trumpSwings.slice(0, -1).join(', ') + '</b> and <b>' + trumpSwings.slice(-1)) + "</b> to take him over the majority to victory." : "")))
 
         // const trumpGOP = allStates.filter(d => formerGOP.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
         //     return el.state
