@@ -155,24 +155,71 @@ function createCards(data) {
         //         return [el.state, el.groups_in_use, el.candidate_select]
         //     });
 
-        const bidenKeyWins = groupBy(allStates.filter(d => keyStates.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
-            return [{
-                state: el.state,
-                group: el.groups_in_use
-            }]
-        }).flat(), 'group')
+        const blueWall = ['Michigan', 'Pennsylvania', 'Wisconsin']
+        const swings = ['Ohio', 'Iowa', 'Florida', 'North Carolina']
+        const formerGOP = ['Arizona', 'Georgia', 'Texas']
+
+        const bidenBlueWall = allStates.filter(d => blueWall.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
+            return el.state
+        })
+
+        const bidenSwings = allStates.filter(d => swings.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
+            return el.state
+        })
+
+        const bidenGOP = allStates.filter(d => formerGOP.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
+            return el.state
+        })
+
+        const trumpBlueWall = allStates.filter(d => blueWall.includes(d.state) && d.candidate_select === 'trump').map(function (el) {
+            return el.state
+        })
+
+        const trumpSwings = allStates.filter(d => swings.includes(d.state) && d.candidate_select === 'trump').map(function (el) {
+            return el.state
+        })
+
+        // Custom copy
+        d3.select('.finish-winner-name')
+            .text(votesBiden > votesTrump ? 'Biden' : 'Trump')
 
 
-        const trumpKeyWins = groupBy(allStates.filter(d => keyStates.includes(d.state) && d.candidate_select === 'trump').map(function (el) {
-            return [{
-                state: el.state,
-                group: el.groups_in_use
-            }]
-        }).flat(), 'group')
+        d3.select('.finish-biden-win')
+            .style('display', votesBiden > votesTrump ? 'block' : 'none')
 
-        // const blueWall = ['Michigan', 'Pennsylvania', 'Wisconsin']
-        // const swings = ['Ohio', 'Iowa', 'Florida', 'North Carolina']
-        // const formerGOP = ['Arizona', 'Georgia', 'Texas']
+        d3.select('.finish-trump-win')
+            .style('display', votesBiden < votesTrump ? 'block' : 'none')
+
+        d3.select('.finish-biden-custom')
+            .html(bidenBlueWall.length == 3 && bidenSwings.length < 2 && bidenGOP.length == 0 ? " win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, taking him over the majority to victory." : (
+                bidenBlueWall.length == 3 && bidenSwings.length >= 2 && bidenGOP.length == 0 ? " win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, as well as the key swing states of <b>" + (bidenSwings.slice(0, -1).join(', ') + '</b> and <b>' + bidenSwings.slice(-1)) + "</b> to take him over the majority to victory." : (
+                    bidenBlueWall.length == 3 && bidenGOP.length == 1 ? " win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican stronghold of <b>" + bidenGOP + "</b> to win the presidency." : (
+                        bidenBlueWall.length == 3 && bidenGOP.length > 1 ? " win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican strongholds of <b>" + (bidenGOP.slice(0, -1).join(', ') + '</b> and <b>' + bidenGOP.slice(-1)) + "</b> to win the presidency." : "")
+                )))
+
+        d3.select('.finish-trump-custom')
+            .html(trumpBlueWall.length == 3 && trumpSwings.length < 2 ? ' retain the now truly broken "blue wall" of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, taking him over the majority to victory.' : (
+                trumpBlueWall.length == 3 && trumpSwings.length >= 2 ? ' retain the now truly broken "blue wall" of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, as well as the key swing states of <b>' + (trumpSwings.slice(0, -1).join(', ') + '</b> and <b>' + trumpSwings.slice(-1)) + "</b> to win the presidency." : (
+                    trumpBlueWall.length < 3 && trumpBlueWall.length > 1 ? ' retain <b>' + (trumpBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + trumpBlueWall.slice(-1)) + "</b> and win the swing states of <b> " + (trumpSwings.slice(0, -1).join(', ') + '</b> and <b>' + trumpSwings.slice(-1)) + "</b> to take him over the majority to victory." : "")))
+
+        // const trumpGOP = allStates.filter(d => formerGOP.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
+        //     return el.state
+        // })
+
+        // const bidenKeyWins = groupBy(allStates.filter(d => keyStates.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
+        //     return [{
+        //         state: el.state,
+        //         group: el.groups_in_use
+        //     }]
+        // }).flat(), 'group')
+
+
+        // const trumpKeyWins = groupBy(allStates.filter(d => keyStates.includes(d.state) && d.candidate_select === 'trump').map(function (el) {
+        //     return [{
+        //         state: el.state,
+        //         group: el.groups_in_use
+        //     }]
+        // }).flat(), 'group')
 
         // Win scenarios
         const finishCard = d3.select('.finish-card')
@@ -199,7 +246,7 @@ function createCards(data) {
 
         // Portraits
         d3.select('.biden-win-portrait')
-            .style("display", votesBiden > votesTrump ? 'block' : 'none')
+            .style("display", votesBiden > votesTrump ? 'block' : 'none');
         d3.select('.trump-win-portrait')
             .style("display", votesTrump > votesBiden ? 'block' : 'none')
 
@@ -263,12 +310,6 @@ function createCards(data) {
                     console.log("can't find ophan")
                 }
             })
-
-        // % Guardian readers who agree
-
-        // Custom copy
-        d3.select('.finish-winner-name')
-            .text(votesBiden > votesTrump ? 'Biden' : 'Trump')
 
         // Filled map
 
