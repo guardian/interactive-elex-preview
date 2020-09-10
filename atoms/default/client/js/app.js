@@ -202,15 +202,6 @@ function createCards(data) {
             .style("display", votesBiden > votesTrump ? 'block' : 'none')
         d3.select('.trump-win-portrait')
             .style("display", votesTrump > votesBiden ? 'block' : 'none')
-        // const finishPortraits = document.querySelectorAll(".finish-portrait-image");
-
-        // finishPortraits.forEach(function (portrait) {
-        //     portrait.classList.remove("show-portrait");
-        // });
-
-        // const winner = votesBiden > votesTrump ? "biden" : (votesTrump > votesBiden ? "trump" : '')
-        // const portraitEl = document.querySelector("." + candidate + "-portrait-" + mood);
-        // portraitEl.classList.add("show-portrait");
 
         // Reset button
         const resetButton = d3.select('.reset-button-div')
@@ -406,7 +397,7 @@ function createCards(data) {
                 .enter()
                 .append('button')
                 .text(name => "All to " + name)
-                .attr('class', d => 'group-candidate-button group-candidate-button--' + d.toLowerCase())
+                .attr('class', d => `group-candidate-button group-button--${groupName} group-candidate-button--` + d.toLowerCase())
 
             groupButtons
                 .on('click', canName => {
@@ -574,6 +565,12 @@ function createCards(data) {
                     updateTotals(prevTotals)
                     buttons
                         .classed('candidate-button--selected', n => n === canName)
+
+                    const selectedGroupButton = $(`.group-candidate-button--selected.group-button--${d.groups_in_use}`)
+
+                    if (selectedGroupButton != null && selectedGroupButton.innerHTML != "All to " + canName) {
+                        selectedGroupButton.classList.remove("group-candidate-button--selected")
+                    }
 
                     var trackingobject = {
                         component: "elex-preview-08-2020",
