@@ -133,17 +133,40 @@ function createCards(data) {
             return el.state;
         })
 
+        const groupBy = (array, key) => {
+            return array.reduce((result, currentValue) => {
+                (result[currentValue[key]] = result[currentValue[key]] || []).push(
+                    currentValue
+                );
+                return result;
+            }, {});
+        };
+
         const keyStates = ['Florida', 'Ohio', 'Iowa', 'North Carolina', 'Michigan', 'Pennsylvania', 'Wisconsin', 'Arizona', 'Georgia', 'Texas']
 
-        const keyStatesSelections = allStates.filter(d => keyStates.includes(d.state)).map(function (el) {
-            return [el.groups_in_use, el.state, el.candidate_select];
-        });
+        // const keyStatesSelections = allStates.filter(d => keyStates.includes(d.state))
+        //     .map(function (el) {
+        //         return [el.state, el.groups_in_use, el.candidate_select]
+        //     });
 
-        // const sorted = keyStatesSelections.reduce((acc, element) => {
-        //         const [key, groups_in_use] = Object.entried(element[0];
-        //             (acc[key] || (acc[key] = [])).push(groups_in_use[0]);
-        //             return acc;
-        //         }, {})
+        const bidenKeyWins = groupBy(allStates.filter(d => keyStates.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
+            return [{
+                state: el.state,
+                group: el.groups_in_use
+            }]
+        }).flat(), 'group')
+
+
+        const trumpKeyWins = groupBy(allStates.filter(d => keyStates.includes(d.state) && d.candidate_select === 'trump').map(function (el) {
+            return [{
+                state: el.state,
+                group: el.groups_in_use
+            }]
+        }).flat(), 'group')
+
+        // const blueWall = ['Michigan', 'Pennsylvania', 'Wisconsin']
+        // const swings = ['Ohio', 'Iowa', 'Florida', 'North Carolina']
+        // const formerGOP = ['Arizona', 'Georgia', 'Texas']
 
         // Win scenarios
         d3.select('.finish-card')
@@ -167,14 +190,15 @@ function createCards(data) {
         d3.select('.finish-tie-text')
             .style("display", votesBiden == votesTrump ? "block" : "none")
 
+        // Portraits
+        // d3.select('.finish-portrait-image')
+        //     .style("display", votesBiden > votesTrump ? 'block' : 'none')
+
         // % Guardian readers who agree
 
         // Custom copy
         d3.select('.finish-winner-name')
             .text(votesBiden > votesTrump ? 'Biden' : 'Trump')
-
-        // d3.select('.finish-key-win')
-        //     .text(votesBiden > votesTrump ? ())
 
         // Filled map
 

@@ -68,6 +68,7 @@ body.ios {
     width: 100%;
     max-width: 680px;
     margin: 10px;
+    float: left;
     // overflow: visible !important;
 }
 
@@ -711,8 +712,13 @@ body.ios {
     @include fs-headline(2);
     width: 60%;
     line-height: 24px;
+    float: left;
 }
 
 .finish-tie-text {
     display: none;
+}
+
+.finish-portrait-image {
+    width: 300px;
 }
