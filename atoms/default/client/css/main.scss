@@ -688,12 +688,8 @@ body.ios {
     @include fs-titlepiece(2);
 }
 
-.finish-agree-percentage {
-    @include fs-header(4);
-    font-weight: bold;
-}
-
-.finish-win-text,
+.finish-biden-win,
+.finish-trump-win,
 .finish-tie-text {
     @include fs-headline(2);
     width: 60%;
