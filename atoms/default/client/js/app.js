@@ -188,7 +188,7 @@ function createCards(data) {
 
 
         // Win scenarios
-        d3.select('.finish-card')
+        const finishCard = d3.select('.finish-card')
             .style('display', "block")
 
 
@@ -208,14 +208,14 @@ function createCards(data) {
             .style("display", votesBiden == votesTrump ? "inline" : "none")
 
         // Portraits
-        d3.select('.biden-win-portrait')
-            .style("display", isMobile() ? "none" : (votesBiden > votesTrump ? 'block' : 'none'));
-        d3.select('.trump-win-portrait')
-            .style("display", isMobile() ? "none" : (votesTrump > votesBiden ? 'block' : 'none'))
         // d3.select('.biden-win-portrait')
-        //     .style("display", votesBiden > votesTrump ? 'block' : 'none');
+        //     .style("display", isMobile() ? "none" : (votesBiden > votesTrump ? 'block' : 'none'));
         // d3.select('.trump-win-portrait')
-        //     .style("display", votesTrump > votesBiden ? 'block' : 'none')
+        //     .style("display", isMobile() ? "none" : (votesTrump > votesBiden ? 'block' : 'none'))
+        d3.select('.biden-win-portrait')
+            .style("display", votesBiden > votesTrump ? 'block' : 'none');
+        d3.select('.trump-win-portrait')
+            .style("display", votesTrump > votesBiden ? 'block' : 'none')
 
         // Reset button
         const resetButton = d3.select('.reset-button-div')
@@ -273,6 +273,9 @@ function createCards(data) {
                 }
 
                 topFunction()
+
+                finishCard
+                    .style('display', "none")
 
                 var trackingobject = {
                     component: "elex-preview-08-2020",
