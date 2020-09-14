@@ -99,8 +99,6 @@ function createCards(data) {
         const prevBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
             .map(d => Number(d.ecvs)).reduce(sum, 0)
 
-        console.log(prevTrumpTotal, prevBidenTotal)
-
         return [prevTrumpTotal, prevBidenTotal]
     }
 
@@ -119,14 +117,14 @@ function createCards(data) {
         updateElexBarGraphic(newBidenTotal, newTrumpTotal, prevTotals[1], prevTotals[0])
 
         if ((newBidenTotal >= 270) || (newTrumpTotal >= 270) || (newBidenTotal == newTrumpTotal && newBidenTotal == 269)) {
-            showFinishCard(newBidenTotal, newTrumpTotal, allStates)
+            showFinishCard(newBidenTotal, newTrumpTotal)
         } else {
             finishCard.style("display", "none")
         }
     }
 
 
-    function showFinishCard(votesBiden, votesTrump, allStates) {
+    function showFinishCard(votesBiden, votesTrump) {
         // remove old reset button
         const oldResetButton = $('.reset-button-div')
         if (oldResetButton != null) {
@@ -257,7 +255,6 @@ function createCards(data) {
                     })
                 })
 
-                console.log(allStates)
 
                 var originalBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
                     .map(d => Number(d.ecvs)).reduce(sum, 0)
@@ -268,8 +265,6 @@ function createCards(data) {
                 // run update elex bar graphic
                 updateElexBarGraphic(originalBidenTotal, originalTrumpTotal, prevTotals[1], prevTotals[0])
 
-                // reset prevtotals 
-                prevTotals = getPreviousTotals()
 
                 // scroll to top - what about app? mobile different position?
                 function topFunction() {
@@ -569,7 +564,6 @@ function createCards(data) {
 
             buttons
                 .on('click', canName => {
-
                     var prevTotals = getPreviousTotals()
 
                     allStates = allStates.map(s => {
