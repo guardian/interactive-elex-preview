@@ -99,6 +99,8 @@ function createCards(data) {
         const prevBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
             .map(d => Number(d.ecvs)).reduce(sum, 0)
 
+        console.log(prevTrumpTotal, prevBidenTotal)
+
         return [prevTrumpTotal, prevBidenTotal]
     }
 
@@ -139,21 +141,6 @@ function createCards(data) {
             return el.state;
         })
 
-        const groupBy = (array, key) => {
-            return array.reduce((result, currentValue) => {
-                (result[currentValue[key]] = result[currentValue[key]] || []).push(
-                    currentValue
-                );
-                return result;
-            }, {});
-        };
-
-        const keyStates = ['Florida', 'Ohio', 'Iowa', 'North Carolina', 'Michigan', 'Pennsylvania', 'Wisconsin', 'Arizona', 'Georgia', 'Texas']
-
-        // const keyStatesSelections = allStates.filter(d => keyStates.includes(d.state))
-        //     .map(function (el) {
-        //         return [el.state, el.groups_in_use, el.candidate_select]
-        //     });
 
         const blueWall = ['Michigan', 'Pennsylvania', 'Wisconsin']
         const swings = ['Ohio', 'Iowa', 'Florida', 'North Carolina']
@@ -199,6 +186,15 @@ function createCards(data) {
                     trumpBlueWall.length < 3 && trumpBlueWall.length > 1 ? 'You said Trump would retain <b>' + (trumpBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + trumpBlueWall.slice(-1)) + "</b> and win the swing states of <b> " + (trumpSwings.slice(0, -1).join(', ') + '</b> and <b>' + trumpSwings.slice(-1)) + "</b> to take him over the majority to victory." : "")))
 
 
+        // const groupBy = (array, key) => {
+        //     return array.reduce((result, currentValue) => {
+        //         (result[currentValue[key]] = result[currentValue[key]] || []).push(
+        //             currentValue
+        //         );
+        //         return result;
+        //     }, {});
+        // };
+
         // const trumpGOP = allStates.filter(d => formerGOP.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
         //     return el.state
         // })
@@ -232,9 +228,6 @@ function createCards(data) {
             .text(votesBiden > votesTrump ? 'Joe Biden' : 'Donald Trump')
 
         // Tie scenario
-        d3.select('.finish-win-text')
-            .style("display", votesBiden == votesTrump ? "none" : "block")
-
         d3.select('.finish-headline-tie')
             .style("display", votesBiden == votesTrump ? "block" : "none")
 
@@ -243,9 +236,13 @@ function createCards(data) {
 
         // Portraits
         d3.select('.biden-win-portrait')
-            .style("display", votesBiden > votesTrump ? 'block' : 'none');
+            .style("display", isMobile() ? "none" : (votesBiden > votesTrump ? 'block' : 'none'));
         d3.select('.trump-win-portrait')
-            .style("display", votesTrump > votesBiden ? 'block' : 'none')
+            .style("display", isMobile() ? "none" : (votesTrump > votesBiden ? 'block' : 'none'))
+        // d3.select('.biden-win-portrait')
+        //     .style("display", votesBiden > votesTrump ? 'block' : 'none');
+        // d3.select('.trump-win-portrait')
+        //     .style("display", votesTrump > votesBiden ? 'block' : 'none')
 
         // Reset button
         const resetButton = d3.select('.reset-button-div')
@@ -257,7 +254,7 @@ function createCards(data) {
             .on('click', canName => {
 
                 // get previous totals
-                const prevTotals = getPreviousTotals()
+                var prevTotals = getPreviousTotals()
 
                 // select group & state buttons
                 const groupButtons = $$('.group-candidate-button')
@@ -287,6 +284,9 @@ function createCards(data) {
 
                 // run update elex bar graphic
                 updateElexBarGraphic(bidenTotal, trumpTotal, prevTotals[1], prevTotals[0])
+
+                // reset prevtotals 
+                prevTotals = getPreviousTotals()
 
                 // scroll to top? what about mobile? app?
                 function topFunction() {
@@ -374,7 +374,7 @@ function createCards(data) {
                 .append("circle")
                 .attr("cx", maineCoords[0])
                 .attr("cy", maineCoords[1])
-                .attr("r", 8)
+                .attr("r", isMobile() ? 4 : 8)
                 .style("fill", ME2 == "biden" ? bidenCol : (ME2 == 'trump' ? trumpCol : '#dcdcdc'))
 
             const nebrasCoords = proj([-97.203378, 40.713956])
@@ -383,7 +383,7 @@ function createCards(data) {
                 .append("circle")
                 .attr("cx", nebrasCoords[0])
                 .attr("cy", nebrasCoords[1])
-                .attr("r", 8)
+                .attr("r", isMobile() ? 4 : 8)
                 .style("fill", NE2 == "biden" ? bidenCol : (NE2 == 'trump' ? trumpCol : '#dcdcdc'))
 
 
@@ -588,6 +588,8 @@ function createCards(data) {
                 .on('click', canName => {
 
                     var prevTotals = getPreviousTotals()
+
+                    console.log(allStates)
 
                     allStates = allStates.map(s => {
 
