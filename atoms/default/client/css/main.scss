@@ -677,11 +677,81 @@ body.ios {
     display: none;
     margin: 40px 100px;
     padding: 10px;
-    height: 600px;
+    height: 650px;
     border-top: solid 1px #f6f6f6;
 
-    @include mq($until: tablet) {
+    @include mq($until: desktop) {
         margin: 0;
+    }
+}
+
+
+.finish-wrapper {
+    display: grid;
+    // grid-gap: 10px;
+    grid-template-columns: 2fr 1fr;
+
+    .finish-headline-win {
+        grid-column: 1;
+        grid-row: 1
+    }
+
+    .finish-biden-win,
+    .finish-trump-win,
+    .finish-tie-text {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .finish-portrait-wrapper {
+        grid-column: 2;
+        grid-row: 3 / span 2;
+    }
+
+    .gv-map {
+        grid-column: 1 / span 2;
+        grid-row: 3;
+    }
+
+    .reset-button-div {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: center;
+    }
+
+    @include mq($until: tablet) {
+
+        grid-template-columns: fr 1fr;
+
+        .finish-headline-win {
+            grid-column: 1;
+            grid-row: 1
+        }
+
+        .finish-portrait-wrapper {
+            grid-column: 2;
+            grid-row: 1 / span 2;
+        }
+
+        .finish-biden-win,
+        .finish-trump-win,
+        .finish-tie-text {
+            grid-column: 1 / span 2;
+            grid-row: 2;
+        }
+
+        .elex-map {
+            grid-column: 1 / span 2;
+            grid-row: 4;
+            max-width: 100%;
+            margin: 8px 12px;
+        }
+
+        .reset-button-div {
+            grid-column: 1 / span 2;
+            grid-row: 5;
+            align-self: center;
+        }
     }
 }
 
@@ -694,24 +764,23 @@ body.ios {
 .finish-headline-tie h2 {
     @include fs-titlepiece(2);
 
-    // @include mq($until: tablet) {
-    //     font-size: 36px;
-    //     line-height: 40px;
-    //     width: 70%;
-    // }
 }
 
 .finish-biden-win,
 .finish-trump-win,
 .finish-tie-text {
     @include fs-headline(2);
-    width: 60%;
+    // width: 60%;
     line-height: 24px;
     margin: 15px 0;
 
     @include mq($until: tablet) {
         width: 100%;
     }
+
+    // @include mq(tablet) {
+    //     width: 80%;
+    // }
 }
 
 .finish-tie-text {
@@ -720,17 +789,22 @@ body.ios {
 
 .finish-portrait-image {
     display: none;
-    height: 500px;
-    position: absolute;
-    right: calc(15%);
-    bottom: 0;
+    height: 450px;
+    // position: absolute;
+    // right: calc(12%);
+    // bottom: 0;
 
-    // @include mq($until: tablet) {
-    //     height: 220px;
+    @include mq($until: tablet) {
+        height: 220px;
+        right: 0;
+        bottom: 220px;
+    }
+
+    // @include mq(tablet) {
     //     right: 0;
-    //     bottom: 220px;
+    //     bottom: 100px;
+    //     height: 350px;
     // }
-
 }
 
 #reset-button {
@@ -738,7 +812,7 @@ body.ios {
     font-size: 18px;
     font-weight: bold;
     box-sizing: border-box;
-    width: calc(20%);
+    width: 150px;
     min-height: 40px;
     border: 1px solid #dcdcdc;
     border-radius: 24px;
@@ -748,9 +822,9 @@ body.ios {
     margin: 0 6px;
     outline: none;
 
-    @include mq($until: tablet) {
-        width: calc(35%);
-    }
+    // @include mq($until: tablet) {
+    //     width: calc(35%);
+    // }
 }
 
 .elex-map {
@@ -758,21 +832,16 @@ body.ios {
     height: 100%;
     max-width: calc(60%);
     margin: 14px 30px;
-    float: left;
+    // float: left;
     overflow: visible !important;
 
-    @include mq($until: tablet) {
-        max-width: calc(90%);
-    }
+    //     @include mq($until: tablet) {
+    //         max-width: calc(90%);
+    //     }
 }
 
 
 .elex-state {
     stroke: #dcdcdc;
     stroke-width: 0.5px;
-}
-
-.finish-wrapper {
-    overflow: hidden;
-
 }
