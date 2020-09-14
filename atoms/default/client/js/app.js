@@ -88,7 +88,7 @@ function createCards(data) {
     })
 
     function sum(a, b) {
-        return a + b
+        return a + b;
     }
 
     // Get previous totals
@@ -98,6 +98,8 @@ function createCards(data) {
 
         const prevBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
             .map(d => Number(d.ecvs)).reduce(sum, 0)
+
+        console.log(prevTrumpTotal, prevBidenTotal)
 
         return [prevTrumpTotal, prevBidenTotal]
     }
@@ -139,21 +141,6 @@ function createCards(data) {
             return el.state;
         })
 
-        const groupBy = (array, key) => {
-            return array.reduce((result, currentValue) => {
-                (result[currentValue[key]] = result[currentValue[key]] || []).push(
-                    currentValue
-                );
-                return result;
-            }, {});
-        };
-
-        const keyStates = ['Florida', 'Ohio', 'Iowa', 'North Carolina', 'Michigan', 'Pennsylvania', 'Wisconsin', 'Arizona', 'Georgia', 'Texas']
-
-        // const keyStatesSelections = allStates.filter(d => keyStates.includes(d.state))
-        //     .map(function (el) {
-        //         return [el.state, el.groups_in_use, el.candidate_select]
-        //     });
 
         const blueWall = ['Michigan', 'Pennsylvania', 'Wisconsin']
         const swings = ['Ohio', 'Iowa', 'Florida', 'North Carolina']
@@ -189,8 +176,11 @@ function createCards(data) {
             .html(bidenBlueWall.length == 3 && bidenSwings.length < 2 && bidenGOP.length == 0 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, taking him over the majority to victory." : (
                 bidenBlueWall.length == 3 && bidenSwings.length >= 2 && bidenGOP.length == 0 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b>, as well as the key swing states of <b>" + (bidenSwings.slice(0, -1).join(', ') + '</b> and <b>' + bidenSwings.slice(-1)) + "</b> to take him over the majority to victory." : (
                     bidenBlueWall.length == 3 && bidenGOP.length == 1 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican stronghold of <b>" + bidenGOP + "</b> to win the presidency." : (
-                        bidenBlueWall.length == 3 && bidenGOP.length > 1 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican strongholds of <b>" + (bidenGOP.slice(0, -1).join(', ') + '</b> and <b>' + bidenGOP.slice(-1)) + "</b> to win the presidency." : "")
-                )))
+                        bidenBlueWall.length == 3 && bidenGOP.length > 1 ? "You said Biden would win back the blue wall of <b>Michigan</b>, <b>Wisconsin</b> and <b>Pennsylvania</b> and take the former Republican strongholds of <b>" + (bidenGOP.slice(0, -1).join(', ') + '</b> and <b>' + bidenGOP.slice(-1)) + "</b> to win the presidency." : (
+                            bidenBlueWall.length == 2 && bidenSwings.length <= 1 && bidenGOP.length == 0 ? "You said Biden would win back <b>" + (bidenBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + bidenBlueWall.slice(-1)) + "</b> to take him over the majority to victory." : (
+                                bidenBlueWall.length == 2 && bidenSwings.length > 1 && bidenGOP.length == 0 ? "You said Biden would win back <b>" + (bidenBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + bidenBlueWall.slice(-1)) + "</b> as well as winning the swing states of <b> " + (bidenSwings.slice(0, -1).join(', ') + '</b> and <b>' + bidenSwings.slice(-1)) + "</b> to take him over the majority to victory." : (
+                                    bidenBlueWall.length == 2 && bidenGOP.length == 1 ? "You said Biden would win back <b>" + (bidenBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + bidenBlueWall.slice(-1)) + "</b> and would take the former Republican stronghold of <b> " + bidenGOP + "</b> to take him over the majority to victory." : (
+                                        bidenBlueWall.length == 2 && bidenGOP.length > 1 ? "You said Biden would win back <b>" + (bidenBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + bidenBlueWall.slice(-1)) + "</b> and would take the former Republican strongholds of <b> " + (bidenGOP.slice(0, -1).join(', ') + '</b> and <b>' + bidenGOP.slice(-1)) + "</b> to win the presidency." : ""))))))))
 
         d3.select('.finish-trump-win')
             .style('display', votesBiden < votesTrump ? 'block' : 'none')
@@ -199,27 +189,8 @@ function createCards(data) {
                     trumpBlueWall.length < 3 && trumpBlueWall.length > 1 ? 'You said Trump would retain <b>' + (trumpBlueWall.slice(0, -1).join(', ') + '</b> and <b>' + trumpBlueWall.slice(-1)) + "</b> and win the swing states of <b> " + (trumpSwings.slice(0, -1).join(', ') + '</b> and <b>' + trumpSwings.slice(-1)) + "</b> to take him over the majority to victory." : "")))
 
 
-        // const trumpGOP = allStates.filter(d => formerGOP.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
-        //     return el.state
-        // })
-
-        // const bidenKeyWins = groupBy(allStates.filter(d => keyStates.includes(d.state) && d.candidate_select === 'biden').map(function (el) {
-        //     return [{
-        //         state: el.state,
-        //         group: el.groups_in_use
-        //     }]
-        // }).flat(), 'group')
-
-
-        // const trumpKeyWins = groupBy(allStates.filter(d => keyStates.includes(d.state) && d.candidate_select === 'trump').map(function (el) {
-        //     return [{
-        //         state: el.state,
-        //         group: el.groups_in_use
-        //     }]
-        // }).flat(), 'group')
-
         // Win scenarios
-        const finishCard = d3.select('.finish-card')
+        d3.select('.finish-card')
             .style('display', "block")
 
 
@@ -232,9 +203,6 @@ function createCards(data) {
             .text(votesBiden > votesTrump ? 'Joe Biden' : 'Donald Trump')
 
         // Tie scenario
-        d3.select('.finish-win-text')
-            .style("display", votesBiden == votesTrump ? "none" : "block")
-
         d3.select('.finish-headline-tie')
             .style("display", votesBiden == votesTrump ? "block" : "none")
 
@@ -243,9 +211,13 @@ function createCards(data) {
 
         // Portraits
         d3.select('.biden-win-portrait')
-            .style("display", votesBiden > votesTrump ? 'block' : 'none');
+            .style("display", isMobile() ? "none" : (votesBiden > votesTrump ? 'block' : 'none'));
         d3.select('.trump-win-portrait')
-            .style("display", votesTrump > votesBiden ? 'block' : 'none')
+            .style("display", isMobile() ? "none" : (votesTrump > votesBiden ? 'block' : 'none'))
+        // d3.select('.biden-win-portrait')
+        //     .style("display", votesBiden > votesTrump ? 'block' : 'none');
+        // d3.select('.trump-win-portrait')
+        //     .style("display", votesTrump > votesBiden ? 'block' : 'none')
 
         // Reset button
         const resetButton = d3.select('.reset-button-div')
@@ -257,7 +229,7 @@ function createCards(data) {
             .on('click', canName => {
 
                 // get previous totals
-                const prevTotals = getPreviousTotals()
+                var prevTotals = getPreviousTotals()
 
                 // select group & state buttons
                 const groupButtons = $$('.group-candidate-button')
@@ -284,11 +256,15 @@ function createCards(data) {
                         }
                     })
                 })
+                console.log(allStates)
 
                 // run update elex bar graphic
                 updateElexBarGraphic(bidenTotal, trumpTotal, prevTotals[1], prevTotals[0])
 
-                // scroll to top? what about mobile? app?
+                // reset prevtotals 
+                prevTotals = getPreviousTotals()
+
+                // scroll to top - what about app? mobile different position?
                 function topFunction() {
                     document.body.scrollTop = 450;
                     document.documentElement.scrollTop = 450;
@@ -374,7 +350,7 @@ function createCards(data) {
                 .append("circle")
                 .attr("cx", maineCoords[0])
                 .attr("cy", maineCoords[1])
-                .attr("r", 8)
+                .attr("r", isMobile() ? 4 : 8)
                 .style("fill", ME2 == "biden" ? bidenCol : (ME2 == 'trump' ? trumpCol : '#dcdcdc'))
 
             const nebrasCoords = proj([-97.203378, 40.713956])
@@ -383,7 +359,7 @@ function createCards(data) {
                 .append("circle")
                 .attr("cx", nebrasCoords[0])
                 .attr("cy", nebrasCoords[1])
-                .attr("r", 8)
+                .attr("r", isMobile() ? 4 : 8)
                 .style("fill", NE2 == "biden" ? bidenCol : (NE2 == 'trump' ? trumpCol : '#dcdcdc'))
 
 

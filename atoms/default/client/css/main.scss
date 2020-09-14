@@ -299,7 +299,7 @@ body.ios {
     }
 
     .bar-candidate-name {
-        @include mq($until: tablet) {
+        @include mq($until: desktop) {
             display: none;
         }
     }
@@ -307,7 +307,7 @@ body.ios {
     .bar-candidate-name-short {
         display: none;
 
-        @include mq($until: tablet) {
+        @include mq($until: desktop) {
             display: inline;
         }
     }
@@ -473,13 +473,7 @@ body.ios {
     margin: 40px 0;
 }
 
-.state-group__text {
-    width: 600px;
-}
 
-// .group-buttons {
-//     width: 400px;
-// }
 
 .group-candidate-button {
     @include fs-textSans(3);
@@ -493,15 +487,14 @@ body.ios {
     display: inline-block;
     line-height: 32px;
     padding: 0 6px;
-    margin: 0 6px;
-
-
-    // width: 33.333333%;
+    margin: 6px;
     text-align: center;
-
     cursor: pointer;
-
     outline: none;
+
+    @include mq($until: tablet) {
+        width: 140px;
+    }
 
 
     &.group-candidate-button--selected {
@@ -527,7 +520,12 @@ body.ios {
 
 .state-group__text {
     @include fs-bodyCopy(2);
-    margin: 0 5px;
+    margin: 6px;
+    max-width: 60%;
+
+    @include mq($until: tablet) {
+        max-width: 100%
+    }
 }
 
 .state-cards {
@@ -541,12 +539,12 @@ body.ios {
 }
 
 .state-card {
-    flex: 400px 0 0;
+    flex: 370px 0 0;
     background: #f6f6f6;
     margin: 8px 5px;
     align-self: stretch;
-    min-height: 350px;
-    max-width: 400px;
+    width: 370px;
+    // min-height: 350px;
     padding: 6px 10px;
     padding-bottom: 40px;
     box-sizing: border-box;
@@ -556,6 +554,10 @@ body.ios {
     // border-radius: 10px;
     border: 1px solid #dcdcdc;
 
+    @include mq($until: tablet) {
+        margin: 6px 0;
+        flex-basis: 100%;
+    }
 
 
     &:first-of-type {
@@ -579,7 +581,7 @@ body.ios {
     @include fs-bodyCopy(1);
     display: inline-block;
     margin-top: 10px;
-    height: 130px;
+    height: 140px;
 }
 
 .state-card__ecvs {
@@ -653,7 +655,7 @@ body.ios {
     background-color: #ffff;
     line-height: 32px;
     padding: 0 6px;
-    margin: 0 6px;
+    margin: 0 16px;
     outline: none;
 
     &.candidate-button--selected {
@@ -673,9 +675,14 @@ body.ios {
 
 .finish-card {
     display: none;
-    margin: 40px 0;
+    margin: 40px 100px;
     padding: 10px;
-    border: solid 1px #121212
+    height: 600px;
+    border-top: solid 1px #f6f6f6;
+
+    @include mq($until: tablet) {
+        margin: 0;
+    }
 }
 
 .finish-headline-win p,
@@ -686,6 +693,12 @@ body.ios {
 .finish-headline-win h2,
 .finish-headline-tie h2 {
     @include fs-titlepiece(2);
+
+    // @include mq($until: tablet) {
+    //     font-size: 36px;
+    //     line-height: 40px;
+    //     width: 70%;
+    // }
 }
 
 .finish-biden-win,
@@ -694,6 +707,11 @@ body.ios {
     @include fs-headline(2);
     width: 60%;
     line-height: 24px;
+    margin: 15px 0;
+
+    @include mq($until: tablet) {
+        width: 100%;
+    }
 }
 
 .finish-tie-text {
@@ -702,12 +720,20 @@ body.ios {
 
 .finish-portrait-image {
     display: none;
-    width: 300px;
+    height: 500px;
+    position: absolute;
+    right: calc(15%);
+    bottom: 0;
+
+    // @include mq($until: tablet) {
+    //     height: 220px;
+    //     right: 0;
+    //     bottom: 220px;
+    // }
 
 }
 
 #reset-button {
-
     @include fs-textSans(4);
     font-size: 18px;
     font-weight: bold;
@@ -721,18 +747,23 @@ body.ios {
     padding: 0 6px;
     margin: 0 6px;
     outline: none;
+
+    @include mq($until: tablet) {
+        width: calc(35%);
+    }
 }
 
 .elex-map {
     width: 100%;
     height: 100%;
     max-width: calc(60%);
-    max-height: calc(80%);
-    margin: 10px;
+    margin: 14px 30px;
     float: left;
-    // overflow: visible !important;
+    overflow: visible !important;
 
-
+    @include mq($until: tablet) {
+        max-width: calc(90%);
+    }
 }
 
 
