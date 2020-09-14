@@ -226,7 +226,7 @@ function createCards(data) {
             .attr('id', 'reset-button')
 
         resetButton
-            .on('click', canName => {
+            .on('click', function () {
 
                 // get previous totals
                 var prevTotals = getPreviousTotals()
@@ -256,10 +256,17 @@ function createCards(data) {
                         }
                     })
                 })
+
                 console.log(allStates)
 
+                var originalBidenTotal = allStates.filter(d => d.candidate_select === 'biden')
+                    .map(d => Number(d.ecvs)).reduce(sum, 0)
+
+                var originalTrumpTotal = allStates.filter(d => d.candidate_select === 'trump')
+                    .map(d => Number(d.ecvs)).reduce(sum, 0)
+
                 // run update elex bar graphic
-                updateElexBarGraphic(bidenTotal, trumpTotal, prevTotals[1], prevTotals[0])
+                updateElexBarGraphic(originalBidenTotal, originalTrumpTotal, prevTotals[1], prevTotals[0])
 
                 // reset prevtotals 
                 prevTotals = getPreviousTotals()
