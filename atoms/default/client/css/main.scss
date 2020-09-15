@@ -6,14 +6,15 @@
 
 $bar-height: 36px;
 
+body {
+    background-color: #FBF6ef
+}
+
 .interactive-atom {
     margin: 0;
     padding: 0;
 }
 
-// .gv-test-para {
-//     @include fs-textSans(4)
-// }
 #gv-mobile-dummy {
     display: block;
     position: absolute;
@@ -41,7 +42,7 @@ $bar-height: 36px;
     position: relative;
     display: block;
     box-sizing: border-box;
-    background: white;
+    background: #FBF6ef;
     z-index: 100;
     width: 100%;
     padding: 6px 0 12px;
@@ -558,7 +559,7 @@ body.ios {
 
 .state-card {
     flex: 340px 0 0;
-    background: #f6f6f6;
+    background: #ffffff;
     margin: 8px 5px;
     align-self: stretch;
     width: 340px;
@@ -567,10 +568,7 @@ body.ios {
     padding-bottom: 40px;
     box-sizing: border-box;
     position: relative;
-    background-color: rgba(0, 0, 0, 0.025);
-
-    // border-radius: 10px;
-    border: 1px solid #dcdcdc;
+    border: 1px solid #121212;
 
     @include mq($until: tablet) {
         margin: 6px 0;
@@ -604,7 +602,7 @@ body.ios {
 
 .state-card__ecvs {
     @include fs-header(3);
-    border-bottom: 1px solid #dcdcdc;
+    border-bottom: 1px solid #121212;
     padding-right: 65px;
     padding-bottom: 3px;
 }
@@ -664,13 +662,13 @@ body.ios {
 .candidate-button {
 
     @include fs-textSans(3);
-    font-weight: bold;
+    // font-weight: bold;
     box-sizing: border-box;
     width: calc(40%);
     min-height: 32px;
-    border: 1px solid #dcdcdc;
+    border: none;
     border-radius: 16px;
-    background-color: #ffff;
+    background-color: #efede8;
     line-height: 32px;
     padding: 0 6px;
     margin: 0 14px;
