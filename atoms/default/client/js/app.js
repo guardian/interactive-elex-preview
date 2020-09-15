@@ -62,6 +62,9 @@ function createCards(data) {
     var statesInUse = data.filter(d => d.groups_in_use)
     const stateGroups = data.filter(d => d.type == "group")
     var allStates = data.filter(d => d.type == "individual")
+    var pollUpdateDate = data.filter(d => d.type == "pollingUpdateDate")
+
+
 
     const trumpTotal = allStates.filter(d => d.candidate_select === 'trump')
         .map(d => Number(d.ecvs)).reduce(sum, 0)
@@ -86,6 +89,11 @@ function createCards(data) {
     const groupIds = stateGroups.map(function (el) {
         return el.group_id;
     })
+
+    // Footnote for polling average calculation date
+    d3.select('.polling-average-date')
+        .text('*2020 polling averages last updated on ' + pollUpdateDate[0].polling2020 + ".");
+
 
     function sum(a, b) {
         return a + b;
@@ -191,6 +199,7 @@ function createCards(data) {
         const finishCard = d3.select('.finish-card')
             .style('display', "block")
 
+        console.log($('.finish-card').getBoundingClientRect().top + window.scrollY)
 
         d3.select('.finish-headline-win')
             .style('display', votesBiden == votesTrump ? "none" : "block")
@@ -538,6 +547,8 @@ function createCards(data) {
             .classed('state-card__label label-2020', true)
             .text('2020 polling')
 
+        $('.state-card__label.label-2020').innerHTML = '2020 polling*'
+
         polling2020
             .append('div')
             .html(d => "+ " + parseFloat(Math.abs(d.polling2020)).toFixed(1))
@@ -628,12 +639,15 @@ var sticky = window.scrollY >= getScrollPoint();
 // event listener on scroll
 d3.select(stickyElement).classed('sticky', sticky);
 window.addEventListener('scroll', stickyListener, false);
-// }
+
 
 
 function makeStickyListenerAt(getYPos) {
 
     var yPos = getYPos();
+
+    // var endScrollPoint = $('.finish-card').getBoundingClientRect().top + window.scrollY
+
     setInterval(() =>
         requestAnimationFrame(() =>
             yPos = getYPos()
@@ -641,8 +655,10 @@ function makeStickyListenerAt(getYPos) {
 
     const toggleSticky = (e) => {
         if (sticky && window.scrollY < yPos) {
+            console.log('Unstick header')
             sticky = false;
         } else if (!sticky && window.scrollY >= yPos) {
+            console.log('Stick header')
             sticky = true;
 
             if (isApp) {

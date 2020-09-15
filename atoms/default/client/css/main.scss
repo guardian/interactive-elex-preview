@@ -111,7 +111,7 @@ body.ios {
     position: relative;
     //margin: 1em 0 2em;
     margin-top: 100px;
-    margin-bottom: 55px;
+    margin-bottom: 62px;
     height: $bar-height;
 
     @include mq($until: tablet) {
@@ -468,9 +468,26 @@ body.ios {
     }
 }
 
+.polling-average-date {
+    @include fs-textSans(2);
+    margin-top: 50px;
+    font-style: italic;
+    position: absolute;
+    right: 0;
+
+    @include mq($until: tablet) {
+        margin-top: 100px;
+        position: relative;
+    }
+}
+
 .state-groups {
     padding: 10px 0;
     margin: 40px 0;
+
+    @include mq($until: tablet) {
+        margin: 0;
+    }
 }
 
 
@@ -539,11 +556,11 @@ body.ios {
 }
 
 .state-card {
-    flex: 370px 0 0;
+    flex: 340px 0 0;
     background: #f6f6f6;
     margin: 8px 5px;
     align-self: stretch;
-    width: 370px;
+    width: 340px;
     // min-height: 350px;
     padding: 6px 10px;
     padding-bottom: 40px;
@@ -593,7 +610,7 @@ body.ios {
 
 .state-card__indicator {
     height: 20px;
-    width: 400px;
+    width: 340px;
 
 }
 
@@ -606,11 +623,11 @@ body.ios {
     line-height: 15px;
     float: left;
     height: 15px;
-    width: 48px;
+    width: 42px;
     margin: 3px 1px;
 
     &.state-card__2020-polling-block {
-        width: 75px;
+        width: 65px;
         margin: 3px 20px;
     }
 }
@@ -655,7 +672,7 @@ body.ios {
     background-color: #ffff;
     line-height: 32px;
     padding: 0 6px;
-    margin: 0 16px;
+    margin: 0 14px;
     outline: none;
 
     &.candidate-button--selected {
