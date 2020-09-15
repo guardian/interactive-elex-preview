@@ -301,11 +301,11 @@ function createCards(data) {
 
         // Filled map
 
-        const ME2 = allStates.filter(d => d.state === 'Maine 2nd congressional district').map(function (el) {
+        const ME2 = allStates.filter(d => d.state === 'Maine 2nd District').map(function (el) {
             return el.candidate_select;
         })
 
-        const NE2 = allStates.filter(d => d.state === 'Nebraska 2nd congressional district').map(function (el) {
+        const NE2 = allStates.filter(d => d.state === 'Nebraska 2nd District').map(function (el) {
             return el.candidate_select;
         })
 
