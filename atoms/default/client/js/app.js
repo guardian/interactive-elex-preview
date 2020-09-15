@@ -238,6 +238,9 @@ function createCards(data) {
         resetButton
             .on('click', function () {
 
+                // reset sticky container style (for hiding on finish card)
+                $('.sticky-container').style.top = "";
+
                 // get previous totals
                 var prevTotals = getPreviousTotals()
 
@@ -895,19 +898,16 @@ const check = () => {
 
     const stickyH = $('.sticky-container').getBoundingClientRect().height
 
-    if(finishCard.getBoundingClientRect().height > 0 && finishCard.getBoundingClientRect().top < stickyH ) {
+    if (finishCard.getBoundingClientRect().height > 0 && finishCard.getBoundingClientRect().top < stickyH) {
 
         const dy = stickyH - finishCard.getBoundingClientRect().top
 
         //console.log(stickyH)
 
         $('.sticky-container').style.top = -dy + 'px'
-
-        // need to reset this style again if reset button hit
-
     }
 
-     window.requestAnimationFrame( check )
+    window.requestAnimationFrame(check)
 
 }
 
