@@ -147,7 +147,6 @@ function createCards(data) {
             return el.state;
         })
 
-
         const blueWall = ['Michigan', 'Pennsylvania', 'Wisconsin']
         const swings = ['Ohio', 'Iowa', 'Florida', 'North Carolina']
         const formerGOP = ['Arizona', 'Georgia', 'Texas']
@@ -886,3 +885,31 @@ function getStyle(element) {
     return element.currentStyle ? element.currentStyle.display :
         getComputedStyle(element, null).display;
 }
+
+// continually check if finish card in view
+
+const finishCard = $('.finish-card')
+
+const check = () => {
+
+    const stickyH = $('.sticky-container').getBoundingClientRect().height
+
+    if(finishCard.getBoundingClientRect().height > 0 && finishCard.getBoundingClientRect().top < stickyH ) {
+
+        const dy = stickyH - finishCard.getBoundingClientRect().top
+
+        //console.log(stickyH)
+
+        $('.sticky-container').style.top = -dy + 'px'
+
+        // need to reset this style again if reset button hit
+
+    }
+
+     window.requestAnimationFrame( check )
+
+}
+
+
+
+check()
