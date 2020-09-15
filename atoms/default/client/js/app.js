@@ -12,8 +12,8 @@ import bubbleData from 'shared/server/data_joined.json'
 
 
 let moodIndex = 0;
-var bidenTotal = 218;
-var trumpTotal = 125;
+var bidenTotal;
+var trumpTotal;
 
 
 // Load data, return individual states, groups & initial bar counts
@@ -94,7 +94,13 @@ function createCards(data) {
     d3.select('.polling-average-date')
         .text('*2020 polling averages last updated on ' + pollUpdateDate[0].polling2020 + ".");
 
+    // scroll to top of graphic function
+    function topFunction() {
+        const topScroll = $('.elex-intro-block')
+        topScroll.scrollIntoView()
+    }
 
+    // reduce function
     function sum(a, b) {
         return a + b;
     }
@@ -198,8 +204,6 @@ function createCards(data) {
         const finishCard = d3.select('.finish-card')
             .style('display', "block")
 
-        console.log($('.finish-card').getBoundingClientRect().top + window.scrollY)
-
         d3.select('.finish-headline-win')
             .style('display', votesBiden == votesTrump ? "none" : "block")
             .style('opacity', 1)
@@ -274,12 +278,7 @@ function createCards(data) {
                 updateElexBarGraphic(originalBidenTotal, originalTrumpTotal, prevTotals[1], prevTotals[0])
 
 
-                // scroll to top - what about app? mobile different position?
-                function topFunction() {
-                    document.body.scrollTop = 450;
-                    document.documentElement.scrollTop = 450;
-                }
-
+                // scroll to top
                 topFunction()
 
                 finishCard
@@ -752,7 +751,9 @@ function animateTotal(candidate, newTotal, currentTotal) {
     total.attr("data-val", currentTotal);
 
     if (candidate == "biden") {
+        console.log(bidenTotal)
         bidenTotal = newTotal;
+        console.log(bidenTotal)
     } else {
         trumpTotal = newTotal;
     }
