@@ -12,7 +12,7 @@ import bubbleData from 'shared/server/data_joined.json'
 
 
 let moodIndex = 0;
-var bidenTotal = 218;
+var bidenTotal = 212;
 var trumpTotal = 125;
 
 
