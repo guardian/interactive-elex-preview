@@ -638,7 +638,8 @@ d3.select('.sticky-container-height')
 
 
 // get scroll point (+ app scroll point extra?)
-const getScrollPoint = () => stickyContainer.getBoundingClientRect().top + window.scrollY + (isApp ? 45 : 0);
+const getScrollPoint = () => stickyContainer.getBoundingClientRect().top + window.scrollY
+// + (isApp ? 45 : 0);
 // listen for scrolling and call scrollpoint function?
 const stickyListener = makeStickyListenerAt(getScrollPoint)
 var sticky = window.scrollY >= getScrollPoint();
@@ -660,7 +661,7 @@ function makeStickyListenerAt(getYPos) {
             yPos = getYPos()
         ), 1000)
 
-    const toggleSticky = (e) => {
+    function toggleSticky() {
         if (sticky && window.scrollY < yPos) {
             // console.log('Unstick header')
             sticky = false;
@@ -668,50 +669,54 @@ function makeStickyListenerAt(getYPos) {
             // console.log('Stick header')
             sticky = true;
 
-            if (isApp) {
-                appBar = false;
-                stickyElement.style.transform = 'translateY(-45px)'
-            }
+            // if (isApp) {
+            //     appBar = false;
+            //     stickyElement.style.transform = 'translateY(-45px)'
+            // }
         }
         d3.select(stickyElement).classed('sticky', sticky)
     }
 
-    var lastY = 0,
-        appBar = true;
-    const adjustBarTop = (e) => {
-        if (window.scrollY > 0) {
-            if (sticky && appBar && window.scrollY > lastY) {
-                if (window.scrollY - lastY >= 45) {
-                    stickyElement.style.transform = 'translateY(-45px)'
-                    lastY = window.scrollY;
-                    appBar = false;
-                } else {
-                    stickyElement.style.transform = `translateY(${lastY - window.scrollY}px)`
-                }
-            } else if (sticky && !appBar && window.scrollY < lastY) {
-                if (lastY - window.scrollY >= 45) {
-                    stickyElement.style.transform = 'translateY(0)'
-                    lastY = window.scrollY;
-                    appBar = true;
-                } else {
-                    stickyElement.style.transform = `translateY(-${45 - (lastY - window.scrollY)}px)`
-                }
-            } else {
-                lastY = window.scrollY;
-            }
-        } else {
-            stickyElement.style.transform = 'translateY(0)'
-        }
-    }
+    return toggleSticky
 
-    if (isApp) {
-        return (e) => {
-            toggleSticky(e);
-            adjustBarTop(e);
-        }
-    } else {
-        return toggleSticky;
-    }
+    // var lastY = 0,
+    //     appBar = true;
+    // const adjustBarTop = () => {
+    //     if (window.scrollY > 0) {
+    //         if (sticky && appBar && window.scrollY > lastY) {
+    //             if (window.scrollY - lastY >= 45) {
+    //                 stickyElement.style.transform = 'translateY(-45px)'
+    //                 lastY = window.scrollY;
+    //                 appBar = false;
+    //             } else {
+    //                 stickyElement.style.transform = `translateY(${lastY - window.scrollY}px)`
+    //             }
+    //         } else if (sticky && !appBar && window.scrollY < lastY) {
+    //             if (lastY - window.scrollY >= 45) {
+    //                 stickyElement.style.transform = 'translateY(0)'
+    //                 lastY = window.scrollY;
+    //                 appBar = true;
+    //             } else {
+    //                 stickyElement.style.transform = `translateY(-${45 - (lastY - window.scrollY)}px)`
+    //             }
+    //         } else {
+    //             lastY = window.scrollY;
+    //         }
+    //     } else {
+    //         stickyElement.style.transform = 'translateY(0)'
+    //     }
+    // }
+
+
+
+    // if (isApp) {
+    //     return () => {
+    //         toggleSticky();
+    //         adjustBarTop();
+    //     }
+    // } else {
+    //     return toggleSticky;
+    // }
 }
 
 
