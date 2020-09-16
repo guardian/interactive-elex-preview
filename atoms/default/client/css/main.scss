@@ -13,6 +13,7 @@ body {
 .interactive-atom {
     margin: 0;
     padding: 0;
+    background-color: #FBF6ef
 }
 
 #gv-mobile-dummy {
@@ -26,15 +27,13 @@ body {
 }
 
 .sticky-container-height {
-    position: relative;
     display: block;
     border-top: 1px solid #dcdcdc;
-    // border-bottom: 1px solid #dcdcdc;
+    // border-bottom: 1px solid #dcdcdc;≠
     padding-bottom: 61px;
 
     @include mq($until: tablet) {
-        padding-bottom: 0 !important;
-        ;
+        // padding-bottom: 0 !important;
     }
 }
 
@@ -45,7 +44,6 @@ body {
     background: #FBF6ef;
     z-index: 100;
     width: 100%;
-    padding: 6px 0 12px;
     padding: 0;
     border-bottom: 1px solid transparent;
 
@@ -71,7 +69,7 @@ body.ios {
 
     @include mq(tablet) {
         max-width: 740px;
-        margin: auto;
+        // margin: auto;
         padding-left: 20px;
         padding-right: 20px;
     }
@@ -94,7 +92,7 @@ body.ios {
 
 .elex-intro-block {
     @include fs-header(4);
-    padding-bottom: 6px;
+    padding: 6px 0;
     margin-top: 15px;
 }
 
@@ -118,7 +116,7 @@ body.ios {
 
     @include mq($until: tablet) {
         margin-bottom: 5px;
-        height: 175px;
+        height: 125px;
     }
 }
 
@@ -132,12 +130,10 @@ body.ios {
         margin: 1em 0;
     }
 
-    &.elex-votes__biden {}
-
     &.elex-votes__trump {
 
         @include mq($until: tablet) {
-            top: 130px;
+            top: 120px;
         }
 
     }
@@ -150,7 +146,7 @@ body.ios {
     position: absolute;
     width: 130px;
     height: 130px;
-    top: -90px;
+    top: -91px;
 
     @include mq($until: tablet) {
         width: 0;
@@ -201,7 +197,7 @@ body.ios {
 
         @include mq($until: tablet) {
             width: 110px;
-            top: -92px;
+            top: -108px;
         }
 
         //height: 188px;
@@ -280,7 +276,7 @@ body.ios {
 
     @include mq($until: tablet) {
         left: 115px;
-        top: -80px;
+        top: -97px;
         font-size: 32px;
         line-height: 32px;
     }
@@ -343,13 +339,6 @@ body.ios {
             }
         }
     }
-
-
-
-    // @include mq(tablet) {
-    //     margin-bottom: 0.25em;
-    //     @include fs-header(3);
-    // }
 }
 
 [class^='bar-container'] {
@@ -362,7 +351,10 @@ body.ios {
     width: 100%;
     background-color: #efede8;
 
-
+    @include mq($until: tablet) {
+        height: 20px;
+        top: -17px;
+    }
 
 
     @include mq(tablet) {
@@ -410,7 +402,8 @@ body.ios {
 
     @include mq($until: tablet) {
         left: 90%;
-        top: -15px;
+        top: -35px;
+        height: 165px;
     }
 
     @include mq(tablet) {
@@ -472,20 +465,12 @@ body.ios {
 
 .polling-average-date {
     @include fs-textSans(2);
-    margin-top: 50px;
     font-style: italic;
-    position: absolute;
-    right: 0;
-
-    @include mq($until: tablet) {
-        margin-top: 100px;
-        position: relative;
-    }
 }
 
 .state-groups {
     padding: 10px 0;
-    margin: 40px 0;
+    margin: 20px 0;
 
     @include mq($until: tablet) {
         margin: 0;
@@ -540,7 +525,7 @@ body.ios {
 .state-group__text {
     @include fs-bodyCopy(2);
     margin: 6px;
-    max-width: 60%;
+    max-width: 75%;
 
     @include mq($until: tablet) {
         max-width: 100%
@@ -558,21 +543,20 @@ body.ios {
 }
 
 .state-card {
-    flex: 340px 0 0;
+    // flex: 340px 0 0;
     background: #ffffff;
     margin: 8px 5px;
     align-self: stretch;
     width: 340px;
-    // min-height: 350px;
-    padding: 6px 10px;
-    padding-bottom: 40px;
+
+    padding: 6px 10px 10px;
     box-sizing: border-box;
     position: relative;
     border: 1px solid #121212;
 
     @include mq($until: tablet) {
         margin: 6px 0;
-        flex-basis: 100%;
+        width: 100%;
     }
 
 
@@ -598,6 +582,10 @@ body.ios {
     display: inline-block;
     margin-top: 10px;
     height: 140px;
+
+    @include mq($until: tablet) {
+        height: auto;
+    }
 }
 
 .state-card__ecvs {
@@ -625,10 +613,22 @@ body.ios {
     width: 42px;
     margin: 3px 1px;
 
+    @include mq($until: tablet) {
+        width: 11vw;
+    }
+
     &.state-card__2020-polling-block {
         width: 65px;
         margin: 3px 20px;
+
+        @include mq($until: tablet) {
+            width: 14vw;
+        }
     }
+}
+
+.state-card__2016-margin-block {
+    margin: 2px 1px;
 }
 
 .state-card__2016-margin,
@@ -674,6 +674,11 @@ body.ios {
     margin: 0 14px;
     outline: none;
 
+    @include mq($until: tablet) {
+        width: 36vw;
+        margin: 3vw;
+    }
+
     &.candidate-button--selected {
 
         color: white;
@@ -694,10 +699,10 @@ body.ios {
     margin: 40px 100px;
     padding: 10px;
     height: 650px;
-    border-top: solid 1px #f6f6f6;
+    border-top: solid 1px #dcdcdc;
 
     @include mq($until: desktop) {
-        margin: 0;
+        margin: 35px 0;
     }
 }
 

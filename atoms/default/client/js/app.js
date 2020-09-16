@@ -65,7 +65,6 @@ function createCards(data) {
     var pollUpdateDate = data.filter(d => d.type == "pollingUpdateDate")
 
 
-
     const trumpTotal = allStates.filter(d => d.candidate_select === 'trump')
         .map(d => Number(d.ecvs)).reduce(sum, 0)
 
@@ -83,8 +82,15 @@ function createCards(data) {
     const bidenBar = $(".bar-votes__biden");
     const trumpBar = $(".bar-votes__trump");
 
-    trumpBar.style.width = (trumpTotal / 538 * 100) + "%";
-    bidenBar.style.width = (bidenTotal / 538 * 100) + "%";
+    if (isMobile()) {
+        bidenBar.style.width = (bidenTotal / (270 / 0.9)) * 100 + "%";
+        trumpBar.style.width = (trumpTotal / (270 / 0.9)) * 100 + "%";
+    } else {
+        trumpBar.style.width = (trumpTotal / 538 * 100) + "%";
+        bidenBar.style.width = (bidenTotal / 538 * 100) + "%";
+    }
+
+
 
     const groupIds = stateGroups.map(function (el) {
         return el.group_id;
@@ -656,10 +662,10 @@ function makeStickyListenerAt(getYPos) {
 
     const toggleSticky = (e) => {
         if (sticky && window.scrollY < yPos) {
-            console.log('Unstick header')
+            // console.log('Unstick header')
             sticky = false;
         } else if (!sticky && window.scrollY >= yPos) {
-            console.log('Stick header')
+            // console.log('Stick header')
             sticky = true;
 
             if (isApp) {
@@ -754,9 +760,7 @@ function animateTotal(candidate, newTotal, currentTotal) {
     total.attr("data-val", currentTotal);
 
     if (candidate == "biden") {
-        console.log(bidenTotal)
         bidenTotal = newTotal;
-        console.log(bidenTotal)
     } else {
         trumpTotal = newTotal;
     }
@@ -847,6 +851,7 @@ function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesT
         // mobile
 
         let finishXPos = 0.9; // 90%;
+        console.log(finishXPos)
 
         if (votesBiden > 300 || votesTrump > 300) {
 
@@ -856,9 +861,10 @@ function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesT
             // }
             finishXPos = 270 / maxXVotes;
             document.querySelector(".elex-votes-finishline").style.left = (finishXPos * 100) + "%";
+        } else {
+            finishXPos = 0.9
+            document.querySelector(".elex-votes-finishline").style.left = (finishXPos * 100) + "%";
         }
-
-
         bidenBar.style.width = (votesBiden / (270 / finishXPos)) * 100 + "%";
         trumpBar.style.width = (votesTrump / (270 / finishXPos)) * 100 + "%";
 
@@ -905,6 +911,9 @@ const check = () => {
         //console.log(stickyH)
 
         $('.sticky-container').style.top = -dy + 'px'
+    } else {
+        // make sure style top is set to 0 when the bar is anywhere else on the page to avoid bar sitting over text when scrolled to the top again
+        $('.sticky-container').style.top = 0 + 'px'
     }
 
     window.requestAnimationFrame(check)
