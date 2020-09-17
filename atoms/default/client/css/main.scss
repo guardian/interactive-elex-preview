@@ -749,6 +749,11 @@ body.ios {
             grid-row: 1
         }
 
+        .finish-headline-tie {
+            grid-column: 1/span 2;
+            grid-row: 1
+        }
+
         .finish-portrait-wrapper {
             grid-column: 2;
             grid-row: 1 / span 2;
@@ -781,10 +786,12 @@ body.ios {
     @include fs-textSans(4);
 }
 
-.finish-headline-win h2,
-.finish-headline-tie h2 {
+.finish-headline-win h2 {
     @include fs-titlepiece(2);
+}
 
+.finish-headline-tie h2 {
+    @include fs-titlepiece(1);
 }
 
 .finish-biden-win,

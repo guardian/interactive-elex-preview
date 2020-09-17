@@ -230,6 +230,8 @@ function createCards(data) {
         //     .style("display", isMobile() ? "none" : (votesBiden > votesTrump ? 'block' : 'none'));
         // d3.select('.trump-win-portrait')
         //     .style("display", isMobile() ? "none" : (votesTrump > votesBiden ? 'block' : 'none'))
+
+
         d3.select('.biden-win-portrait')
             .style("display", votesBiden > votesTrump ? 'block' : 'none');
         d3.select('.trump-win-portrait')
@@ -856,7 +858,7 @@ function updateElexBarGraphic(votesBiden, votesTrump, prevVotesBiden, prevVotesT
         // mobile
 
         let finishXPos = 0.9; // 90%;
-        console.log(finishXPos)
+
 
         if (votesBiden > 300 || votesTrump > 300) {
 
@@ -912,8 +914,6 @@ const check = () => {
     if (finishCard.getBoundingClientRect().height > 0 && finishCard.getBoundingClientRect().top < stickyH) {
 
         const dy = stickyH - finishCard.getBoundingClientRect().top
-
-        //console.log(stickyH)
 
         $('.sticky-container').style.top = -dy + 'px'
     } else {
