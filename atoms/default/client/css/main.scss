@@ -518,7 +518,7 @@ body.ios {
 
 
 .state-group__name {
-    @include fs-header(4);
+    @include fs-header(5);
     margin: 50px 5px 0px;
 }
 
@@ -572,9 +572,9 @@ body.ios {
 }
 
 .state-card__name {
-    @include fs-header(3);
+    @include fs-header(4);
+    line-height: 22px;
     min-height: 32px;
-    margin-bottom: 3px;
 }
 
 .state-card__text {
@@ -589,7 +589,8 @@ body.ios {
 }
 
 .state-card__ecvs {
-    @include fs-header(3);
+    @include fs-header(2);
+    line-height: 120%;
     border-bottom: 1px solid #121212;
     padding-right: 65px;
     padding-bottom: 3px;
