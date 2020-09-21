@@ -2,6 +2,7 @@
 @import "mq";
 @import "palette";
 @import "enhancer";
+@import "remove-dark-mode";
 
 
 $bar-height: 36px;
@@ -116,7 +117,7 @@ body.ios {
 
     @include mq($until: tablet) {
         margin-bottom: 5px;
-        height: 125px;
+        height: 100px;
     }
 }
 
@@ -197,7 +198,7 @@ body.ios {
 
         @include mq($until: tablet) {
             width: 110px;
-            top: -108px;
+            top: -103px;
         }
 
         //height: 188px;
@@ -250,6 +251,10 @@ body.ios {
         .bar-portrait-image {
             margin-left: -65px;
         }
+
+        @include mq($until: tablet) {
+            top: -16px;
+        }
     }
 
 
@@ -277,7 +282,7 @@ body.ios {
 
     @include mq($until: tablet) {
         left: 115px;
-        top: -97px;
+        top: -100px;
         font-size: 32px;
         line-height: 32px;
     }
@@ -290,6 +295,7 @@ body.ios {
 
         @include mq($until: tablet) {
             text-align: left;
+            top: -112px;
         }
     }
 
@@ -339,7 +345,7 @@ body.ios {
             display: inline-block;
             position: relative;
             top: -1px;
-            margin: 0 10px;
+            margin: 0 6px;
             width: 100px;
             line-height: 16px;
 
@@ -362,7 +368,11 @@ body.ios {
 
     @include mq($until: tablet) {
         height: 20px;
-        top: -17px;
+        top: -31px;
+
+        &.bar-container__trump {
+            top: -46px;
+        }
     }
 
 
@@ -411,7 +421,7 @@ body.ios {
 
     @include mq($until: tablet) {
         left: 90%;
-        top: -35px;
+        top: -60px;
         height: 165px;
     }
 
@@ -528,6 +538,7 @@ body.ios {
 
 .state-group__name {
     @include fs-header(5);
+    font-size: 26px;
     margin: 50px 5px 0px;
 }
 
@@ -582,7 +593,7 @@ body.ios {
 
 .state-card__name {
     @include fs-header(4);
-    min-height: 30px;
+    line-height: 22px;
 }
 
 .state-card__text {
@@ -609,7 +620,7 @@ body.ios {
     line-height: 120%;
     border-bottom: 1px solid #121212;
     padding-right: 65px;
-    padding-bottom: 3px;
+    padding-bottom: 10px;
 }
 
 .state-card__indicator {
@@ -727,6 +738,7 @@ body.ios {
     display: grid;
     // grid-gap: 10px;
     grid-template-columns: 2fr 1fr;
+    border-bottom: solid 1px #dcdcdc;
 
     .finish-headline-win {
         grid-column: 1;
@@ -742,7 +754,8 @@ body.ios {
 
     .finish-portrait-wrapper {
         grid-column: 2;
-        grid-row: 2 / span 2;
+        grid-row: 2 / span 3;
+        align-self: end;
     }
 
     .gv-map {
@@ -751,18 +764,22 @@ body.ios {
     }
 
     .reset-button-div {
-        grid-column: 2;
-        grid-row: 1;
+        grid-column: 1;
+        grid-row: 4;
         align-self: center;
+        padding-bottom: 12px;
     }
+
 
     @include mq($until: tablet) {
 
-        grid-template-columns: fr 1fr;
+        grid-template-columns: 1fr 1fr;
+        border-bottom: none;
 
         .finish-headline-win {
             grid-column: 1;
-            grid-row: 1
+            grid-row: 1;
+            border-bottom: solid 1px #dcdcdc;
         }
 
         .finish-headline-tie {
@@ -772,7 +789,8 @@ body.ios {
 
         .finish-portrait-wrapper {
             grid-column: 2;
-            grid-row: 1 / span 2;
+            grid-row: 1;
+            border-bottom: solid 1px #dcdcdc;
         }
 
         .finish-biden-win,
