@@ -112,12 +112,12 @@ body.ios {
     position: relative;
     //margin: 1em 0 2em;
     margin-top: 100px;
-    margin-bottom: 7px;
+    margin-bottom: 2px;
     height: $bar-height;
 
     @include mq($until: tablet) {
         margin-bottom: 5px;
-        height: 100px;
+        height: 93px;
     }
 }
 
@@ -134,7 +134,7 @@ body.ios {
     &.elex-votes__trump {
 
         @include mq($until: tablet) {
-            top: 120px;
+            top: 98px;
         }
 
     }
@@ -252,9 +252,6 @@ body.ios {
             margin-left: -65px;
         }
 
-        @include mq($until: tablet) {
-            top: -16px;
-        }
     }
 
 
@@ -295,7 +292,6 @@ body.ios {
 
         @include mq($until: tablet) {
             text-align: left;
-            top: -112px;
         }
     }
 
@@ -369,10 +365,6 @@ body.ios {
     @include mq($until: tablet) {
         height: 20px;
         top: -31px;
-
-        &.bar-container__trump {
-            top: -46px;
-        }
     }
 
 
@@ -421,8 +413,8 @@ body.ios {
 
     @include mq($until: tablet) {
         left: 90%;
-        top: -60px;
-        height: 165px;
+        top: -45px;
+        height: 140px;
     }
 
     @include mq(tablet) {
