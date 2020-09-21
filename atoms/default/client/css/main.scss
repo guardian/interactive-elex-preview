@@ -111,7 +111,7 @@ body.ios {
     position: relative;
     //margin: 1em 0 2em;
     margin-top: 100px;
-    margin-bottom: 43px;
+    margin-bottom: 42px;
     height: $bar-height;
 
     @include mq($until: tablet) {
@@ -573,8 +573,7 @@ body.ios {
 
 .state-card__name {
     @include fs-header(4);
-    line-height: 22px;
-    min-height: 32px;
+    min-height: 30px;
 }
 
 .state-card__text {
