@@ -486,7 +486,7 @@ function createCards(data) {
             .data(statesInGroup)
             .enter()
             .append('div')
-            .classed('state-card', true)
+            .attr('class', d => 'state-card state-card--' + d.state.replace(/ /g, "_").toLowerCase())
 
         stateDivs
             .append('h2')
@@ -577,7 +577,10 @@ function createCards(data) {
 
         stateDivs.each(function (d, i) {
             const stateDiv = d3.select(this)
-            const buttons = stateDiv
+            const candButtonDiv = stateDiv.append('div')
+                .attr('class', 'candidate-button-div')
+
+            const buttons = candButtonDiv
                 .selectAll('button')
                 .data(['Biden', 'Trump'])
                 .enter()
