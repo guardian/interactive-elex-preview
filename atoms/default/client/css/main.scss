@@ -16,6 +16,14 @@ body {
     .article {
         overflow: visible !important;
     }
+
+    .sticky-container-height {
+        box-sizing: content-box !important;
+    }
+
+    .elex-votes {
+        margin-top: 100px !important;
+    }
 }
 
 .interactive-atom {
@@ -718,10 +726,6 @@ body.ios {
     padding: 0 6px;
     outline: none;
 
-    @include mq($until: tablet) {
-        margin-top: 6px;
-    }
-
     &.candidate-button--selected {
 
         color: white;
@@ -741,11 +745,16 @@ body.ios {
     display: none;
     margin: 40px 100px;
     padding: 10px;
-    height: 650px;
+    height: auto;
     border-top: solid 1px #dcdcdc;
 
     @include mq($until: desktop) {
         margin: 35px 0;
+    }
+
+    @include mq($until: tablet) {
+        height: auto;
+        margin: 10px 0 0;
     }
 }
 
