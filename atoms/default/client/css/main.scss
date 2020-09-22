@@ -119,6 +119,11 @@ body.ios {
         margin-bottom: 5px;
         height: 93px;
     }
+
+    @include mq($until: 374px) {
+        height: 75px;
+        top: -8px;
+    }
 }
 
 
@@ -135,6 +140,10 @@ body.ios {
 
         @include mq($until: tablet) {
             top: 98px;
+        }
+
+        @include mq($until: 374px) {
+            top: 90px;
         }
 
     }
@@ -415,6 +424,10 @@ body.ios {
         left: 90%;
         top: -45px;
         height: 140px;
+    }
+
+    @include mq($until: 374px) {
+        height: 130px;
     }
 
     @include mq(tablet) {
@@ -698,6 +711,10 @@ body.ios {
     padding: 0 6px;
     outline: none;
 
+    @include mq($until: tablet) {
+        margin-top: 6px;
+    }
+
     &.candidate-button--selected {
 
         color: white;
@@ -759,7 +776,7 @@ body.ios {
         grid-column: 1;
         grid-row: 4;
         align-self: center;
-        padding-bottom: 12px;
+        margin-bottom: 12px;
     }
 
 
@@ -776,7 +793,8 @@ body.ios {
 
         .finish-headline-tie {
             grid-column: 1/span 2;
-            grid-row: 1
+            grid-row: 1;
+            border-bottom: solid 1px #dcdcdc;
         }
 
         .finish-portrait-wrapper {
@@ -817,7 +835,7 @@ body.ios {
 }
 
 .finish-headline-tie h2 {
-    @include fs-titlepiece(1);
+    @include fs-titlepiece(2);
 }
 
 .finish-biden-win,
@@ -844,9 +862,6 @@ body.ios {
 .finish-portrait-image {
     display: none;
     height: 450px;
-    // position: absolute;
-    // right: calc(12%);
-    // bottom: 0;
 
     @include mq($until: tablet) {
         height: 220px;
@@ -854,11 +869,6 @@ body.ios {
         bottom: 220px;
     }
 
-    // @include mq(tablet) {
-    //     right: 0;
-    //     bottom: 100px;
-    //     height: 350px;
-    // }
 }
 
 #reset-button {
@@ -875,10 +885,6 @@ body.ios {
     padding: 0 6px;
     margin: 0 6px;
     outline: none;
-
-    // @include mq($until: tablet) {
-    //     width: calc(35%);
-    // }
 }
 
 .elex-map {
@@ -886,12 +892,11 @@ body.ios {
     height: 100%;
     max-width: calc(60%);
     margin: 14px 30px;
-    // float: left;
     overflow: visible !important;
 
-    //     @include mq($until: tablet) {
-    //         max-width: calc(90%);
-    //     }
+    // @include mq($until: tablet) {
+    //     max-width: calc(90%);
+    // }
 }
 
 

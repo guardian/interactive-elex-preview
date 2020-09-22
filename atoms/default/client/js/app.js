@@ -659,8 +659,6 @@ function makeStickyListenerAt(getYPos) {
 
     var yPos = getYPos();
 
-    // var endScrollPoint = $('.finish-card').getBoundingClientRect().top + window.scrollY
-
     setInterval(() =>
         requestAnimationFrame(() =>
             yPos = getYPos()
