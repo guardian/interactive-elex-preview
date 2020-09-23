@@ -55,7 +55,6 @@ finish
     .text("270 to win");
 
 
-
 // Create state groups & cards
 function createCards(data) {
 
