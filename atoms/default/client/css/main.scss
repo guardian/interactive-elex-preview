@@ -565,7 +565,7 @@ body.ios {
 
 .state-group__name {
     @include fs-header(5);
-    font-size: 26px;
+    font-size: 26px !important;
     margin: 50px 5px 0px;
 }
 

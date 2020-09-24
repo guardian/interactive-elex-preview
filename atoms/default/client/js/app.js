@@ -681,49 +681,10 @@ function makeStickyListenerAt(getYPos) {
 
     return toggleSticky
 
-    // var lastY = 0,
-    //     appBar = true;
-    // const adjustBarTop = () => {
-    //     if (window.scrollY > 0) {
-    //         if (sticky && appBar && window.scrollY > lastY) {
-    //             if (window.scrollY - lastY >= 45) {
-    //                 stickyElement.style.transform = 'translateY(-45px)'
-    //                 lastY = window.scrollY;
-    //                 appBar = false;
-    //             } else {
-    //                 stickyElement.style.transform = `translateY(${lastY - window.scrollY}px)`
-    //             }
-    //         } else if (sticky && !appBar && window.scrollY < lastY) {
-    //             if (lastY - window.scrollY >= 45) {
-    //                 stickyElement.style.transform = 'translateY(0)'
-    //                 lastY = window.scrollY;
-    //                 appBar = true;
-    //             } else {
-    //                 stickyElement.style.transform = `translateY(-${45 - (lastY - window.scrollY)}px)`
-    //             }
-    //         } else {
-    //             lastY = window.scrollY;
-    //         }
-    //     } else {
-    //         stickyElement.style.transform = 'translateY(0)'
-    //     }
-    // }
-
-
-
-    // if (isApp) {
-    //     return () => {
-    //         toggleSticky();
-    //         adjustBarTop();
-    //     }
-    // } else {
-    //     return toggleSticky;
-    // }
 }
 
 
 // ANIMATION FUNCTIONS
-
 
 
 // ROUNDEL PULSE
