@@ -98,17 +98,19 @@ $neutral-replacement: #FBF6ef;
 
 .content__standfirst,
 .standfirst, .content--interactive .content__standfirst {
-  @include fs-headline(1);
+  @include fs-headline(2);
+      font-size: 18px;
+    line-height: 1.2;
   font-weight: 200;
   margin-top: 24px;
   max-width: 90%;
-  margin-bottom: 48px;
+  margin-bottom: 12px;
 
   @include mq(mobileMedium) {
     @include fs-headline(2);
     font-weight: 200;
     font-size: 22px;
-    line-height: 1;
+    line-height: 1.2;
   }
   @include mq(mobileLandscape) {
     max-width: 80%;
@@ -182,7 +184,7 @@ $neutral-replacement: #FBF6ef;
     height: 100%;
     min-height: 500px;
     content: " ";
-    border-left: 1px solid $neutral-46;
+    border-left: 1px solid $neutral-86;
 
     @include mq(leftCol) {
       left: calc((100% - 1140px) / 2 + 170px);
